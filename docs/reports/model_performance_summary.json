@@ -1,0 +1,458 @@
+{
+  "Heuristic_Rule": {
+    "pr_auc": 0.6310595544291668,
+    "roc_auc": 0.3941002312664882,
+    "brier_score": 0.3392210536770658,
+    "brier_skill_score": -0.6196725947066053,
+    "log_loss": 1.2638397441955491,
+    "ece": 0.31579969043351097,
+    "base_rate": 0.7014,
+    "top_decile_lift": 0.6900484744796122,
+    "top_decile_gains_pct": 6.900484744796122,
+    "top_2_deciles_gains_pct": 16.367265469061877,
+    "decile_table": [
+      {
+        "decile": "Decile 1",
+        "households": 500,
+        "actual_buyers": 242,
+        "avg_predicted_prob": 0.9992383226811764,
+        "actual_response_rate": 0.484,
+        "lift": 0.6900484744796122,
+        "cum_buyers": 242,
+        "cum_gains_pct": 6.900484744796122
+      },
+      {
+        "decile": "Decile 2",
+        "households": 500,
+        "actual_buyers": 332,
+        "avg_predicted_prob": 0.9660228646413076,
+        "actual_response_rate": 0.664,
+        "lift": 0.9466780724265754,
+        "cum_buyers": 574,
+        "cum_gains_pct": 16.367265469061877
+      },
+      {
+        "decile": "Decile 3",
+        "households": 500,
+        "actual_buyers": 359,
+        "avg_predicted_prob": 0.8460032031527402,
+        "actual_response_rate": 0.718,
+        "lift": 1.0236669518106642,
+        "cum_buyers": 933,
+        "cum_gains_pct": 26.603934987168522
+      },
+      {
+        "decile": "Decile 4",
+        "households": 500,
+        "actual_buyers": 358,
+        "avg_predicted_prob": 0.6834112547190149,
+        "actual_response_rate": 0.716,
+        "lift": 1.0208155118334759,
+        "cum_buyers": 1291,
+        "cum_gains_pct": 36.81209010550328
+      },
+      {
+        "decile": "Decile 5",
+        "households": 500,
+        "actual_buyers": 314,
+        "avg_predicted_prob": 0.5738070359846772,
+        "actual_response_rate": 0.628,
+        "lift": 0.8953521528371827,
+        "cum_buyers": 1605,
+        "cum_gains_pct": 45.76561163387511
+      },
+      {
+        "decile": "Decile 6",
+        "households": 500,
+        "actual_buyers": 360,
+        "avg_predicted_prob": 0.47083061699461876,
+        "actual_response_rate": 0.72,
+        "lift": 1.0265183917878529,
+        "cum_buyers": 1965,
+        "cum_gains_pct": 56.030795551753634
+      },
+      {
+        "decile": "Decile 7",
+        "households": 500,
+        "actual_buyers": 375,
+        "avg_predicted_prob": 0.38133441095293996,
+        "actual_response_rate": 0.75,
+        "lift": 1.06928999144568,
+        "cum_buyers": 2340,
+        "cum_gains_pct": 66.72369546621043
+      },
+      {
+        "decile": "Decile 8",
+        "households": 500,
+        "actual_buyers": 387,
+        "avg_predicted_prob": 0.31563836643391957,
+        "actual_response_rate": 0.774,
+        "lift": 1.1035072711719418,
+        "cum_buyers": 2727,
+        "cum_gains_pct": 77.75876817792987
+      },
+      {
+        "decile": "Decile 9",
+        "households": 500,
+        "actual_buyers": 331,
+        "avg_predicted_prob": 0.2533660169995904,
+        "actual_response_rate": 0.662,
+        "lift": 0.9438266324493869,
+        "cum_buyers": 3058,
+        "cum_gains_pct": 87.19703450242372
+      },
+      {
+        "decile": "Decile 10",
+        "households": 500,
+        "actual_buyers": 449,
+        "avg_predicted_prob": 0.23147521650098232,
+        "actual_response_rate": 0.898,
+        "lift": 1.2802965497576275,
+        "cum_buyers": 3507,
+        "cum_gains_pct": 100.0
+      }
+    ]
+  },
+  "Logistic_Regression": {
+    "pr_auc": 0.9328285558581928,
+    "roc_auc": 0.8556280415916803,
+    "brier_score": 0.13852739443150766,
+    "brier_skill_score": 0.33857576956169155,
+    "log_loss": 0.42555832046468883,
+    "ece": 0.019087296126501462,
+    "base_rate": 0.7014,
+    "top_decile_lift": 1.4228685486170516,
+    "top_decile_gains_pct": 14.228685486170518,
+    "top_2_deciles_gains_pct": 27.915597376675223,
+    "decile_table": [
+      {
+        "decile": "Decile 1",
+        "households": 500,
+        "actual_buyers": 499,
+        "avg_predicted_prob": 0.9977608850967746,
+        "actual_response_rate": 0.998,
+        "lift": 1.4228685486170516,
+        "cum_buyers": 499,
+        "cum_gains_pct": 14.228685486170518
+      },
+      {
+        "decile": "Decile 2",
+        "households": 500,
+        "actual_buyers": 480,
+        "avg_predicted_prob": 0.9789229117787913,
+        "actual_response_rate": 0.96,
+        "lift": 1.3686911890504705,
+        "cum_buyers": 979,
+        "cum_gains_pct": 27.915597376675223
+      },
+      {
+        "decile": "Decile 3",
+        "households": 500,
+        "actual_buyers": 474,
+        "avg_predicted_prob": 0.9398783592805523,
+        "actual_response_rate": 0.948,
+        "lift": 1.3515825491873394,
+        "cum_buyers": 1453,
+        "cum_gains_pct": 41.431422868548616
+      },
+      {
+        "decile": "Decile 4",
+        "households": 500,
+        "actual_buyers": 454,
+        "avg_predicted_prob": 0.8799602965178631,
+        "actual_response_rate": 0.908,
+        "lift": 1.29455374964357,
+        "cum_buyers": 1907,
+        "cum_gains_pct": 54.37696036498431
+      },
+      {
+        "decile": "Decile 5",
+        "households": 500,
+        "actual_buyers": 413,
+        "avg_predicted_prob": 0.7989641329200299,
+        "actual_response_rate": 0.826,
+        "lift": 1.1776447105788421,
+        "cum_buyers": 2320,
+        "cum_gains_pct": 66.15340747077273
+      },
+      {
+        "decile": "Decile 6",
+        "households": 500,
+        "actual_buyers": 354,
+        "avg_predicted_prob": 0.7039026456867564,
+        "actual_response_rate": 0.708,
+        "lift": 1.0094097519247218,
+        "cum_buyers": 2674,
+        "cum_gains_pct": 76.24750499001996
+      },
+      {
+        "decile": "Decile 7",
+        "households": 500,
+        "actual_buyers": 317,
+        "avg_predicted_prob": 0.5976917458031026,
+        "actual_response_rate": 0.634,
+        "lift": 0.9039064727687482,
+        "cum_buyers": 2991,
+        "cum_gains_pct": 85.28656971770744
+      },
+      {
+        "decile": "Decile 8",
+        "households": 500,
+        "actual_buyers": 252,
+        "avg_predicted_prob": 0.4853246812508706,
+        "actual_response_rate": 0.504,
+        "lift": 0.718562874251497,
+        "cum_buyers": 3243,
+        "cum_gains_pct": 92.47219846022242
+      },
+      {
+        "decile": "Decile 9",
+        "households": 500,
+        "actual_buyers": 172,
+        "avg_predicted_prob": 0.33765247020137146,
+        "actual_response_rate": 0.344,
+        "lift": 0.49044767607641854,
+        "cum_buyers": 3415,
+        "cum_gains_pct": 97.3766752209866
+      },
+      {
+        "decile": "Decile 10",
+        "households": 500,
+        "actual_buyers": 92,
+        "avg_predicted_prob": 0.13002256119357178,
+        "actual_response_rate": 0.184,
+        "lift": 0.2623324779013402,
+        "cum_buyers": 3507,
+        "cum_gains_pct": 100.0
+      }
+    ]
+  },
+  "LightGBM_Raw": {
+    "pr_auc": 0.9348055372328054,
+    "roc_auc": 0.8600447177599637,
+    "brier_score": 0.13628003648051998,
+    "brier_skill_score": 0.3493061886917964,
+    "log_loss": 0.41839653359954665,
+    "ece": 0.019329911817933636,
+    "base_rate": 0.7014,
+    "top_decile_lift": 1.4143142286854862,
+    "top_decile_gains_pct": 14.143142286854863,
+    "top_2_deciles_gains_pct": 28.086683775306533,
+    "decile_table": [
+      {
+        "decile": "Decile 1",
+        "households": 500,
+        "actual_buyers": 496,
+        "avg_predicted_prob": 0.9852008490968912,
+        "actual_response_rate": 0.992,
+        "lift": 1.4143142286854862,
+        "cum_buyers": 496,
+        "cum_gains_pct": 14.143142286854863
+      },
+      {
+        "decile": "Decile 2",
+        "households": 500,
+        "actual_buyers": 489,
+        "avg_predicted_prob": 0.9678388079426183,
+        "actual_response_rate": 0.978,
+        "lift": 1.3943541488451667,
+        "cum_buyers": 985,
+        "cum_gains_pct": 28.086683775306533
+      },
+      {
+        "decile": "Decile 3",
+        "households": 500,
+        "actual_buyers": 474,
+        "avg_predicted_prob": 0.9373023054498468,
+        "actual_response_rate": 0.948,
+        "lift": 1.3515825491873394,
+        "cum_buyers": 1459,
+        "cum_gains_pct": 41.602509267179926
+      },
+      {
+        "decile": "Decile 4",
+        "households": 500,
+        "actual_buyers": 452,
+        "avg_predicted_prob": 0.8890721378935759,
+        "actual_response_rate": 0.904,
+        "lift": 1.288850869689193,
+        "cum_buyers": 1911,
+        "cum_gains_pct": 54.49101796407185
+      },
+      {
+        "decile": "Decile 5",
+        "households": 500,
+        "actual_buyers": 416,
+        "avg_predicted_prob": 0.8118094952632284,
+        "actual_response_rate": 0.832,
+        "lift": 1.1861990305104078,
+        "cum_buyers": 2327,
+        "cum_gains_pct": 66.35300826917594
+      },
+      {
+        "decile": "Decile 6",
+        "households": 500,
+        "actual_buyers": 351,
+        "avg_predicted_prob": 0.7074897154711619,
+        "actual_response_rate": 0.702,
+        "lift": 1.0008554319931564,
+        "cum_buyers": 2678,
+        "cum_gains_pct": 76.3615625891075
+      },
+      {
+        "decile": "Decile 7",
+        "households": 500,
+        "actual_buyers": 310,
+        "avg_predicted_prob": 0.582565517530791,
+        "actual_response_rate": 0.62,
+        "lift": 0.8839463929284288,
+        "cum_buyers": 2988,
+        "cum_gains_pct": 85.20102651839179
+      },
+      {
+        "decile": "Decile 8",
+        "households": 500,
+        "actual_buyers": 258,
+        "avg_predicted_prob": 0.4771679748868918,
+        "actual_response_rate": 0.516,
+        "lift": 0.7356715141146278,
+        "cum_buyers": 3246,
+        "cum_gains_pct": 92.55774165953807
+      },
+      {
+        "decile": "Decile 9",
+        "households": 500,
+        "actual_buyers": 174,
+        "avg_predicted_prob": 0.3350570257698249,
+        "actual_response_rate": 0.348,
+        "lift": 0.4961505560307955,
+        "cum_buyers": 3420,
+        "cum_gains_pct": 97.51924721984602
+      },
+      {
+        "decile": "Decile 10",
+        "households": 500,
+        "actual_buyers": 87,
+        "avg_predicted_prob": 0.16569278288449843,
+        "actual_response_rate": 0.174,
+        "lift": 0.24807527801539775,
+        "cum_buyers": 3507,
+        "cum_gains_pct": 100.0
+      }
+    ]
+  },
+  "LightGBM_Calibrated": {
+    "pr_auc": 0.9303317953363304,
+    "roc_auc": 0.8595402248798738,
+    "brier_score": 0.1363755264679311,
+    "brier_skill_score": 0.3488502543858264,
+    "log_loss": 0.4188064007483361,
+    "ece": 0.017140801423436776,
+    "base_rate": 0.7014,
+    "top_decile_lift": 1.4143142286854862,
+    "top_decile_gains_pct": 14.143142286854863,
+    "top_2_deciles_gains_pct": 28.029654975762757,
+    "decile_table": [
+      {
+        "decile": "Decile 1",
+        "households": 500,
+        "actual_buyers": 496,
+        "avg_predicted_prob": 0.9985212380757611,
+        "actual_response_rate": 0.992,
+        "lift": 1.4143142286854862,
+        "cum_buyers": 496,
+        "cum_gains_pct": 14.143142286854863
+      },
+      {
+        "decile": "Decile 2",
+        "households": 500,
+        "actual_buyers": 487,
+        "avg_predicted_prob": 0.9731042331667386,
+        "actual_response_rate": 0.974,
+        "lift": 1.3886512688907897,
+        "cum_buyers": 983,
+        "cum_gains_pct": 28.029654975762757
+      },
+      {
+        "decile": "Decile 3",
+        "households": 500,
+        "actual_buyers": 478,
+        "avg_predicted_prob": 0.9551262054484094,
+        "actual_response_rate": 0.956,
+        "lift": 1.3629883090960935,
+        "cum_buyers": 1461,
+        "cum_gains_pct": 41.6595380667237
+      },
+      {
+        "decile": "Decile 4",
+        "households": 500,
+        "actual_buyers": 451,
+        "avg_predicted_prob": 0.8942706717621905,
+        "actual_response_rate": 0.902,
+        "lift": 1.2859994297120045,
+        "cum_buyers": 1912,
+        "cum_gains_pct": 54.51953236384374
+      },
+      {
+        "decile": "Decile 5",
+        "households": 500,
+        "actual_buyers": 414,
+        "avg_predicted_prob": 0.8297055558130806,
+        "actual_response_rate": 0.828,
+        "lift": 1.1804961505560307,
+        "cum_buyers": 2326,
+        "cum_gains_pct": 66.32449386940405
+      },
+      {
+        "decile": "Decile 6",
+        "households": 500,
+        "actual_buyers": 352,
+        "avg_predicted_prob": 0.714644241214033,
+        "actual_response_rate": 0.704,
+        "lift": 1.003706871970345,
+        "cum_buyers": 2678,
+        "cum_gains_pct": 76.3615625891075
+      },
+      {
+        "decile": "Decile 7",
+        "households": 500,
+        "actual_buyers": 309,
+        "avg_predicted_prob": 0.6028070295724482,
+        "actual_response_rate": 0.618,
+        "lift": 0.8810949529512403,
+        "cum_buyers": 2987,
+        "cum_gains_pct": 85.1725121186199
+      },
+      {
+        "decile": "Decile 8",
+        "households": 500,
+        "actual_buyers": 259,
+        "avg_predicted_prob": 0.4736545876020821,
+        "actual_response_rate": 0.518,
+        "lift": 0.7385229540918163,
+        "cum_buyers": 3246,
+        "cum_gains_pct": 92.55774165953807
+      },
+      {
+        "decile": "Decile 9",
+        "households": 500,
+        "actual_buyers": 174,
+        "avg_predicted_prob": 0.33497207175327354,
+        "actual_response_rate": 0.348,
+        "lift": 0.4961505560307955,
+        "cum_buyers": 3420,
+        "cum_gains_pct": 97.51924721984602
+      },
+      {
+        "decile": "Decile 10",
+        "households": 500,
+        "actual_buyers": 87,
+        "avg_predicted_prob": 0.1587766302400553,
+        "actual_response_rate": 0.174,
+        "lift": 0.24807527801539775,
+        "cum_buyers": 3507,
+        "cum_gains_pct": 100.0
+      }
+    ]
+  }
+}
