@@ -129,3 +129,4 @@ def test_evaluation_metrics_bounds():
     assert 0.0 <= metrics["brier_score"] <= 1.0
     assert 0.0 <= metrics["ece"] <= 1.0
     assert metrics["top_decile_lift"] > 1.0
+

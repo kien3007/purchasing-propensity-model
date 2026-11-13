@@ -182,3 +182,4 @@ class LightGBMPropensityModel:
         instance.categorical_features_ = data["categorical_features"]
         logger.info(f"Model loaded from {target_path}")
         return instance
+

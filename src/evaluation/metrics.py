@@ -104,3 +104,4 @@ def compute_propensity_metrics(y_true: np.ndarray, y_prob: np.ndarray) -> Dict[s
         "top_2_deciles_gains_pct": top_2_deciles_gains,
         "decile_table": decile_df,
     }
+

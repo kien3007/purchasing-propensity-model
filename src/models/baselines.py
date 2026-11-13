@@ -92,3 +92,4 @@ class LogisticRegressionBaseline:
 
     def predict(self, X: pd.DataFrame, threshold: float = 0.5) -> np.ndarray:
         return (self.predict_proba(X)[:, 1] >= threshold).astype(int)
+

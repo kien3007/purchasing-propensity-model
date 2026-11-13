@@ -41,7 +41,11 @@ purchasing-propensity-model/
 │       └── figures/                      # 10 biểu đồ trực quan hóa dữ liệu
 ├── models/                      # Mô hình LightGBM đã hiệu chuẩn xác suất (.joblib)
 ├── notebooks/
-│   └── 01_eda_and_data_quality.ipynb    # Jupyter Notebook thực thi 100% phân tích & biểu đồ
+│   ├── 01_eda_and_data_quality.ipynb             # Khám phá 8 bảng dữ liệu & 10 câu chuyện trực quan
+│   ├── 02_point_in_time_feature_engineering.ipynb  # Kỷ luật Point-in-Time, chống rò rỉ & trích xuất 28 tính năng
+│   ├── 03_model_training_and_benchmarking.ipynb  # Huấn luyện Heuristic vs Logistic vs LightGBM & Hiệu chuẩn Isotonic
+│   ├── 04_business_impact_and_decile_lift.ipynb  # Phân tầng 10 phân vị Decile Lift, Cumulative Gains & ROI Marketing
+│   └── 05_model_explainability_and_shap.ipynb    # Giải thích toàn cục/cục bộ qua SHAP & CRM Action Playbook
 ├── sample_data/                 # Thư mục chứa 8 file CSV gốc từ Dunnhumby
 ├── scripts/
 │   ├── compute_actual_stats.py          # Script kiểm toán số liệu thực tế
@@ -185,12 +189,21 @@ python -m src.pipelines.train_pipeline
 ```
 *Pipeline sẽ tự động tải dữ liệu, xây dựng ma trận đặc trưng qua các mốc thời gian, huấn luyện LightGBM, hiệu chuẩn Isotonic, xuất file mô hình `models/lightgbm_propensity_model.joblib` và cập nhật các file báo cáo trong `docs/reports/`.*
 
-### Bước 4: Chạy Notebook Khám Phá EDA
+### Bước 4: Khám Phá Chuỗi 5 Jupyter Notebook Tương Tác
 ```bash
+# Mở giao diện Jupyter Lab để khám phá trực quan từng giai đoạn:
+jupyter lab notebooks/
+
+# Hoặc thực thi lại toàn bộ chuỗi 5 notebooks:
 jupyter nbconvert --to notebook --execute notebooks/01_eda_and_data_quality.ipynb --inplace
+jupyter nbconvert --to notebook --execute notebooks/02_point_in_time_feature_engineering.ipynb --inplace
+jupyter nbconvert --to notebook --execute notebooks/03_model_training_and_benchmarking.ipynb --inplace
+jupyter nbconvert --to notebook --execute notebooks/04_business_impact_and_decile_lift.ipynb --inplace
+jupyter nbconvert --to notebook --execute notebooks/05_model_explainability_and_shap.ipynb --inplace
 ```
 
 ---
 
 ## ⚖️ Giấy Phép & Tác Quyền
 Dự án được phát triển và công bố theo giấy phép MIT License. Toàn bộ mã nguồn mở phục vụ mục đích nghiên cứu, học tập và ứng dụng thực tiễn trong ngành khoa học dữ liệu bán lẻ.
+
