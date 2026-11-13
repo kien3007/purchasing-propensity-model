@@ -292,6 +292,7 @@ ax.set_ylabel('Số ngày cách lần đi chợ tiếp theo', fontweight='bold')
 ax.set_xticks(x)
 ax.set_xticklabels(categories, fontweight='bold')
 ax.legend(frameon=True, facecolor='white')
+ax.set_ylim(0, 8.5)
 ax.set_title(f'Biểu đồ 5: Đồ Tươi Sống Thúc Đẩy Tần Suất Mua Sắm Nhanh Hơn\\n({perish_pct:.1f}% tổng số giỏ hàng chứa mặt hàng tươi sống)', pad=15)
 
 for i in range(len(categories)):
@@ -329,27 +330,32 @@ skus_nocpn = no_cpn_baskets['distinct_items'].mean()
 items_median_cpn = cpn_baskets['basket_items'].median()
 items_median_nocpn = no_cpn_baskets['basket_items'].median()
 
-fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(11, 5))
+# Khởi tạo layout rộng rãi với constrained_layout tự động căn chỉnh lề chống đè chữ
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5.2), constrained_layout=True)
 
 # 1. So sánh giá trị giỏ hàng (AOV)
 bars1 = ax1.bar(['Không dùng Coupon', 'Có dùng Coupon'], [aov_nocpn, aov_cpn], color=['#7570b3', '#d95f02'], edgecolor='black', width=0.45)
-ax1.set_ylabel('Giá trị giỏ hàng trung bình AOV (USD)', fontweight='bold')
-ax1.set_title('Giá Trị Giỏ Hàng (AOV)', fontweight='bold', pad=10)
-ax1.set_ylim(0, aov_cpn * 1.25)
-ax1.text(0, aov_nocpn + 2.0, f'${aov_nocpn:.2f}', ha='center', fontweight='bold', fontsize=12)
-ax1.text(1, aov_cpn + 2.0, f'${aov_cpn:.2f}\\n(+152.6%)', ha='center', fontweight='bold', color='#d95f02', fontsize=12)
+ax1.set_ylabel('Giá trị giỏ hàng trung bình AOV (USD)', fontweight='bold', fontsize=11)
+ax1.set_title('Giá Trị Giỏ Hàng (AOV)', fontweight='bold', fontsize=13, pad=12)
+ax1.set_ylim(0, 95)
+ax1.text(0, aov_nocpn + 3.0, f'${aov_nocpn:.2f}', ha='center', fontweight='bold', fontsize=12)
+ax1.text(1, aov_cpn + 3.0, f'${aov_cpn:.2f}\\n(+152.6%)', ha='center', fontweight='bold', color='#d95f02', fontsize=12)
 
 # 2. So sánh độ đa dạng giỏ hàng (Distinct SKUs)
 bars2 = ax2.bar(['Không dùng Coupon', 'Có dùng Coupon'], [skus_nocpn, skus_cpn], color=['#7570b3', '#d95f02'], edgecolor='black', width=0.45)
-ax2.set_ylabel('Số loại mặt hàng trong giỏ (Distinct SKUs)', fontweight='bold')
-ax2.set_title('Độ Đa Dạng Giỏ Hàng (Distinct SKUs)', fontweight='bold', pad=10)
-ax2.set_ylim(0, skus_cpn * 1.25)
-ax2.text(0, skus_nocpn + 0.8, f'{skus_nocpn:.1f} loại\\n(Median: {items_median_nocpn:.0f} món)', ha='center', fontweight='bold', fontsize=11)
-ax2.text(1, skus_cpn + 0.8, f'{skus_cpn:.1f} loại\\n(+178.3% | Median: {items_median_cpn:.0f})', ha='center', fontweight='bold', color='#d95f02', fontsize=11)
+ax2.set_ylabel('Số loại mặt hàng trong giỏ (Distinct SKUs)', fontweight='bold', fontsize=11)
+ax2.set_title('Độ Đa Dạng Giỏ Hàng (Distinct SKUs)', fontweight='bold', fontsize=13, pad=12)
+ax2.set_ylim(0, 36)
+ax2.text(0, skus_nocpn + 1.2, f'{skus_nocpn:.1f} loại', ha='center', fontweight='bold', fontsize=12)
+ax2.text(1, skus_cpn + 1.2, f'{skus_cpn:.1f} loại\\n(+178.3%)', ha='center', fontweight='bold', color='#d95f02', fontsize=12)
 
-plt.suptitle(f'Biểu đồ 6: Hiệu Ứng Mồi Câu Coupon - Chi Tiêu Gấp 2.53 Lần\\n({len(cpn_baskets):,} giỏ hàng có áp dụng ưu đãi)', fontsize=14, fontweight='bold', y=0.98)
-plt.subplots_adjust(top=0.85, wspace=0.3)
-plt.savefig(FIG_DIR / '06_coupon_halo_effect.png', dpi=150, bbox_inches='tight')
+# Hộp chú thích trung vị số món rõ ràng, không đè lấn tiêu đề
+ax2.text(0.5, 0.88, f'Trung vị số món: {items_median_nocpn:.0f} món vs {items_median_cpn:.0f} món (+243%)', transform=ax2.transAxes, ha='center', fontsize=10, bbox=dict(boxstyle='round,pad=0.4', facecolor='white', edgecolor='#999999', alpha=0.9))
+
+# Tiêu đề tổng thể 1 dòng duy nhất, không đè lên các tiêu đề con
+fig.suptitle(f'Biểu đồ 6: Hiệu Ứng Mồi Câu Coupon - Chi Tiêu Gấp 2.53 Lần ({len(cpn_baskets):,} giỏ hàng có ưu đãi)', fontsize=15, fontweight='bold')
+
+plt.savefig(FIG_DIR / '06_coupon_halo_effect.png', dpi=150)
 plt.show()
 
 print(f"📊 SỐ LIỆU COUPON THỰC TẾ:")
