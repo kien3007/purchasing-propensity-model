@@ -314,6 +314,7 @@ print(f" - Chu kỳ giỏ đồ khô:  Trung vị {median_np:.1f} ngày (Trung b
 ### 📌 Vì sao dùng biểu đồ Cột So Sánh Doanh Thu (Spend Comparison Bar Chart)?
 - **Lý do chọn biểu đồ**: Để chứng minh trực quan hiệu quả tài chính của Coupon: Có phải phát coupon chỉ làm mất biên lợi nhuận hay nó thực sự kéo khách mua nhiều hơn?
 - **Ý nghĩa nghiệp vụ**: Khi khách hàng mang theo phiếu giảm giá, họ chi tiêu trung bình **$67.60** so với **$26.76** ở đơn bình thường (**Tăng gấp 2.53 lần / +152.6%**). Coupon đóng vai trò như thỏi nam châm hút khách.
+- **Lưu ý kiểm toán chất lượng dữ liệu (Data Quality Note)**: Trường số lượng thô (`QUANTITY`) trong bảng giao dịch gốc chứa các dòng bán sỉ dị biệt (lên tới 89,638 đơn vị/dòng), khiến số trung bình cộng số món bị méo mó. Do đó, theo chuẩn phân tích bán lẻ, chúng ta sử dụng **Số loại mặt hàng khác nhau (Distinct SKUs)** và **Trung vị số món (Median Items)** để phản ánh chuẩn xác quy mô giỏ hàng của người tiêu dùng.
 - **Quyết định mô hình**: Tạo tính năng `coupon_redemption_count_180d` để đo lường độ nhạy cảm của khách hàng với các chương trình khuyến mãi.
 """))
 
@@ -323,35 +324,38 @@ no_cpn_baskets = baskets[~has_cpn]
 
 aov_cpn = cpn_baskets['basket_spend'].mean()
 aov_nocpn = no_cpn_baskets['basket_spend'].mean()
-items_cpn = cpn_baskets['basket_items'].mean()
-items_nocpn = no_cpn_baskets['basket_items'].mean()
+skus_cpn = cpn_baskets['distinct_items'].mean()
+skus_nocpn = no_cpn_baskets['distinct_items'].mean()
+items_median_cpn = cpn_baskets['basket_items'].median()
+items_median_nocpn = no_cpn_baskets['basket_items'].median()
 
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(11, 5))
 
-# So sánh giá trị giỏ hàng (AOV)
-ax1.bar(['Không dùng Coupon', 'Có dùng Coupon'], [aov_nocpn, aov_cpn], color=['#7570b3', '#d95f02'], edgecolor='black', width=0.5)
-ax1.set_ylabel('Giá trị giỏ hàng trung bình (USD)', fontweight='bold')
-ax1.set_title('Giá Trị Giỏ Hàng (AOV)', fontweight='bold')
-ax1.text(0, aov_nocpn + 1.5, f'${aov_nocpn:.2f}', ha='center', fontweight='bold', fontsize=12)
-ax1.text(1, aov_cpn + 1.5, f'${aov_cpn:.2f}\\n(+152.6%)', ha='center', fontweight='bold', color='#d95f02', fontsize=12)
-ax1.set_ylim(0, 85)
+# 1. So sánh giá trị giỏ hàng (AOV)
+bars1 = ax1.bar(['Không dùng Coupon', 'Có dùng Coupon'], [aov_nocpn, aov_cpn], color=['#7570b3', '#d95f02'], edgecolor='black', width=0.45)
+ax1.set_ylabel('Giá trị giỏ hàng trung bình AOV (USD)', fontweight='bold')
+ax1.set_title('Giá Trị Giỏ Hàng (AOV)', fontweight='bold', pad=10)
+ax1.set_ylim(0, aov_cpn * 1.25)
+ax1.text(0, aov_nocpn + 2.0, f'${aov_nocpn:.2f}', ha='center', fontweight='bold', fontsize=12)
+ax1.text(1, aov_cpn + 2.0, f'${aov_cpn:.2f}\\n(+152.6%)', ha='center', fontweight='bold', color='#d95f02', fontsize=12)
 
-# So sánh số lượng sản phẩm
-ax2.bar(['Không dùng Coupon', 'Có dùng Coupon'], [items_nocpn, items_cpn], color=['#7570b3', '#d95f02'], edgecolor='black', width=0.5)
-ax2.set_ylabel('Số món đồ trong giỏ (Items)', fontweight='bold')
-ax2.set_title('Quy Mô Giỏ Hàng (Basket Size)', fontweight='bold')
-ax2.text(0, items_nocpn + 0.8, f'{items_nocpn:.1f} món', ha='center', fontweight='bold', fontsize=12)
-ax2.text(1, items_cpn + 0.8, f'{items_cpn:.1f} món\\n(+189%)', ha='center', fontweight='bold', color='#d95f02', fontsize=12)
-ax2.set_ylim(0, 35)
+# 2. So sánh độ đa dạng giỏ hàng (Distinct SKUs)
+bars2 = ax2.bar(['Không dùng Coupon', 'Có dùng Coupon'], [skus_nocpn, skus_cpn], color=['#7570b3', '#d95f02'], edgecolor='black', width=0.45)
+ax2.set_ylabel('Số loại mặt hàng trong giỏ (Distinct SKUs)', fontweight='bold')
+ax2.set_title('Độ Đa Dạng Giỏ Hàng (Distinct SKUs)', fontweight='bold', pad=10)
+ax2.set_ylim(0, skus_cpn * 1.25)
+ax2.text(0, skus_nocpn + 0.8, f'{skus_nocpn:.1f} loại\\n(Median: {items_median_nocpn:.0f} món)', ha='center', fontweight='bold', fontsize=11)
+ax2.text(1, skus_cpn + 0.8, f'{skus_cpn:.1f} loại\\n(+178.3% | Median: {items_median_cpn:.0f})', ha='center', fontweight='bold', color='#d95f02', fontsize=11)
 
-plt.suptitle(f'Biểu đồ 6: Hiệu Ứng Mồi Câu Coupon - Chi Tiêu Gấp 2.53 Lần\\n({len(cpn_baskets):,} giỏ hàng có áp dụng ưu đãi)', fontsize=15, fontweight='bold')
-plt.tight_layout()
-plt.savefig(FIG_DIR / '06_coupon_halo_effect.png', dpi=150)
+plt.suptitle(f'Biểu đồ 6: Hiệu Ứng Mồi Câu Coupon - Chi Tiêu Gấp 2.53 Lần\\n({len(cpn_baskets):,} giỏ hàng có áp dụng ưu đãi)', fontsize=14, fontweight='bold', y=0.98)
+plt.subplots_adjust(top=0.85, wspace=0.3)
+plt.savefig(FIG_DIR / '06_coupon_halo_effect.png', dpi=150, bbox_inches='tight')
 plt.show()
 
 print(f"📊 SỐ LIỆU COUPON THỰC TẾ:")
-print(f" - AOV có Coupon: ${aov_cpn:.2f} vs Không Coupon: ${aov_nocpn:.2f} (Tăng {aov_cpn/aov_nocpn:.2f}x)")
-print(f" - Số món có Coupon: {items_cpn:.1f} vs Không Coupon: {items_nocpn:.1f}")
+print(f" - AOV có Coupon: ${aov_cpn:.2f} vs Không Coupon: ${aov_nocpn:.2f} (Tăng gấp {aov_cpn/aov_nocpn:.2f} lần / +152.6%)")
+print(f" - Số loại mặt hàng (SKUs): {skus_cpn:.1f} loại vs {skus_nocpn:.1f} loại (Tăng gấp {skus_cpn/skus_nocpn:.2f} lần / +178.3%)")
+print(f" - Trung vị số món (Median Items): {items_median_cpn:.0f} món vs {items_median_nocpn:.0f} món (Tăng gấp {items_median_cpn/items_median_nocpn:.2f} lần)")
 """))
 
     # Chart 7: Campaign Acceleration
