@@ -30,11 +30,14 @@ $$Y_{h, t_0} = \begin{cases} 1 & \text{nếu } \exists \text{ trip của hộ } 
 
 ```text
 purchasing-propensity-model/
-├── .agents/skills/              # 12 Skills tiêu chuẩn phân tích dữ liệu & clean code
+├── .agents/skills/              # 13 Skills tiêu chuẩn (EDA, Modeling, LaTeX Beamer, Clean Code...)
 ├── .venv/                       # Môi trường ảo Python độc lập
 ├── data/                        # Thư mục dữ liệu trung gian (git-ignored)
-├── docs/                        # Tài liệu nghiệp vụ & báo cáo chuyên sâu
+├── docs/                        # Tài liệu nghiệp vụ, slide thuyết trình & báo cáo chuyên sâu
 │   ├── purchase_propensity_checklist.md  # Master Blueprint & Checklist
+│   ├── presentation/                     # Slide thuyết trình LaTeX Beamer chuẩn học thuật (19 trang)
+│   │   ├── presentation.tex              # Mã nguồn LaTeX Beamer widescreen 16:9
+│   │   └── presentation.pdf              # File Slide PDF đã biên dịch hoàn chỉnh
 │   └── reports/
 │       ├── model_performance_summary.md  # Báo cáo kết quả kiểm thử OOT
 │       ├── model_performance_summary.json
