@@ -148,21 +148,21 @@
 % ==============================================================================
 \begin{frame}{3. Nhịp Sinh Học Đi Chợ \& Chu Kỳ Mua Sắm Của Hộ Gia Đình}
   \begin{columns}[c]
-    \begin{column}{0.64\textwidth}
+    \begin{column}{0.60\textwidth}
       \centering
-      \includegraphics[width=\linewidth,height=0.68\textheight,keepaspectratio]{../reports/figures/01_inter_trip_distribution.png}
+      \includegraphics[width=\linewidth,height=0.65\textheight,keepaspectratio]{../reports/figures/01_inter_trip_distribution.png}
     \end{column}
-    \begin{column}{0.34\textwidth}
-      \textbf{Chỉ Số Thực Nghiệm:}
+    \begin{column}{0.38\textwidth}
+      \small
+      \textbf{Quy Luật Hành Vi Đi Chợ:}
       \begin{itemize}\setlength{\itemsep}{2pt}
-        \item \textbf{Trung vị chu kỳ:} \textbf{2.0 ngày}
-        \item \textbf{Trung bình:} \textbf{5.67 ngày} (P90 = 12.0)
-        \item \textbf{Quay lại $\le 7$ ngày:} \textbf{82.0\%}
-        \item \textbf{Quay lại $\le 14$ ngày:} \textbf{92.4\%}
+        \item \textbf{Tần suất thiết yếu:} Khách đi chợ theo nhịp tuần; hơn 80\% lượt mua lặp lại trong $\le 7$ ngày.
+        \item \textbf{Bão hòa chu kỳ:} Đạt 92.4\% ở mốc 14 ngày; thời gian chờ lâu hơn là khách vãng lai.
       \end{itemize}
-      \vspace{0.1cm}
+      \vspace{0.08cm}
       \begin{alertblock}{Cơ Sở Chọn $\Delta t = 14$ Ngày}
-        Bao quát \textbf{92.4\% chu kỳ tự nhiên}, tạo cửa sổ hành động lý tưởng cho CRM.\\
+        \footnotesize
+        Bao quát trọn \textbf{92.4\% hành vi tự nhiên}, tạo cửa sổ hành động lý tưởng cho CRM.\\
         $\rightarrow$ Biến: \texttt{urgency\_ratio}, \texttt{days\_since\_last\_basket}.
       \end{alertblock}
     \end{column}
@@ -174,22 +174,22 @@
 % ==============================================================================
 \begin{frame}{4. Cấu Trúc Giá Trị Giỏ Hàng Thực Nghiệm (AOV)}
   \begin{columns}[c]
-    \begin{column}{0.64\textwidth}
+    \begin{column}{0.60\textwidth}
       \centering
-      \includegraphics[width=\linewidth,height=0.68\textheight,keepaspectratio]{../reports/figures/02_basket_spend_distribution.png}
+      \includegraphics[width=\linewidth,height=0.65\textheight,keepaspectratio]{../reports/figures/02_basket_spend_distribution.png}
     \end{column}
-    \begin{column}{0.34\textwidth}
-      \textbf{Chỉ Số Thực Nghiệm:}
+    \begin{column}{0.38\textwidth}
+      \small
+      \textbf{Đặc Trưng Phân Hóa Giỏ Hàng:}
       \begin{itemize}\setlength{\itemsep}{2pt}
-        \item \textbf{Trung vị (P50):} \textbf{\$17.18}
-        \item \textbf{Trung bình (AOV):} \textbf{\$29.24}
-        \item \textbf{Phân vị P75:} \$37.28
-        \item \textbf{Phân vị P90:} \$68.04
+        \item \textbf{Lệch phải điển hình:} Đa số đơn hàng là mua sắm lẻ bổ sung, nhưng nhóm giỏ lớn gánh doanh số.
+        \item \textbf{Nhiễu số trung bình:} AOV cao hơn P50 tới 70\% do ảnh hưởng của các đơn mua sỉ/tiệc tùng.
       \end{itemize}
-      \vspace{0.1cm}
+      \vspace{0.08cm}
       \begin{exampleblock}{Quyết Định Kỹ Thuật}
-        Phân phối lệch phải cực mạnh: đơn nhỏ chiếm đa số, đơn lớn gánh doanh số.\\
-        $\rightarrow$ Bóc tách độc lập: \textbf{Tần suất} (\texttt{frequency}) và \textbf{Giá trị} (\texttt{spend\_30d}, \texttt{aov\_90d}).
+        \footnotesize
+        Khách mua nhiều tiền chưa chắc đã đi thường xuyên; bắt buộc bóc tách:\\
+        $\rightarrow$ \textbf{Tần suất} (\texttt{frequency}) \& \textbf{Giá trị} (\texttt{spend\_30d}, \texttt{aov\_90d}).
       \end{exampleblock}
     \end{column}
   \end{columns}
@@ -200,19 +200,21 @@
 % ==============================================================================
 \begin{frame}{5. Phân Bổ Nhịp Mua Sắm Theo Các Ngày Trong Tuần}
   \begin{columns}[c]
-    \begin{column}{0.64\textwidth}
+    \begin{column}{0.60\textwidth}
       \centering
-      \includegraphics[width=\linewidth,height=0.68\textheight,keepaspectratio]{../reports/figures/03_day_of_week_distribution.png}
+      \includegraphics[width=\linewidth,height=0.65\textheight,keepaspectratio]{../reports/figures/03_day_of_week_distribution.png}
     \end{column}
-    \begin{column}{0.34\textwidth}
-      \textbf{Chỉ Số Thực Nghiệm:}
+    \begin{column}{0.38\textwidth}
+      \small
+      \textbf{Quy Luật Nhịp Điệu Tuần:}
       \begin{itemize}\setlength{\itemsep}{2pt}
-        \item \textbf{Cuối tuần áp đảo:} Thứ Bảy và Chủ Nhật ghi nhận lượng đơn cao nhất.
-        \item \textbf{Giữa tuần giảm nhẹ:} Thứ Ba và Thứ Tư có lượng khách ghé thấp nhất.
+        \item \textbf{Tích trữ cuối tuần:} T7 và Chủ Nhật bùng nổ nhu cầu mua lớn; giữa tuần (T3--T4) chỉ mua bù đắp.
+        \item \textbf{Biên độ dao động:} Lượng giỏ cuối tuần tăng 30--35\% so với đáy giữa tuần.
       \end{itemize}
-      \vspace{0.1cm}
+      \vspace{0.08cm}
       \begin{block}{Quyết Định Kỹ Thuật}
-        Hành vi đi chợ gắn chặt với ngày nghỉ.\\
+        \footnotesize
+        Hành vi gắn chặt với lịch nghỉ ngơi.\\
         $\rightarrow$ Biến: \texttt{day\_of\_week} tại mốc $t_0$, khoảng cách thời gian tới ngày cuối tuần.
       \end{block}
     \end{column}
@@ -224,19 +226,21 @@
 % ==============================================================================
 \begin{frame}{6. Nhịp Sinh Học Mua Sắm Suốt 24 Giờ Trong Ngày}
   \begin{columns}[c]
-    \begin{column}{0.64\textwidth}
+    \begin{column}{0.60\textwidth}
       \centering
-      \includegraphics[width=\linewidth,height=0.68\textheight,keepaspectratio]{../reports/figures/04_hourly_shopping_rhythm.png}
+      \includegraphics[width=\linewidth,height=0.65\textheight,keepaspectratio]{../reports/figures/04_hourly_shopping_rhythm.png}
     \end{column}
-    \begin{column}{0.34\textwidth}
-      \textbf{Chỉ Số Thực Nghiệm:}
+    \begin{column}{0.38\textwidth}
+      \small
+      \textbf{Nhịp Điệu Hoạt Động Trong Ngày:}
       \begin{itemize}\setlength{\itemsep}{2pt}
-        \item \textbf{Khung giờ vàng:} \textbf{11:00 -- 18:00} (chiếm $> 65\%$ tổng số hóa đơn).
-        \item \textbf{Đỉnh cao trào tan sở:} \textbf{16:00 -- 17:00} khi khách ghé mua thực phẩm tối.
+        \item \textbf{Đỉnh đôi sinh hoạt:} Làn sóng mua trưa (11h--13h) và cao trào tan sở (16h--18h) chuẩn bị bữa tối.
+        \item \textbf{Tập trung giao dịch:} Hơn 65\% hóa đơn xuất hiện trong khung 7 tiếng ban ngày.
       \end{itemize}
-      \vspace{0.1cm}
+      \vspace{0.08cm}
       \begin{alertblock}{Ứng Dụng Tiếp Thị CRM}
-        Khung thời gian gửi thông báo ưu đãi chuyển đổi tốt nhất là \textbf{9:00 -- 10:00 sáng}, đón đầu nhu cầu mua trong ngày.
+        \footnotesize
+        Khung giờ vàng gửi ưu đãi là \textbf{9:00 -- 10:00 sáng}, đón đầu nhu cầu mua sắm phát sinh trong ngày.
       \end{alertblock}
     \end{column}
   \end{columns}
@@ -247,19 +251,21 @@
 % ==============================================================================
 \begin{frame}{7. Thực Phẩm Tươi Sống \& Động Lực Thúc Đẩy Mua Sắm}
   \begin{columns}[c]
-    \begin{column}{0.64\textwidth}
+    \begin{column}{0.60\textwidth}
       \centering
-      \includegraphics[width=\linewidth,height=0.68\textheight,keepaspectratio]{../reports/figures/05_perishable_trigger_effect.png}
+      \includegraphics[width=\linewidth,height=0.65\textheight,keepaspectratio]{../reports/figures/05_perishable_trigger_effect.png}
     \end{column}
-    \begin{column}{0.34\textwidth}
-      \textbf{Chỉ Số Thực Nghiệm:}
+    \begin{column}{0.38\textwidth}
+      \small
+      \textbf{Cơ Chế Tiêu Dùng Tươi Sống:}
       \begin{itemize}\setlength{\itemsep}{2pt}
-        \item \textbf{51.71\%} giỏ hàng chứa đồ tươi (Thịt, Rau củ, Sữa, Bánh mì, Deli).
-        \item Hạn sử dụng ngắn (2--5 ngày) buộc khách phải \textbf{đi chợ lại sớm hơn}.
+        \item \textbf{Đồng hồ đếm ngược:} Hạn dùng ngắn (2--5 ngày) của thịt, rau, sữa buộc hộ phải đi chợ lại sớm.
+        \item \textbf{Rút ngắn độ trễ:} Mua đồ tươi kéo thời gian chờ tái mua giảm gần 2 ngày so với chỉ mua đồ khô.
       \end{itemize}
-      \vspace{0.1cm}
+      \vspace{0.08cm}
       \begin{exampleblock}{Đặc Trưng Cốt Lõi}
-        Cạn thực phẩm tươi tủ lạnh là động lực kích hoạt chuyến đi chợ kế tiếp.\\
+        \footnotesize
+        Cạn thực phẩm tủ lạnh kích thích chuyến đi kế tiếp.\\
         $\rightarrow$ Biến: \texttt{days\_since\_last\_perishable}, \texttt{perishable\_ratio\_90d}.
       \end{exampleblock}
     \end{column}
@@ -271,19 +277,21 @@
 % ==============================================================================
 \begin{frame}{8. Hiệu Ứng Mồi Câu \& Độ Lan Tỏa Của Phiếu Giảm Giá}
   \begin{columns}[c]
-    \begin{column}{0.64\textwidth}
+    \begin{column}{0.60\textwidth}
       \centering
-      \includegraphics[width=\linewidth,height=0.68\textheight,keepaspectratio]{../reports/figures/06_coupon_halo_effect.png}
+      \includegraphics[width=\linewidth,height=0.65\textheight,keepaspectratio]{../reports/figures/06_coupon_halo_effect.png}
     \end{column}
-    \begin{column}{0.34\textwidth}
-      \textbf{Chỉ Số Thực Nghiệm:}
+    \begin{column}{0.38\textwidth}
+      \small
+      \textbf{Cơ Chế Lan Tỏa (Halo Effect):}
       \begin{itemize}\setlength{\itemsep}{2pt}
-        \item \textbf{AOV có Coupon:} \textbf{\$67.60} vs không Coupon \textbf{\$26.76} (\textbf{Gấp 2.53 lần / +152.6\%}).
-        \item \textbf{Độ đa dạng SKU:} Tăng từ \textbf{8.5} lên \textbf{23.6 loại} (\textbf{+178.3\%}).
+        \item \textbf{Tâm lý mồi câu:} Phiếu giảm giá chỉ nhắm 1--2 món, nhưng kéo khách dạo khắp các quầy khác.
+        \item \textbf{Chi tiêu chéo nguyên giá:} Hơn 80\% giá trị giỏ hàng đến từ các sản phẩm nguyên giá đi kèm.
       \end{itemize}
-      \vspace{0.1cm}
+      \vspace{0.08cm}
       \begin{alertblock}{Bản Chất Kinh Doanh}
-        Coupon đóng vai trò mồi câu: khách tới vì món giảm giá nhưng chi phần lớn cho các mặt hàng nguyên giá.\\
+        \footnotesize
+        Hộ chịu dùng coupon là nhóm khách có giá trị cao nhất.\\
         $\rightarrow$ Biến: \texttt{coupon\_redempt\_count\_180d}.
       \end{alertblock}
     \end{column}
@@ -295,20 +303,22 @@
 % ==============================================================================
 \begin{frame}{9. Sức Bật Chu Kỳ Từ Các Chiến Dịch Tiếp Thị}
   \begin{columns}[c]
-    \begin{column}{0.64\textwidth}
+    \begin{column}{0.60\textwidth}
       \centering
-      \includegraphics[width=\linewidth,height=0.68\textheight,keepaspectratio]{../reports/figures/07_campaign_acceleration.png}
+      \includegraphics[width=\linewidth,height=0.65\textheight,keepaspectratio]{../reports/figures/07_campaign_acceleration.png}
     \end{column}
-    \begin{column}{0.34\textwidth}
-      \textbf{Chỉ Số Thực Nghiệm:}
+    \begin{column}{0.38\textwidth}
+      \small
+      \textbf{Tác Động Xung Lực Tiếp Thị:}
       \begin{itemize}\setlength{\itemsep}{2pt}
-        \item Khoảng cách giữa 2 lần mua rút ngắn từ \textbf{6.49 ngày $\rightarrow$ 3.55 ngày}.
-        \item Tốc độ quay lại siêu thị \textbf{nhanh hơn 45.3\%} khi có chiến dịch.
+        \item \textbf{Phá vỡ độ ì mua sắm:} Thư tiếp thị gửi tận nhà kích thích nhu cầu tiềm ẩn, kéo khách quay lại sớm gần 3 ngày.
+        \item \textbf{Tăng mật độ giao dịch:} Trong đợt chiến dịch active, tần suất mua sắm tăng vọt gần gấp đôi.
       \end{itemize}
-      \vspace{0.1cm}
+      \vspace{0.08cm}
       \begin{block}{Quyết Định Kỹ Thuật}
-        Chiến dịch đóng vai trò chất xúc tác tăng tốc chu kỳ mua sắm.\\
-        $\rightarrow$ Biến: \texttt{is\_targeted\_by\_campaign} tại thời điểm chốt sổ $t_0$.
+        \footnotesize
+        Chiến dịch là chất xúc tác ngoại sinh tăng tốc chu kỳ.\\
+        $\rightarrow$ Biến: \texttt{is\_targeted\_by\_campaign} tại $t_0$.
       \end{block}
     \end{column}
   \end{columns}
@@ -319,20 +329,21 @@
 % ==============================================================================
 \begin{frame}{10. Hành Vi Mua Sắm Đa Cửa Hàng \& Lòng Trung Thành}
   \begin{columns}[c]
-    \begin{column}{0.64\textwidth}
+    \begin{column}{0.60\textwidth}
       \centering
-      \includegraphics[width=\linewidth,height=0.68\textheight,keepaspectratio]{../reports/figures/08_store_hopping_distribution.png}
+      \includegraphics[width=\linewidth,height=0.65\textheight,keepaspectratio]{../reports/figures/08_store_hopping_distribution.png}
     \end{column}
-    \begin{column}{0.34\textwidth}
-      \textbf{Chỉ Số Thực Nghiệm:}
+    \begin{column}{0.38\textwidth}
+      \small
+      \textbf{Quy Luật Phân Bổ Địa Bàn:}
       \begin{itemize}\setlength{\itemsep}{2pt}
-        \item Chỉ \textbf{6.68\%} khách chỉ ghé đúng 1 cửa hàng.
-        \item \textbf{66.4\%} hộ ghé từ \textbf{4 cửa hàng trở lên}.
-        \item Tuy nhiên, "cửa hàng ruột" vẫn chiếm tới \textbf{73.35\% tổng chi tiêu}.
+        \item \textbf{Linh hoạt điểm đến:} Khách mua chéo nhiều chi nhánh tiện đường đi làm, đón con hoặc du lịch.
+        \item \textbf{Tập trung ngân sách lõi:} Dù ghé nhiều nơi, gần 3/4 ngân sách vẫn đổ vào một cửa hàng ruột duy nhất.
       \end{itemize}
-      \vspace{0.1cm}
+      \vspace{0.08cm}
       \begin{exampleblock}{Quyết Định Kỹ Thuật}
-        Khách phân bổ địa bàn nhưng trung thành ngân sách với 1 shop chính.\\
+        \footnotesize
+        Cần phân định chi nhánh vãng lai với chi nhánh trọng tâm:\\
         $\rightarrow$ Biến: \texttt{store\_loyalty\_index}, \texttt{primary\_store\_id}.
       \end{exampleblock}
     \end{column}
@@ -344,21 +355,22 @@
 % ==============================================================================
 \begin{frame}{11. Quy Mô Hộ Gia Đình \& Tác Động Lên Giá Trị Giỏ Hàng}
   \begin{columns}[c]
-    \begin{column}{0.64\textwidth}
+    \begin{column}{0.60\textwidth}
       \centering
-      \includegraphics[width=\linewidth,height=0.68\textheight,keepaspectratio]{../reports/figures/09_household_size_vs_aov.png}
+      \includegraphics[width=\linewidth,height=0.65\textheight,keepaspectratio]{../reports/figures/09_household_size_vs_aov.png}
     \end{column}
-    \begin{column}{0.34\textwidth}
-      \textbf{Chỉ Số Thực Nghiệm:}
+    \begin{column}{0.38\textwidth}
+      \small
+      \textbf{Động Lực Nhân Khẩu Học:}
       \begin{itemize}\setlength{\itemsep}{2pt}
-        \item \textbf{Hộ đông người (4--5+):} Chi tiêu trung bình \textbf{\$43.91}/giỏ.
-        \item \textbf{Hộ độc thân (1 người):} Chi tiêu \textbf{\$31.49}/giỏ (\textbf{Chênh lệch +39.4\%}).
-        \item \textbf{Hộ có con nhỏ:} AOV cao hơn \textbf{+27.7\%} so với hộ không có con.
+        \item \textbf{Tuyến tính theo quy mô:} Số miệng ăn trong nhà quy định trực tiếp kích thước hóa đơn thanh toán.
+        \item \textbf{Hiệu ứng con cái:} Trẻ nhỏ bổ sung các nhóm hàng giá trị cao như sữa bột, tã bỉm và đồ ăn dặm.
       \end{itemize}
-      \vspace{0.1cm}
+      \vspace{0.08cm}
       \begin{block}{Quyết Định Kỹ Thuật}
-        Quy mô hộ định hình trực tiếp sức mua.\\
-        $\rightarrow$ Biến phân loại: \texttt{hh\_size}, \texttt{kid\_category}, \texttt{income\_group}.
+        \footnotesize
+        Khai thác tín hiệu nhân khẩu qua phân loại khuyết thiếu:\\
+        $\rightarrow$ Biến: \texttt{hh\_size}, \texttt{kid\_category}, \texttt{income\_group}.
       \end{block}
     \end{column}
   \end{columns}
@@ -369,20 +381,21 @@
 % ==============================================================================
 \begin{frame}{12. Độ Ổn Định Nhãn Mục Tiêu Theo Dòng Thời Gian}
   \begin{columns}[c]
-    \begin{column}{0.64\textwidth}
+    \begin{column}{0.60\textwidth}
       \centering
-      \includegraphics[width=\linewidth,height=0.68\textheight,keepaspectratio]{../reports/figures/10_target_rate_stability.png}
+      \includegraphics[width=\linewidth,height=0.65\textheight,keepaspectratio]{../reports/figures/10_target_rate_stability.png}
     \end{column}
-    \begin{column}{0.34\textwidth}
-      \textbf{Chỉ Số Thực Nghiệm:}
+    \begin{column}{0.38\textwidth}
+      \small
+      \textbf{Kiểm Định Tính Toàn Vẹn:}
       \begin{itemize}\setlength{\itemsep}{2pt}
-        \item Đo lường qua 16 mốc chốt sổ từ Ngày 200 đến 680 ($\sim 1.5$ năm).
-        \item \textbf{Tỷ lệ dương trung bình:} \textbf{68.25\%}
-        \item \textbf{Biên dao động rất hẹp:} 65.8\% -- 70.2\%
+        \item \textbf{Không trôi dạt dữ liệu:} Tỷ lệ đi chợ trong 14 ngày tới duy trì nhất quán quanh mức 68\% suốt 1.5 năm.
+        \item \textbf{Biên dao động rất hẹp:} Chỉ $\pm 2.2\%$ khẳng định tính độc lập mùa vụ của nhịp bán lẻ thiết yếu.
       \end{itemize}
-      \vspace{0.1cm}
+      \vspace{0.08cm}
       \begin{alertblock}{Kết Luận Kiểm Định}
-        Tỷ lệ mục tiêu ổn định tuyệt đối, không bị trôi dạt dữ liệu (Data Drift), bảo đảm tính vững chắc cho phương pháp trượt cửa sổ thời gian.
+        \footnotesize
+        Nhãn ổn định tuyệt đối; vững chắc cho chiến lược Multi-cutoff trượt thời gian mà không méo mó phân phối.
       \end{alertblock}
     \end{column}
   \end{columns}
@@ -393,23 +406,23 @@
 % ==============================================================================
 \begin{frame}{13. Quy Luật Pareto 80/20 \& Giá Trị Trọn Đời Khách Hàng}
   \begin{columns}[c]
-    \begin{column}{0.64\textwidth}
+    \begin{column}{0.60\textwidth}
       \centering
-      \includegraphics[width=\linewidth,height=0.66\textheight,keepaspectratio]{../reports/figures/19_clv_pareto_distribution.png}
+      \includegraphics[width=\linewidth,height=0.65\textheight,keepaspectratio]{../reports/figures/19_clv_pareto_distribution.png}
     \end{column}
-    \begin{column}{0.34\textwidth}
+    \begin{column}{0.38\textwidth}
       \small
-      \textbf{Chỉ Số Thực Nghiệm:}
+      \textbf{Bất Bình Đẳng Doanh Thu:}
       \begin{itemize}\setlength{\itemsep}{1pt}
-        \item \textbf{Top 10\% hộ (250 hộ):} Chiếm \textbf{34.29\%} (\$2.76M).
-        \item \textbf{Top 20\% hộ (500 hộ):} Chiếm \textbf{53.05\%} (\$4.27M).
-        \item \textbf{Bottom 50\% hộ:} Chỉ đóng góp \textbf{15.66\%}.
+        \item \textbf{Tập trung hóa cực đoan:} Dòng tiền phụ thuộc sống còn vào thiểu số 500 hộ hạt nhân dẫn đầu.
+        \item \textbf{Thiệt hại rời bỏ:} Mất 1 khách VIP bằng tổn thất của 10 khách hàng thông thường cộng lại.
+        \item \textbf{Tối ưu hóa ngân sách:} Chi phí giữ chân khách VIP mang lại ROI vượt trội so với dàn trải đại trà.
       \end{itemize}
-      \vspace{0.08cm}
+      \vspace{0.06cm}
       \begin{alertblock}{Chiến Lược Giữ Chân VIP}
         \footnotesize
-        Khách VIP quyết định dòng tiền siêu thị.\\
-        $\rightarrow$ Biến: \texttt{spend\_percentile\_rank}, cảnh báo CRM khi \texttt{urgency\_ratio} $> 1.5$.
+        Cảnh báo CRM tức thì khi khách VIP dãn chu kỳ mua:\\
+        $\rightarrow$ Biến: \texttt{spend\_percentile\_rank}, \texttt{urgency\_ratio} $> 1.5$.
       \end{alertblock}
     \end{column}
   \end{columns}
@@ -420,23 +433,23 @@
 % ==============================================================================
 \begin{frame}{14. Cơ Chế Chiết Khấu Hai Tầng: Quầy Kệ \& Phiếu Giảm Giá}
   \begin{columns}[c]
-    \begin{column}{0.64\textwidth}
+    \begin{column}{0.60\textwidth}
       \centering
-      \includegraphics[width=\linewidth,height=0.66\textheight,keepaspectratio]{../reports/figures/20_markdown_vs_coupon_spend.png}
+      \includegraphics[width=\linewidth,height=0.65\textheight,keepaspectratio]{../reports/figures/20_markdown_vs_coupon_spend.png}
     \end{column}
-    \begin{column}{0.34\textwidth}
+    \begin{column}{0.38\textwidth}
       \small
-      \textbf{Chỉ Số Thực Nghiệm:}
+      \textbf{Bản Chất Khuyến Mãi 2 Kênh:}
       \begin{itemize}\setlength{\itemsep}{1pt}
-        \item \textbf{Giảm giá tại quầy:} \textbf{\$1.40M USD} (14.8\% gross, 83.7\% giỏ).
-        \item \textbf{Coupon nhà SX:} \textbf{\$42.6k USD} (0.5\% gross, 6.2\% giỏ).
-        \item Giảm giá quầy lớn gấp \textbf{32.8 lần} coupon!
+        \item \textbf{Giảm giá quầy (Bán lẻ):} Chương trình đại trà toàn diện tại điểm bán nhằm đẩy tồn kho và kích cầu.
+        \item \textbf{Coupon (Chủ động):} Đòi hỏi nỗ lực sưu tầm, chỉ nhóm khách nhạy cảm giá cao mới tận dụng.
+        \item \textbf{Quy mô áp đảo:} Ngân sách quầy kệ là động lực chính định hình quyết định mua sắm.
       \end{itemize}
-      \vspace{0.08cm}
+      \vspace{0.06cm}
       \begin{exampleblock}{Tách Biệt Feature}
         \footnotesize
-        Siêu thị chủ động chiết khấu giá kệ đại trà.\\
-        $\rightarrow$ Tách riêng \texttt{retail\_discount\_ratio} và \texttt{coupon\_discount\_ratio}.
+        Hai cơ chế phản ánh tâm lý đối lập; bắt buộc tách riêng:\\
+        $\rightarrow$ \texttt{retail\_discount\_ratio} và \texttt{coupon\_discount\_ratio}.
       \end{exampleblock}
     \end{column}
   \end{columns}
@@ -447,23 +460,22 @@
 % ==============================================================================
 \begin{frame}{15. Sức Thâm Nhập Doanh Thu Của Nhãn Hàng Riêng}
   \begin{columns}[c]
-    \begin{column}{0.64\textwidth}
+    \begin{column}{0.60\textwidth}
       \centering
-      \includegraphics[width=\linewidth,height=0.66\textheight,keepaspectratio]{../reports/figures/21_private_label_penetration.png}
+      \includegraphics[width=\linewidth,height=0.65\textheight,keepaspectratio]{../reports/figures/21_private_label_penetration.png}
     \end{column}
-    \begin{column}{0.34\textwidth}
+    \begin{column}{0.38\textwidth}
       \small
-      \textbf{Chỉ Số Thực Nghiệm:}
+      \textbf{Hiệu Quả Kinh Tế Nhãn Riêng:}
       \begin{itemize}\setlength{\itemsep}{1pt}
-        \item \textbf{Tỷ lệ SKU danh mục:} Chỉ \textbf{14.96\%} (13,812 SKU).
-        \item \textbf{Tỷ lệ doanh thu:} Đạt \textbf{27.83\%} (\$2.24 Triệu USD).
-        \item \textbf{Tỷ lệ sản lượng:} Đạt \textbf{28.80\%} số món.
-        \item Hiệu suất/SKU cao gấp \textbf{2.18 lần} hàng quốc gia!
+        \item \textbf{Hiệu suất sinh lời đột biến:} Danh mục SKU nhỏ gọn nhưng tạo doanh thu \& sản lượng gấp 1.9 lần.
+        \item \textbf{Lựa chọn thiết yếu tiết kiệm:} Khách tin dùng nhãn riêng cho nhu cầu cơ bản nhờ lợi thế giá.
+        \item \textbf{Chỉ dấu gắn kết:} Mua nhãn riêng gắn chặt với sự gắn bó lâu dài cùng chuỗi siêu thị.
       \end{itemize}
-      \vspace{0.08cm}
+      \vspace{0.06cm}
       \begin{block}{Quyết Định Kỹ Thuật}
         \footnotesize
-        Khách xem nhãn riêng là lựa chọn giá tốt.\\
+        Phản ánh độ nhạy cảm chi tiêu và phân khúc khách hàng:\\
         $\rightarrow$ Biến: \texttt{private\_label\_ratio\_90d}.
       \end{block}
     \end{column}
@@ -475,22 +487,22 @@
 % ==============================================================================
 \begin{frame}{16. Phễu Chuyển Đổi Tiếp Thị Theo Nhóm Chiến Dịch}
   \begin{columns}[c]
-    \begin{column}{0.64\textwidth}
+    \begin{column}{0.60\textwidth}
       \centering
-      \includegraphics[width=\linewidth,height=0.66\textheight,keepaspectratio]{../reports/figures/22_campaign_type_conversion_funnel.png}
+      \includegraphics[width=\linewidth,height=0.65\textheight,keepaspectratio]{../reports/figures/22_campaign_type_conversion_funnel.png}
     \end{column}
-    \begin{column}{0.34\textwidth}
+    \begin{column}{0.38\textwidth}
       \small
-      \textbf{Chỉ Số Thực Nghiệm:}
+      \textbf{Chiến Lược Tiếp Thị Đa Tầng:}
       \begin{itemize}\setlength{\itemsep}{1pt}
-        \item \textbf{Loại A (Đa ngành):} Chuyển đổi \textbf{45.01\%} (1,791 đổi).
-        \item \textbf{Loại B (Chuyên ngành):} Chuyển đổi \textbf{17.10\%} (454 đổi).
-        \item \textbf{Loại C (Sự kiện ngắn):} Chuyển đổi \textbf{12.72\%} (73 đổi).
+        \item \textbf{Ưu thế đa ngành (Loại A):} Độ phủ rộng giúp khách dễ tìm thấy ưu đãi phù hợp, tạo tỷ lệ đổi vượt trội.
+        \item \textbf{Rào cản chuyên ngành (B \& C):} Ngành hẹp hoặc thời gian gấp rút giới hạn tỷ lệ chuyển đổi.
+        \item \textbf{Phân hóa chất lượng:} Không phải chiến dịch nào cũng đem lại tác động thúc đẩy tương đương.
       \end{itemize}
-      \vspace{0.08cm}
+      \vspace{0.06cm}
       \begin{alertblock}{Quyết Định Tiếp Thị \& ML}
         \footnotesize
-        Loại A hiệu quả gấp \textbf{3.5 lần} Loại C!\\
+        Mô hình bắt buộc phân rã theo loại hình chiến dịch:\\
         $\rightarrow$ Tách riêng: \texttt{is\_targeted\_type\_A/B/C}.
       \end{alertblock}
     \end{column}
@@ -502,23 +514,22 @@
 % ==============================================================================
 \begin{frame}{17. Cơ Cấu Doanh Thu Ngành Hàng \& Hiệp Đồng Cây Xăng}
   \begin{columns}[c]
-    \begin{column}{0.64\textwidth}
+    \begin{column}{0.60\textwidth}
       \centering
-      \includegraphics[width=\linewidth,height=0.66\textheight,keepaspectratio]{../reports/figures/23_department_revenue_share.png}
+      \includegraphics[width=\linewidth,height=0.65\textheight,keepaspectratio]{../reports/figures/23_department_revenue_share.png}
     \end{column}
-    \begin{column}{0.34\textwidth}
+    \begin{column}{0.38\textwidth}
       \small
-      \textbf{Top Đóng Góp Doanh Thu:}
+      \textbf{Hiệu Ứng Hiệp Đồng Ngành Hàng:}
       \begin{itemize}\setlength{\itemsep}{1pt}
-        \item \textbf{Bách hóa (GROCERY):} \textbf{51.00\%} (\$4.11M).
-        \item \textbf{Dược/Mỹ phẩm (DRUG GM):} \textbf{13.12\%} (\$1.06M).
-        \item \textbf{Rau củ (PRODUCE):} \textbf{6.86\%} (\$552k).
-        \item \textbf{Cây xăng (KIOSK-GAS):} \textbf{6.81\%} (\$548k) -- \textbf{Đứng thứ 4 toàn chuỗi}!
+        \item \textbf{Xương sống dòng tiền:} Bách hóa \& Hàng tiêu dùng cá nhân tạo nền tảng vững chắc cho 64\% doanh thu.
+        \item \textbf{Phễu gom khách từ cây xăng:} Cây xăng là trạm tiếp đón ngoại vi, kéo khách tiện đường rẽ vào siêu thị.
+        \item \textbf{Chu kỳ nhiên liệu:} Nhịp đổ xăng phản ánh chân thực nhịp di chuyển và sinh hoạt của hộ gia đình.
       \end{itemize}
-      \vspace{0.08cm}
+      \vspace{0.06cm}
       \begin{exampleblock}{Hiệp Đồng Cây Xăng}
         \footnotesize
-        Cây xăng là mồi kéo khách định kỳ ghé siêu thị.\\
+        Thời gian từ lần đổ xăng gần nhất là tín hiệu độc lập:\\
         $\rightarrow$ Biến: \texttt{days\_since\_last\_gas}.
       \end{exampleblock}
     \end{column}
