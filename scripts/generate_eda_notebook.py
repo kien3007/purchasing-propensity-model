@@ -633,7 +633,7 @@ ax2.text(0, cov_values[0] + 1.5, f'{cov_values[0]:.2f}%\\n({int(len(baskets)*cov
 ax2.text(1, cov_values[1] + 1.5, f'{cov_values[1]:.2f}%\\n({int(len(baskets)*cov_values[1]/100):,} giỏ)', ha='center', fontweight='bold', fontsize=11)
 
 fig.suptitle('Biểu đồ 12: Cấu Trúc Khuyến Mãi 2 Tầng - Giảm Giá Niêm Yết vs Coupon Giấy', fontsize=15, fontweight='bold')
-plt.savefig(FIG_DIR / '20_markdown_vs_coupon_spend.png', dpi=150)
+plt.savefig(FIG_DIR / '20_markdown_vs_coupon_spend.png', dpi=150, bbox_inches='tight')
 plt.show()
 
 print("📊 SỐ LIỆU CẤU TRÚC CHIẾT KHẤU THỰC TẾ:")
@@ -665,24 +665,24 @@ trans_brand = df_trans[['PRODUCT_ID', 'SALES_VALUE', 'QUANTITY']].merge(
     df_prod[['PRODUCT_ID', 'BRAND']], on='PRODUCT_ID', how='inner'
 )
 brand_spend = trans_brand.groupby('BRAND', observed=False)['SALES_VALUE'].sum()
-brand_qty = trans_brand.groupby('BRAND', observed=False)['QUANTITY'].sum()
+brand_units = trans_brand['BRAND'].value_counts()
 
 total_spend_brand = brand_spend.sum()
 spend_priv_pct = (brand_spend.get('Private', 0) / total_spend_brand) * 100
 spend_nat_pct = (brand_spend.get('National', 0) / total_spend_brand) * 100
 
-total_qty_brand = brand_qty.sum()
-qty_priv_pct = (brand_qty.get('Private', 0) / total_qty_brand) * 100
-qty_nat_pct = (brand_qty.get('National', 0) / total_qty_brand) * 100
+total_units_brand = brand_units.sum()
+unit_priv_pct = (brand_units.get('Private', 0) / total_units_brand) * 100
+unit_nat_pct = (brand_units.get('National', 0) / total_units_brand) * 100
 
 # Hiệu suất doanh thu trên mỗi SKU
 priv_efficiency = spend_priv_pct / sku_priv_pct
 nat_efficiency = spend_nat_pct / sku_nat_pct
 
-fig, ax = plt.subplots(figsize=(10, 5))
-categories = ['Tỷ lệ Mặt hàng trong Danh mục (SKU Share)', 'Tỷ lệ Doanh thu Thực tế (Spend Share)', 'Tỷ lệ Sản lượng Tiêu thụ (Quantity Share)']
-private_shares = [sku_priv_pct, spend_priv_pct, qty_priv_pct]
-national_shares = [sku_nat_pct, spend_nat_pct, qty_nat_pct]
+fig, ax = plt.subplots(figsize=(10, 4.6))
+categories = ['Tỷ lệ Mặt hàng (SKU Share)', 'Tỷ lệ Doanh thu (Spend Share)', 'Tỷ lệ Sản lượng (Unit Share)']
+private_shares = [sku_priv_pct, spend_priv_pct, unit_priv_pct]
+national_shares = [sku_nat_pct, spend_nat_pct, unit_nat_pct]
 
 y = np.arange(len(categories))
 height = 0.45
@@ -690,12 +690,12 @@ height = 0.45
 p1 = ax.barh(y, private_shares, height, label='Nhãn Hàng Riêng Siêu Thị (Private Label)', color='#2b8cbe', edgecolor='black')
 p2 = ax.barh(y, national_shares, height, left=private_shares, label='Thương Hiệu Quốc Gia (National Brand)', color='#fdae6b', edgecolor='black')
 
-ax.set_xlabel('Tỷ trọng đóng góp (%)', fontweight='bold')
+ax.set_xlabel('Tỷ trọng đóng góp (%)', fontweight='bold', fontsize=11)
 ax.set_yticks(y)
 ax.set_yticklabels(categories, fontweight='bold', fontsize=11)
 ax.set_xlim(0, 100)
-ax.set_title('Biểu đồ 13: Hiệu Quả Đột Biến Của Nhãn Hàng Riêng (Private Label Penetration)\\n(Chỉ chiếm 15.0% danh mục SKU nhưng chiếm tới 27.8% Doanh thu & 28.8% Sản lượng)', pad=15)
-ax.legend(loc='lower right', frameon=True, facecolor='white')
+ax.set_title('Hiệu Quả Đột Biến Của Nhãn Hàng Riêng (Private Label Penetration)\\n(Chỉ chiếm 15.0% danh mục SKU nhưng tạo ra 27.8% Doanh thu & 28.8% Sản lượng)', fontsize=12, fontweight='bold', pad=12)
+ax.legend(loc='lower right', frameon=True, facecolor='white', fontsize=10)
 
 # Hiển thị số liệu bên trong thanh
 for i in range(len(categories)):
@@ -703,13 +703,13 @@ for i in range(len(categories)):
     ax.text(private_shares[i] + national_shares[i] / 2, y[i], f'{national_shares[i]:.1f}%', ha='center', va='center', color='black', fontweight='bold', fontsize=11)
 
 plt.tight_layout()
-plt.savefig(FIG_DIR / '21_private_label_penetration.png', dpi=150)
+plt.savefig(FIG_DIR / '21_private_label_penetration.png', dpi=150, bbox_inches='tight')
 plt.show()
 
 print("📊 SỐ LIỆU NHÃN HÀNG RIÊNG THỰC TẾ:")
 print(f" - Tỷ trọng SKU:        Private = {sku_priv_pct:.2f}% ({sku_brand_counts.get('Private', 0):,} SKUs) | National = {sku_nat_pct:.2f}% ({sku_brand_counts.get('National', 0):,} SKUs)")
 print(f" - Tỷ trọng Doanh thu:  Private = {spend_priv_pct:.2f}% (${brand_spend.get('Private', 0):,.2f}) | National = {spend_nat_pct:.2f}% (${brand_spend.get('National', 0):,.2f})")
-print(f" - Tỷ trọng Sản lượng:  Private = {qty_priv_pct:.2f}% | National = {qty_nat_pct:.2f}%")
+print(f" - Tỷ trọng Sản lượng:  Private = {unit_priv_pct:.2f}% | National = {unit_nat_pct:.2f}%")
 print(f" - Hiệu suất/SKU Index: Private = {priv_efficiency:.2f}x (Cao gấp {priv_efficiency/nat_efficiency:.2f} lần so với National)")
 """))
 
@@ -786,7 +786,7 @@ for bar in bars2_r:
     ax2.text(bar.get_x() + bar.get_width()/2.0, yval + 70, f'{int(yval):,}', ha='center', va='bottom', fontweight='bold', fontsize=10, color='#2ca02c')
 
 fig.suptitle('Biểu đồ 14: Phễu Chuyển Đổi Tiếp Thị Theo Loại Chiến Dịch (Campaign Conversion Funnel)', fontsize=15, fontweight='bold')
-plt.savefig(FIG_DIR / '22_campaign_type_conversion_funnel.png', dpi=150)
+plt.savefig(FIG_DIR / '22_campaign_type_conversion_funnel.png', dpi=150, bbox_inches='tight')
 plt.show()
 
 print("📊 SỐ LIỆU PHỄU CHIẾN DỊCH TIẾP THỊ THỰC TẾ:")
@@ -849,7 +849,7 @@ for bar, val, spend_val in zip(bars, dept_pcts.values[::-1], top8_dept.values[::
     ax.text(bar.get_width() + 0.8, bar.get_y() + bar.get_height()/2.0, f'{val:.2f}% (${spend_val:,.0f})', va='center', fontweight='bold', fontsize=10)
 
 plt.tight_layout()
-plt.savefig(FIG_DIR / '23_department_revenue_share.png', dpi=150)
+plt.savefig(FIG_DIR / '23_department_revenue_share.png', dpi=150, bbox_inches='tight')
 plt.show()
 
 print("📊 SỐ LIỆU DOANH THU CÁC NGÀNH HÀNG THỰC TẾ:")
