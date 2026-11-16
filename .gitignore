@@ -13,7 +13,7 @@ __pycache__/
 # Data files (CSVs exceed GitHub push limits)
 sample_data/**/*.csv
 sample_data/dunnhumby_The-Complete-Journey/dunnhumby_The-Complete-Journey CSV/
-data/
+/data/
 *.parquet
 *.feather
 *.h5
