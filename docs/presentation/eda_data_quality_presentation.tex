@@ -81,7 +81,7 @@
       \textbf{Thách Thức Dữ Liệu Bán Lẻ Gốc:}
       \begin{itemize}\setlength{\itemsep}{4pt}
         \item \textbf{Quy mô lớn \& phức tạp:} 2.6 triệu giao dịch từ 2,500 hộ gia đình trong 711 ngày liên tục.
-        \item \textbf{Nhiễu dữ liệu nghiệp vụ:} Đơn hoàn trả, giá trị âm, độ phủ nhân khẩu học không đồng đều.
+        \item \textbf{Nhiễu dữ liệu nghiệp vụ:} Lỗi hủy quét POS, hàng tặng 0đ, độ phủ nhân khẩu học không đồng đều.
         \item \textbf{Kỷ luật thời gian:} Thiết lập ranh giới quá khứ ($DAY \le t_0$) và tương lai ($DAY > t_0$).
       \end{itemize}
     \end{column}
@@ -122,9 +122,9 @@
   \vspace{0.2cm}
   \begin{columns}[T]
     \begin{column}{0.32\textwidth}
-      \begin{alertblock}{1. Lọc Giao Dịch Âm}
+      \begin{alertblock}{1. Lọc Giỏ Hàng \$0}
         \footnotesize
-        Loại bỏ 942 đơn hoàn trả $\le \$0$, thu được \textbf{275,542 giỏ hàng hợp lệ}.
+        Loại 942 giỏ hủy POS/tặng 0đ ($\le \$0$), thu \textbf{275,542 giỏ thương mại}.
       \end{alertblock}
     \end{column}
     \begin{column}{0.32\textwidth}

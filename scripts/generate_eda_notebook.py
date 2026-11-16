@@ -80,7 +80,7 @@ print("✅ Đã sẵn sàng môi trường phân tích!")
 
 Trước khi đi vào hành vi mua sắm, chúng ta tiến hành kiểm toán tính toàn vẹn của dữ liệu:
 - **Kiểm tra giá trị thiếu**: Độ phủ nhân khẩu học, độ phủ chiến dịch tiếp thị.
-- **Lọc giỏ hàng không hợp lệ**: Loại bỏ các dòng trả hàng / hủy đơn (chi tiêu $\le 0$).
+- **Lọc giỏ hàng không phát sinh doanh thu**: Loại bỏ 942 giỏ hàng quét hủy POS và đổi quà tặng 0đ (chi tiêu $\le 0$).
 - **Liên kết khóa quan hệ**: `household_key`, `PRODUCT_ID`, `BASKET_ID`, `CAMPAIGN`, `COUPON_UPC`.
 - **Bao quát 8 bảng**: Bao gồm 7 bảng nghiệp vụ bán lẻ và bảng `causal_data` (36.7 triệu dòng ghi nhận vị trí trưng bày và tờ rơi khuyến mãi).
 """))
