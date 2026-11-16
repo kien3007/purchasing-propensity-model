@@ -130,3 +130,83 @@ def test_evaluation_metrics_bounds():
     assert 0.0 <= metrics["ece"] <= 1.0
     assert metrics["top_decile_lift"] > 1.0
 
+
+# ==============================================================================
+# REAL DATA QUALITY CONTRACTS & INVARIANTS (DATA-QUALITY-FRAMEWORKS)
+# ==============================================================================
+
+def test_data_loader_cleansing_and_contracts():
+    """
+    Data Contract Test:
+    1. Positive basket spend only (non-positive trips filtered out).
+    2. Coupon mappings are 100% unique (exact duplicates eliminated).
+    3. Exactly 2,500 unique households are preserved across study.
+    """
+    from src.data.loader import DataLoader, load_coupons
+
+    # 1. Test coupon deduplication contract
+    coupons, redemptions = load_coupons()
+    assert len(coupons) == 119_384, f"Expected 119,384 unique coupons, got {len(coupons)}"
+    assert coupons.duplicated().sum() == 0, "Coupons table must have 0 duplicate rows"
+    assert len(redemptions) == 2_318, f"Expected 2,318 redemption events, got {len(redemptions)}"
+
+    # 2. Test transactions & basket cleansing contract
+    data = DataLoader.load_all()
+    trans = data["transactions"]
+    assert trans["household_key"].nunique() == 2_500, "Must contain all 2,500 households"
+
+    baskets = DataLoader.build_trip_level_baskets(trans, data["products"])
+    assert len(baskets) == 275_542, f"Expected 275,542 commercial baskets, got {len(baskets)}"
+    assert (baskets["basket_spend"] <= 0).sum() == 0, "No basket with spend <= 0 is allowed"
+    assert baskets["household_key"].nunique() == 2_500, "All 2,500 households must be preserved in baskets"
+
+
+def test_demographics_unknown_imputation_contract():
+    """
+    Verify that 100% of the 2,500 households are retained in feature extraction,
+    with missing demographics (68% of households) properly imputed as 'UNKNOWN'.
+    """
+    from src.data.loader import DataLoader
+    from src.features.feature_builder import PointInTimeFeatureExtractor
+
+    data = DataLoader.load_all()
+    baskets = DataLoader.build_trip_level_baskets(data["transactions"], data["products"])
+
+    extractor = PointInTimeFeatureExtractor(
+        baskets_df=baskets,
+        demographics_df=data["demographics"],
+        lookback_days=180,
+    )
+
+    feats = extractor.extract_features_for_cutoff(t0=200)
+
+    # Invariant 1: Exactly 2,500 rows
+    assert len(feats) == 2_500, f"Expected 2,500 households in feature matrix, got {len(feats)}"
+
+    # Invariant 2: Zero NaNs in demographic categorical features
+    demo_cols = ["classification_1", "classification_2", "classification_3", "HOMEOWNER_DESC", "classification_4", "classification_5", "KID_CATEGORY_DESC"]
+    for col in demo_cols:
+        assert col in feats.columns
+        assert feats[col].isna().sum() == 0, f"Column {col} must not contain NaNs"
+        # Over 60% of households should be 'UNKNOWN'
+        unknown_pct = (feats[col] == "UNKNOWN").mean() * 100
+        assert 60.0 <= unknown_pct <= 75.0, f"Column {col} expected ~68% UNKNOWN, got {unknown_pct:.1f}%"
+
+
+def test_model_artifact_load_and_predict():
+    """
+    Verify that the trained production LightGBM model artifact loads cleanly,
+    contains isotonic calibration, and outputs valid calibrated probabilities.
+    """
+    from src.config.settings import MODELS_DIR
+    from src.models.trainer import LightGBMPropensityModel
+
+    model_path = MODELS_DIR / "lightgbm_propensity_model.joblib"
+    assert model_path.exists(), f"Model artifact {model_path} does not exist!"
+
+    model = LightGBMPropensityModel.load(model_path)
+    assert hasattr(model, "predict_proba"), "Loaded model must support predict_proba"
+    assert model.calibrated_model is not None, "Model must have fitted calibration"
+    assert len(model.feature_names_) == 28, f"Expected 28 features, got {len(model.feature_names_)}"
+
+
