@@ -357,9 +357,8 @@ ax2.text(1, skus_cpn + 1.2, f'{skus_cpn:.1f} loại\\n(+178.3%)', ha='center', f
 ax2.text(0.5, 0.88, f'Trung vị số món: {items_median_nocpn:.0f} món vs {items_median_cpn:.0f} món (+243%)', transform=ax2.transAxes, ha='center', fontsize=10, bbox=dict(boxstyle='round,pad=0.4', facecolor='white', edgecolor='#999999', alpha=0.9))
 
 # Tiêu đề tổng thể 1 dòng duy nhất, không đè lên các tiêu đề con
-fig.suptitle(f'Biểu đồ 6: Hiệu Ứng Mồi Câu Coupon - Chi Tiêu Gấp 2.53 Lần ({len(cpn_baskets):,} giỏ hàng có ưu đãi)', fontsize=15, fontweight='bold')
-
-plt.savefig(FIG_DIR / '06_coupon_halo_effect.png', dpi=150)
+fig.suptitle(f'Hiệu Ứng Mồi Câu Coupon: Chi Tiêu Gấp 2.53 Lần ({len(cpn_baskets):,} giỏ hàng có ưu đãi)', fontsize=14, fontweight='bold')
+plt.savefig(FIG_DIR / '06_coupon_halo_effect.png', dpi=150, bbox_inches='tight')
 plt.show()
 
 print(f"📊 SỐ LIỆU COUPON THỰC TẾ:")
@@ -617,7 +616,7 @@ colors = ['#e6550d', '#31a354']
 bars1 = ax1.bar(categories, disc_values, color=colors, edgecolor='black', width=0.45)
 ax1.set_ylabel('Tổng ngân sách giảm giá (Triệu USD)', fontweight='bold')
 ax1.set_title('Quy Mô Ngân Sách Giảm Giá', fontweight='bold', fontsize=13, pad=12)
-ax1.set_ylim(0, 1.7)
+ax1.set_ylim(0, 1.8)
 ax1.text(0, disc_values[0] + 0.05, f'${total_retail_disc:,.2f}\\n({pct_retail_disc:.2f}% Gross Sales)', ha='center', fontweight='bold', fontsize=11)
 ax1.text(1, disc_values[1] + 0.05, f'${total_coupon_disc:,.2f}\\n({pct_coupon_disc:.2f}% Gross Sales)', ha='center', fontweight='bold', fontsize=11)
 ax1.text(0.5, 0.85, f'Giảm giá tại quầy lớn gấp {ratio_markdown_coupon:.1f} LẦN so với Coupon!', transform=ax1.transAxes, ha='center', fontsize=11, fontweight='bold', bbox=dict(boxstyle='round,pad=0.4', facecolor='#fee8c8', edgecolor='#e6550d'))
@@ -628,11 +627,11 @@ cov_values = [baskets_with_retail, baskets_with_coupon]
 bars2 = ax2.bar(coverage_cats, cov_values, color=colors, edgecolor='black', width=0.45)
 ax2.set_ylabel('Tỷ lệ giỏ hàng áp dụng (%)', fontweight='bold')
 ax2.set_title('Độ Phủ Trên Giỏ Hàng Mua Sắm', fontweight='bold', fontsize=13, pad=12)
-ax2.set_ylim(0, 60)
-ax2.text(0, cov_values[0] + 1.5, f'{cov_values[0]:.2f}%\\n({int(len(baskets)*cov_values[0]/100):,} giỏ)', ha='center', fontweight='bold', fontsize=11)
-ax2.text(1, cov_values[1] + 1.5, f'{cov_values[1]:.2f}%\\n({int(len(baskets)*cov_values[1]/100):,} giỏ)', ha='center', fontweight='bold', fontsize=11)
+ax2.set_ylim(0, 105)
+ax2.text(0, cov_values[0] + 2.0, f'{cov_values[0]:.2f}%\\n({int(len(baskets)*cov_values[0]/100):,} giỏ)', ha='center', fontweight='bold', fontsize=11)
+ax2.text(1, cov_values[1] + 2.0, f'{cov_values[1]:.2f}%\\n({int(len(baskets)*cov_values[1]/100):,} giỏ)', ha='center', fontweight='bold', fontsize=11)
 
-fig.suptitle('Biểu đồ 12: Cấu Trúc Khuyến Mãi 2 Tầng - Giảm Giá Niêm Yết vs Coupon Giấy', fontsize=15, fontweight='bold')
+fig.suptitle('Cấu Trúc Khuyến Mãi 2 Tầng: Giảm Giá Niêm Yết vs Coupon Giấy', fontsize=14, fontweight='bold')
 plt.savefig(FIG_DIR / '20_markdown_vs_coupon_spend.png', dpi=150, bbox_inches='tight')
 plt.show()
 
@@ -785,7 +784,7 @@ for bar in bars2_r:
     yval = bar.get_height()
     ax2.text(bar.get_x() + bar.get_width()/2.0, yval + 70, f'{int(yval):,}', ha='center', va='bottom', fontweight='bold', fontsize=10, color='#2ca02c')
 
-fig.suptitle('Biểu đồ 14: Phễu Chuyển Đổi Tiếp Thị Theo Loại Chiến Dịch (Campaign Conversion Funnel)', fontsize=15, fontweight='bold')
+fig.suptitle('Phễu Chuyển Đổi Tiếp Thị Theo Loại Chiến Dịch (Campaign Conversion Funnel)', fontsize=14, fontweight='bold')
 plt.savefig(FIG_DIR / '22_campaign_type_conversion_funnel.png', dpi=150, bbox_inches='tight')
 plt.show()
 
@@ -842,7 +841,7 @@ bars = ax.barh(y[::-1], dept_pcts.values[::-1], color=colors[::-1], edgecolor='b
 ax.set_yticks(y[::-1])
 ax.set_yticklabels(labels_vn[::-1], fontweight='bold', fontsize=11)
 ax.set_xlabel('Tỷ trọng đóng góp vào tổng doanh thu hệ thống (%)', fontweight='bold')
-ax.set_title('Biểu đồ 15: Phân Bổ Doanh Thu 8 Ngành Hàng Hàng Đầu & Sức Hút Cây Xăng\\n(Cây xăng KIOSK-GAS chiếm 6.81% Doanh thu, đứng thứ 4 toàn hệ thống)', pad=15)
+ax.set_title('Phân Bổ Doanh Thu 8 Ngành Hàng Hàng Đầu & Sức Hút Cây Xăng\\n(Cây xăng KIOSK-GAS chiếm 6.81% Doanh thu, đứng thứ 4 toàn hệ thống)', pad=15)
 ax.set_xlim(0, 60)
 
 for bar, val, spend_val in zip(bars, dept_pcts.values[::-1], top8_dept.values[::-1]):
