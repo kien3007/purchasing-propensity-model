@@ -152,8 +152,8 @@
     \texttt{hh\_demographic} & Mã hộ & 801 & 32.0\% & Tuổi, thu nhập, quy mô gia đình \\
     \texttt{campaign\_desc} & Mã chiến dịch & 30 & Toàn bộ & Lịch trình chiến dịch tiếp thị \\
     \texttt{campaign\_table} & Hộ + Chiến dịch & 7,208 & 1,584 hộ & Danh sách hộ nhận thư tiếp thị \\
-    \texttt{coupon} & Mã giảm giá & 124,548 & Toàn bộ & Ánh xạ phiếu ưu đãi tới SKU \\
-    \texttt{coupon\_redempt} & Lượt đổi & 2,318 & 434 hộ & Lịch sử dùng phiếu giảm giá \\
+    \texttt{coupon} & Mã giảm giá & 124,548 & Toàn bộ & Ánh xạ ưu đãi SKU (119,384 sau khử trùng) \\
+    \texttt{coupon\_redempt} & Lượt đổi & 2,318 & 434 hộ & Lịch sử dùng coupon tại quầy (0 trùng lặp) \\
     \bottomrule
   \end{tabular}
   \vspace{0.2cm}
@@ -161,7 +161,7 @@
     \small
     \begin{itemize}\setlength{\itemsep}{2pt}
       \item Lọc bỏ 942 giỏ hàng hủy POS/tặng 0đ ($\text{Tiền} \le \$0$) $\rightarrow$ Thu được \textbf{275,542 giỏ hàng thương mại hợp lệ}.
-      \item Ép kiểu tối ưu (Downcasting), giảm dung lượng từ 350MB xuống 70MB (\textbf{Tiết kiệm 78\% RAM}).
+      \item Khử \textbf{5,164 dòng trùng 100\%} ở \texttt{coupon}; Ép kiểu (Downcasting) tiết kiệm \textbf{78\% RAM} (350MB $\rightarrow$ 70MB).
     \end{itemize}
   \end{alertblock}
 \end{frame}

@@ -88,7 +88,7 @@
     
     \begin{column}{0.48\textwidth}
       \begin{alertblock}{Mục Tiêu Kiểm Toán Chất Lượng}
-        Lọc bỏ bất thường, bảo toàn mẫu, tối ưu hóa 78\% RAM phục vụ tính toán cửa sổ trượt.
+        Lọc 942 giỏ dị biệt, khử trùng 5,164 dòng coupon, bảo toàn 100\% mẫu, tiết kiệm 78\% RAM.
       \end{alertblock}
       \vspace{0.2cm}
       \begin{exampleblock}{Mục Tiêu Khám Phá Hành Vi}
@@ -114,29 +114,35 @@
     \texttt{demographics} & Mã hộ gia đình & 801 & 32.0\% & Tuổi, thu nhập, quy mô hộ, tình trạng con cái \\
     \texttt{campaign\_desc} & Mã chiến dịch & 30 & Toàn bộ & Lịch trình hoạt động các đợt tiếp thị (Loại A, B, C) \\
     \texttt{campaigns} & Hộ + Chiến dịch & 7,208 & 1,584 hộ & Danh sách hộ gia đình được gửi thư ưu đãi \\
-    \texttt{coupons} & Mã giảm giá & 124,548 & Toàn bộ & Ánh xạ phiếu ưu đãi vào từng SKU sản phẩm \\
-    \texttt{redemptions} & Lượt đổi phiếu & 2,318 & 434 hộ & Lịch sử sử dụng coupon thực tế tại quầy thanh toán \\
+    \texttt{coupons} & Mã giảm giá & 124,548 & Toàn bộ & Ánh xạ ưu đãi SKU (119,384 sau khử trùng) \\
+    \texttt{redemptions} & Lượt đổi phiếu & 2,318 & 434 hộ & Lịch sử dùng coupon tại quầy (0 dòng trùng lặp) \\
     \texttt{causal\_data} & Tuần + Cửa hàng & 36,786,524 & Toàn bộ & Vị trí trưng bày quầy kệ \& tờ rơi khuyến mãi \\
     \bottomrule
   \end{tabularx}
   \vspace{0.2cm}
   \begin{columns}[T]
-    \begin{column}{0.32\textwidth}
+    \begin{column}{0.24\textwidth}
       \begin{alertblock}{1. Lọc Giỏ Hàng \$0}
-        \footnotesize
-        Loại 942 giỏ hủy POS/tặng 0đ ($\le \$0$), thu \textbf{275,542 giỏ thương mại}.
+        \scriptsize
+        Loại 942 giỏ hủy POS/tặng 0đ ($\le \$0$) $\rightarrow$ thu \textbf{275,542 giỏ thương mại}.
       \end{alertblock}
     \end{column}
-    \begin{column}{0.32\textwidth}
-      \begin{exampleblock}{2. Khuyết Thiếu Dân Số}
-        \footnotesize
-        Gán nhãn \texttt{MissingCategory} cho 68\% hộ, bảo toàn 100\% tập 2,500 hộ.
+    \begin{column}{0.24\textwidth}
+      \begin{block}{2. Khử Trùng Phiếu}
+        \scriptsize
+        Khử \textbf{5,164 dòng trùng 100\%} ở \texttt{coupons} $\rightarrow$ chống nổ dòng khi merge.
+      \end{block}
+    \end{column}
+    \begin{column}{0.24\textwidth}
+      \begin{exampleblock}{3. Khuyết Dân Số}
+        \scriptsize
+        Gán \texttt{MissingCategory} cho 68\% hộ, bảo toàn \textbf{100\% 2,500 hộ}.
       \end{exampleblock}
     \end{column}
-    \begin{column}{0.32\textwidth}
-      \begin{block}{3. Ép Kiểu Bộ Nhớ}
-        \footnotesize
-        Downcasting giảm dung lượng từ 350MB xuống \textbf{70MB} (\textbf{tiết kiệm 78\% RAM}).
+    \begin{column}{0.24\textwidth}
+      \begin{block}{4. Ép Kiểu Bộ Nhớ}
+        \scriptsize
+        Downcasting giảm từ 350MB xuống \textbf{70MB} (\textbf{tiết kiệm 78\% RAM}).
       \end{block}
     \end{column}
   \end{columns}
@@ -564,7 +570,7 @@
       \textbf{4 Đóng Góp Nền Tảng Cho Dự Án:}
       \begin{enumerate}\setlength{\itemsep}{4pt}
         \item \textbf{Khung Dự Báo Khoa Học:} Dựa trên 92.4\% chu kỳ hồi tiếp thực nghiệm, xác lập cửa sổ dự báo tối ưu $\Delta t = 14$ ngày.
-        \item \textbf{Chuẩn Hóa Dữ Liệu Sạch:} Loại bỏ 942 giao dịch dị biệt, bảo toàn 100\% mẫu 2,500 hộ và tiết kiệm 78\% RAM.
+        \item \textbf{Chuẩn Hóa Dữ Liệu Sạch:} Loại 942 giỏ hủy/tặng 0đ, khử trùng 5,164 bản ghi coupon, bảo toàn 100\% mẫu và tiết kiệm 78\% RAM.
         \item \textbf{Cơ Sở Thiết Kế Đặc Trưng:} Chuyển hóa 15 phát hiện định lượng thành hệ thống biến phái sinh phản ánh trọn vẹn hành vi.
         \item \textbf{Kiểm Định Vững Chắc:} Xác nhận tỷ lệ mục tiêu ổn định ở mức 68.25\%, không có hiện tượng trôi dạt dữ liệu theo thời gian.
       \end{enumerate}
