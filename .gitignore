@@ -40,6 +40,9 @@ htmlcov/
 *.vrb
 *.synctex.gz
 
+# Agent skills & configurations
+.agents/
+
 # OS generated files
 .DS_Store
 Thumbs.db
