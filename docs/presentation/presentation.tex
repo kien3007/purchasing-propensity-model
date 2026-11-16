@@ -77,28 +77,27 @@
 % ==============================================================================
 \begin{frame}{1. Đặt Vấn Đề Kinh Doanh \& Động Lực Nghiên Cứu}
   \begin{columns}[T]
-    \begin{column}{0.50\textwidth}
+    \begin{column}{0.48\textwidth}
       \textbf{Thách Thức Ngành Bán Lẻ Siêu Thị:}
-      \begin{itemize}\setlength{\itemsep}{4pt}
-        \item \textbf{Biên lợi nhuận mỏng:} Chỉ đạt từ 2--4\%.
-        \item \textbf{Lãng phí ngân sách:} Phát coupon đại trà vào nhóm khách tự nhiên (Organic) tự đi chợ.
-        \item \textbf{Rủi ro kỹ thuật:} Mô hình thường bị rò rỉ dữ liệu tương lai và xác suất thiếu tin cậy.
+      \begin{itemize}\setlength{\itemsep}{5pt}
+        \item \textbf{Biên lợi nhuận mỏng (2--4\%):} Áp lực tối ưu chi phí vận hành và hiệu quả tiếp thị cực kỳ gay gắt.
+        \item \textbf{Lãng phí khuyến mãi đại trà:} Phát coupon cho nhóm khách tự nhiên (Organic) làm giảm biên lợi nhuận thuần.
+        \item \textbf{Rủi ro dự báo:} Rò rỉ dữ liệu tương lai trong học máy dẫn đến mô hình hoạt động kém khi triển khai thực tế.
       \end{itemize}
-      \vspace{0.25cm}
-      \begin{alertblock}{Mục Tiêu Bài Toán}
-        Dự đoán xác suất hộ gia đình $h$ phát sinh \textbf{ít nhất 1 giỏ hàng hợp lệ} ($> \$0$) trong 14 ngày tới, chỉ dùng dữ liệu quá khứ ($DAY \le t_0$).
-      \end{alertblock}
     \end{column}
     
-    \begin{column}{0.46\textwidth}
-      \begin{block}{4 Cam Kết Khoa Học Cốt Lõi}
-        \begin{itemize}\setlength{\itemsep}{4pt}
-          \item \textbf{100\% Dữ Liệu Thực:} 2,595,732 dòng giao dịch từ Dunnhumby, tuyệt đối không bịa số liệu.
-          \item \textbf{Kỷ Luật Point-in-Time:} Triệt tiêu hoàn toàn rò rỉ dữ liệu (Zero Data Leakage).
-          \item \textbf{Hiệu Chuẩn Xác Suất:} Sai số kỳ vọng ECE chỉ \textbf{1.71\%}, phục vụ tối ưu hóa ROI.
-          \item \textbf{Khả Năng Tái Lập:} Đóng gói chuẩn mã nguồn mở, unit tests kiểm chứng 100\%.
+    \begin{column}{0.48\textwidth}
+      \begin{alertblock}{Mục Tiêu Nghiên Cứu}
+        Dự đoán chính xác xác suất hộ gia đình $h$ phát sinh \textbf{ít nhất 1 giỏ hàng hợp lệ} ($> \$0$) trong chu kỳ \textbf{14 ngày tới}, chỉ dùng thông tin lịch sử ($DAY \le t_0$).
+      \end{alertblock}
+      \vspace{0.25cm}
+      \begin{exampleblock}{Giá Trị Ứng Dụng Thực Tiễn}
+        \begin{itemize}\setlength{\itemsep}{3pt}
+          \item Nhận diện đúng nhóm khách hàng nhạy cảm ưu đãi.
+          \item Tối ưu hóa ngân sách tiếp thị và nâng cao ROI chiến dịch.
+          \item Tự động hóa quyết định chăm sóc khách hàng cá nhân hóa.
         \end{itemize}
-      \end{block}
+      \end{exampleblock}
     \end{column}
   \end{columns}
 \end{frame}
@@ -834,7 +833,7 @@
       \textbf{4 Đóng Góp Cốt Lõi Của Đề Tài:}
       \begin{enumerate}\setlength{\itemsep}{3pt}
         \item \textbf{Khung Phương Pháp Point-in-Time:} Chuẩn mực triệt tiêu hoàn toàn rò rỉ dữ liệu trong bán lẻ.
-        \item \textbf{100\% Thực Nghiệm Dữ Liệu Thật:} Khai phá 2.6 triệu giao dịch Dunnhumby không bịa số liệu.
+        \item \textbf{Thực Nghiệm Quy Mô Lớn:} Khai phá 2.6 triệu giao dịch Dunnhumby trên 2,500 hộ gia đình.
         \item \textbf{Hiệu Chuẩn Xác Suất Đỉnh Cao:} Đạt $\text{ECE} = 1.71\%$, phục vụ bài toán tối ưu hóa ROI.
         \item \textbf{Minh Bạch \& Ứng Dụng:} Mở hộp đen với SHAP và xây dựng Playbook CRM tự động hóa.
       \end{enumerate}
