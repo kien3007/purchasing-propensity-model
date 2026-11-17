@@ -93,7 +93,7 @@
       \end{alertblock}
       \vspace{0.2cm}
       \begin{exampleblock}{Mục Tiêu Khám Phá Hành Vi}
-        Chiết xuất \textbf{15 quy luật thực nghiệm} nhằm xác định cửa sổ dự báo tối ưu ($\Delta t$) và thiết kế hệ thống đặc trưng Point-in-Time.
+        Chiết xuất \textbf{15 quy luật thực nghiệm} nhằm xác định cửa sổ dự báo tối ưu ($\Delta t$) và thiết kế hệ thống đặc trưng chống rò rỉ dữ liệu.
       \end{exampleblock}
     \end{column}
   \end{columns}
@@ -537,7 +537,7 @@
 \end{frame}
 
 % ==============================================================================
-% SLIDE 19: MA TRẬN ÁNH XẠ EDA SANG ĐẶC TRƯNG POINT-IN-TIME
+% SLIDE 19: MA TRẬN ÁNH XẠ EDA SANG HỆ THỐNG ĐẶC TRƯNG HỌC MÁY
 % ==============================================================================
 \begin{frame}{18. Chuyển Hóa Phát Hiện EDA Sang Hệ Thống Đặc Trưng ML}
   \centering
@@ -545,7 +545,7 @@
   \renewcommand{\arraystretch}{1.0}
   \begin{tabularx}{\textwidth}{p{3.8cm}Y>{\raggedright\arraybackslash}p{4.2cm}}
     \toprule
-    \textbf{Nhóm Hành Vi Tiêu Dùng} & \textbf{Quy Luật Thực Nghiệm Từ 2.6M Giao Dịch} & \textbf{Đặc Trưng Point-in-Time Đại Diện} \\
+    \textbf{Nhóm Hành Vi Tiêu Dùng} & \textbf{Quy Luật Thực Nghiệm Từ 2.6M Giao Dịch} & \textbf{Đặc Trưng Mô Hình Hóa Đại Diện} \\
     \midrule
     \textbf{1. Nhịp sinh học \& Đồ tươi} & 82\% mua lại trong 7 ngày (P50 = 2 ngày); cạn đồ tươi kích thích đi chợ & \texttt{days\_since\_last\_basket}, \texttt{urgency\_ratio}, \texttt{days\_since\_perishable} \\
     \addlinespace
@@ -561,7 +561,7 @@
     \bottomrule
   \end{tabularx}
   \vspace{0.15cm}
-  \begin{alertblock}{Kỷ Luật Point-in-Time}
+  \begin{alertblock}{Kỷ Luật Thời Gian (Chống Rò Rỉ Dữ Liệu)}
     \centering \footnotesize
     100\% đặc trưng được tính toán tại ranh giới $DAY \le t_0$, triệt tiêu hoàn toàn rủi ro rò rỉ dữ liệu tương lai.
   \end{alertblock}
