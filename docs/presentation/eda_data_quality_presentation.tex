@@ -93,7 +93,7 @@
       \end{alertblock}
       \vspace{0.2cm}
       \begin{exampleblock}{Mục Tiêu Khám Phá Hành Vi}
-        Chiết xuất \textbf{11 quy luật thực nghiệm cốt lõi} nhằm xác định cửa sổ dự báo tối ưu ($\Delta t$) và thiết kế hệ thống đặc trưng chống rò rỉ dữ liệu.
+        Chiết xuất \textbf{10 quy luật thực nghiệm cốt lõi} nhằm xác định cửa sổ dự báo tối ưu ($\Delta t$) và thiết kế hệ thống đặc trưng chống rò rỉ dữ liệu.
       \end{exampleblock}
     \end{column}
   \end{columns}
@@ -357,36 +357,9 @@
 \end{frame}
 
 % ==============================================================================
-% SLIDE 12: CÂU CHUYỆN 10 - ĐỘNG LƯỢNG MUA SẮM & CẢNH BÁO NGỦ ĐÔNG
+% SLIDE 12: CÂU CHUYỆN 10 - PHỄU CHUYỂN ĐỔI THEO LOẠI CHIẾN DỊCH
 % ==============================================================================
-\begin{frame}{12. Động Lượng Mua Sắm \& Cảnh Báo Ngủ Đông (Momentum \& Urgency)}
-  \begin{columns}[c]
-    \begin{column}{0.60\textwidth}
-      \centering
-      \includegraphics[width=\linewidth,height=0.65\textheight,keepaspectratio]{../reports/figures/25_momentum_urgency_decay.png}
-    \end{column}
-    \begin{column}{0.38\textwidth}
-      \small
-      \textbf{Cơ Chế Suy Giảm Tương Tác:}
-      \begin{itemize}\setlength{\itemsep}{0pt}
-        \item \textbf{Tắt hẳn động lượng:} 0 giỏ trong 30 ngày khiến xác suất mua rơi tự do từ \textbf{80.0\% xuống 32.6\%} (-47.4\%).
-        \item \textbf{Ngưỡng gãy chu kỳ:} Trễ hẹn gấp đôi chu kỳ bình thường ($UR > 2.0\times$) kéo tỷ lệ mua giảm còn \textbf{51.7\%}; mất dấu rơi về \textbf{14.1\%}.
-        \item \textbf{Giải mã nhãn $Y=0$:} Hộ không mua tập trung chính xác ở nhóm suy giảm vận tốc.
-      \end{itemize}
-      \vspace{0.02cm}
-      \begin{alertblock}{Đặc Trưng Phân Loại Số 1}
-        \footnotesize
-        Phát hiện sớm trạng thái rời bỏ và chững lại:\\
-        $\rightarrow$ Biến: \texttt{frequency\_momentum\_30\_vs\_90}, \texttt{urgency\_ratio}.
-      \end{alertblock}
-    \end{column}
-  \end{columns}
-\end{frame}
-
-% ==============================================================================
-% SLIDE 13: CÂU CHUYỆN 11 - PHỄU CHUYỂN ĐỔI THEO LOẠI CHIẾN DỊCH
-% ==============================================================================
-\begin{frame}{13. Phễu Chuyển Đổi Tiếp Thị Theo Nhóm Chiến Dịch}
+\begin{frame}{12. Phễu Chuyển Đổi Tiếp Thị Theo Nhóm Chiến Dịch}
   \begin{columns}[c]
     \begin{column}{0.60\textwidth}
       \centering
@@ -411,9 +384,9 @@
 \end{frame}
 
 % ==============================================================================
-% SLIDE 14: MA TRẬN ÁNH XẠ EDA SANG HỆ THỐNG ĐẶC TRƯNG HỌC MÁY
+% SLIDE 13: MA TRẬN ÁNH XẠ EDA SANG HỆ THỐNG ĐẶC TRƯNG HỌC MÁY
 % ==============================================================================
-\begin{frame}{14. Chuyển Hóa Phát Hiện EDA Sang Hệ Thống Đặc Trưng ML}
+\begin{frame}{13. Chuyển Hóa Phát Hiện EDA Sang Hệ Thống Đặc Trưng ML}
   \centering
   \scriptsize
   \renewcommand{\arraystretch}{1.08}
@@ -425,7 +398,7 @@
     \addlinespace
     \textbf{2. Sức mua \& Độ rộng giỏ} & Phân phối AOV \$29.24; độ phủ $\ge 12$ ngành neo giữ 96.5\% xác suất mua & \texttt{spend\_30d/90d}, \texttt{aov\_90d}, \texttt{department\_breadth\_90d} \\
     \addlinespace
-    \textbf{3. Động lượng \& Ngủ đông} & Đóng băng 30 ngày khiến xác suất mua rơi về 32.6\%; trễ chu kỳ $UR > 2.0$ & \texttt{frequency\_momentum\_30\_vs\_90}, \texttt{urgency\_ratio} \\
+    \textbf{3. Tần suất \& Động lượng} & Phân hóa nhịp giao dịch; trôi dạt chu kỳ báo hiệu nguy cơ đóng băng & \texttt{frequency\_momentum\_30\_vs\_90}, \texttt{baskets\_count\_14d/30d} \\
     \addlinespace
     \textbf{4. Nhân khẩu \& Quy mô hộ} & Gia đình đông con chi tiêu cao hơn +39.4\%; gán UNKNOWN cho 68\% hộ & \texttt{household\_size\_desc}, \texttt{kid\_category\_desc}, \texttt{income\_desc} \\
     \addlinespace
@@ -442,16 +415,16 @@
 \end{frame}
 
 % ==============================================================================
-% SLIDE 15: TỔNG KẾT GIAI ĐOẠN EDA
+% SLIDE 14: TỔNG KẾT GIAI ĐOẠN EDA
 % ==============================================================================
-\begin{frame}{15. Tổng Kết Giá Trị Nền Tảng Của Giai Đoạn EDA}
+\begin{frame}{14. Tổng Kết Giá Trị Nền Tảng Của Giai Đoạn EDA}
   \begin{columns}[T]
     \begin{column}{0.48\textwidth}
       \textbf{4 Đóng Góp Nền Tảng Cho Dự Án:}
       \begin{enumerate}\setlength{\itemsep}{4pt}
         \item \textbf{Khung Dự Báo Khoa Học:} Dựa trên 92.4\% chu kỳ hồi tiếp thực nghiệm, xác lập cửa sổ dự báo tối ưu $\Delta t = 14$ ngày.
         \item \textbf{Chuẩn Hóa Dữ Liệu Sạch:} Loại 942 giỏ hủy/tặng 0đ, khử trùng 5,164 bản ghi coupon, bảo toàn trọn vẹn 100\% tập 2,500 hộ.
-        \item \textbf{Cơ Sở Thiết Kế Đặc Trưng:} Chuyển hóa \textbf{11 phát hiện định lượng cốt lõi} thành hệ thống biến phái sinh phản ánh trọn vẹn hành vi.
+        \item \textbf{Cơ Sở Thiết Kế Đặc Trưng:} Chuyển hóa \textbf{10 phát hiện định lượng cốt lõi} thành hệ thống biến phái sinh phản ánh trọn vẹn hành vi.
         \item \textbf{Kiểm Định Vững Chắc:} Xác nhận tỷ lệ mục tiêu ổn định ở mức 68.25\%, không có hiện tượng trôi dạt dữ liệu theo thời gian.
       \end{enumerate}
     \end{column}

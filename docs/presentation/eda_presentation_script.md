@@ -13,15 +13,14 @@
    │
    ├──> [Phần 1: Kiểm Toán & Làm Sạch Dữ Liệu] Kiến trúc 8 bảng & Tiêu chuẩn sạch (Slide 3)
    │
-   ├──> [Phần 2: 11 Quy Luật Thực Nghiệm Cốt Lõi] Nhịp sinh học & Bản chất mua sắm (Slide 4-14)
+   ├──> [Phần 2: 10 Quy Luật Thực Nghiệm Cốt Lõi] Nhịp sinh học & Bản chất mua sắm (Slide 4-13)
    │      • Nhịp đi chợ & Giá trị giỏ hàng (Slide 4-5)
    │      • Đồ tươi sống & Mỏ neo đa ngành (Slide 6-7)
    │      • Hiệu ứng mồi câu & Gia tốc tiếp thị (Slide 8-9)
    │      • Địa bàn đa cửa hàng & Quy mô nhân khẩu (Slide 10-11)
-   │      • Ổn định nhãn mục tiêu & Phân hóa CLV Pareto (Slide 12-13)
-   │      • Phễu chuyển đổi chiến dịch tiếp thị (Slide 14)
+   │      • Ổn định nhãn mục tiêu & Phễu chuyển đổi tiếp thị (Slide 12-13)
    │
-   └──> [Phần 3: Chuyển Giao Sang Học Máy] Ma trận đặc trưng & Tổng kết (Slide 15-16)
+   └──> [Phần 3: Chuyển Giao Sang Học Máy] Ma trận đặc trưng & Tổng kết (Slide 14-15)
 ```
 
 ---
@@ -53,7 +52,7 @@
 >
 > *Thách thức lớn nhất ở đây là dữ liệu thực tế luôn chứa đầy **nhiễu nghiệp vụ**: từ các thao tác hủy quẹt thẻ tại quầy POS, các giỏ hàng quà tặng 0 đồng, cho đến độ khuyết thiếu lớn về nhân khẩu học. Đặc biệt, để xây dựng mô hình dự báo hành vi trong tương lai, chúng ta phải tuân thủ nghiêm ngặt **kỷ luật thời gian**, phân định rạch ròi giữa quá khứ quan sát và tương lai dự báo.*
 >
-> *Từ thách thức đó, giai đoạn EDA của chúng tôi tập trung vào 2 mục tiêu cốt lõi: Thứ nhất, kiểm toán và bảo toàn 100% tập mẫu dữ liệu sạch; Thứ hai, bóc tách **11 quy luật thực nghiệm cốt lõi** để làm cơ sở toán học xác định cửa sổ dự báo và sinh đặc trưng cho mô hình."*
+> *Từ thách thức đó, giai đoạn EDA của chúng tôi tập trung vào 2 mục tiêu cốt lõi: Thứ nhất, kiểm toán và bảo toàn 100% tập mẫu dữ liệu sạch; Thứ hai, bóc tách **10 quy luật thực nghiệm cốt lõi** để làm cơ sở toán học xác định cửa sổ dự báo và sinh đặc trưng cho mô hình."*
 
 ---
 
@@ -69,7 +68,7 @@
 > 2. *Tại bảng `coupons`: Chúng tôi khử trùng **5,164 bản ghi trùng lặp 100%**, triệt tiêu nguy cơ nổ dòng (cartesian explosion) khi kết nối sang bảng giao dịch.*
 > 3. *Tại bảng `demographics`: Dữ liệu nhân khẩu học khuyết thiếu ở 68% số hộ gia đình. Thay vì xóa bỏ gây mất mát mẫu, chúng tôi chuẩn hóa gán nhãn `UNKNOWN` để đưa vào mô hình dưới dạng một nhóm danh mục độc lập, bảo toàn trọn vẹn 100% tập 2,500 hộ gia đình.*
 >
-> *Sau khi nền tảng dữ liệu đã đạt chuẩn sạch, chúng ta cùng bước vào 11 quy luật hành vi thực nghiệm cốt lõi."*
+> *Sau khi nền tảng dữ liệu đã đạt chuẩn sạch, chúng ta cùng bước vào 10 quy luật hành vi thực nghiệm cốt lõi."*
 
 ---
 
@@ -210,24 +209,8 @@
 
 ---
 
-### SLIDE 13: CÂU CHUYỆN 10 - ĐỘNG LƯỢNG MUA SẮM & CẢNH BÁO NGỦ ĐÔNG
-* **Tiêu đề:** 12. Động Lượng Mua Sắm \& Cảnh Báo Ngủ Đông (Momentum \& Urgency)
-* **Biểu đồ:** Đối sánh Xác suất mua sắm 14 ngày theo Gia tốc động lượng (Frequency Momentum 30d vs 90d) và Độ trễ chu kỳ cá nhân hóa (Urgency Ratio).
-* **Thời lượng:** 50 giây
-* **Điểm nhấn trực quan:** Cột xác suất rơi tự do từ 80.0% xuống 32.6% (-47.4%) khi tắt động lượng trong 30 ngày, và ngưỡng trượt dốc khi $UR > 2.0\times$ (giảm về 51.7%).
-
-**Lời thoại trình bày:**
-> *"Slide 13 giải quyết trực diện câu hỏi hóc búa nhất của bài toán học máy: **Tại sao một bộ phận hộ gia đình KHÔNG MUA HÀNG trong 14 ngày tới (Nhãn $Y=0$)?** Dữ liệu thực nghiệm chỉ ra hai cơ chế suy giảm tương tác rõ rệt:*
->
-> 1. *Về mặt **Gia tốc động lượng (Panel A)**: Các hộ duy trì nhịp mua ổn định đạt xác suất mua **80.0%**. Tuy nhiên, nếu một hộ hoàn toàn không có giỏ hàng nào trong 30 ngày gần nhất (dù trước đó 90 ngày vẫn đi chợ), xác suất mua sắm trong 14 ngày tới **rơi tự do xuống chỉ còn 32.6%** (sụt giảm tới -47.4%).*
-> 2. *Về mặt **Độ trễ chu kỳ cá nhân hóa (Panel B)**: Khi số ngày chưa mua vượt quá 2 lần chu kỳ bình quân của chính hộ đó ($UR > 2.0\times$), xác suất mua gãy dốc xuống **51.7%**; và những hộ mất dấu rơi về **14.1%**.*
->
-> *Khám phá này chứng minh: Khách hàng không mua sắm ($Y=0$) không phải là hiện tượng ngẫu nhiên, mà luôn có tín hiệu cảnh báo sớm từ sự tắt dần động lượng. Đây là lý do tại sao `frequency_momentum_30_vs_90` và `urgency_ratio` là cặp đặc trưng phân loại mạnh nhất của mô hình."*
-
----
-
-### SLIDE 14: CÂU CHUYỆN 11 - PHỄU CHUYỂN ĐỔI THEO NHÓM CHIẾN DỊCH
-* **Tiêu đề:** 13. Phễu Chuyển Đổi Tiếp Thị Theo Nhóm Chiến Dịch
+### SLIDE 13: CÂU CHUYỆN 10 - PHỄU CHUYỂN ĐỔI THEO NHÓM CHIẾN DỊCH
+* **Tiêu đề:** 12. Phễu Chuyển Đổi Tiếp Thị Theo Nhóm Chiến Dịch
 * **Biểu đồ:** Tỷ lệ đổi phiếu thành công của Chiến dịch Loại A, B và C.
 * **Thời lượng:** 45 giây
 * **Điểm nhấn trực quan:** Cột Chiến dịch Loại A dẫn đầu với tỷ lệ đổi phiếu vượt trội ~45%.
@@ -239,18 +222,18 @@
 
 ---
 
-### SLIDE 15: CHUYỂN HÓA PHÁT HIỆN EDA SANG HỆ THỐNG ĐẶC TRƯNG HỌC MÁY
-* **Tiêu đề:** 14. Chuyển Hóa Phát Hiện EDA Sang Hệ Thống Đặc Trưng ML
+### SLIDE 14: CHUYỂN HÓA PHÁT HIỆN EDA SANG HỆ THỐNG ĐẶC TRƯNG HỌC MÁY
+* **Tiêu đề:** 13. Chuyển Hóa Phát Hiện EDA Sang Hệ Thống Đặc Trưng ML
 * **Bảng:** Ma trận ánh xạ 6 nhóm hành vi sang hệ thống biến đặc trưng tương ứng.
 * **Thời lượng:** 60 giây
 * **Điểm nhấn trực quan:** Hàng alertbox dưới cùng nhấn mạnh Kỷ luật thời gian $DAY \le t_0$.
 
 **Lời thoại trình bày:**
-> *"Thưa quý vị, toàn bộ 11 câu chuyện thực nghiệm cốt lõi vừa nêu đã được chúng tôi tổng hợp và chuyển hóa thành **Ma trận ánh xạ đặc trưng** trên Slide 14:*
+> *"Thưa quý vị, toàn bộ 10 câu chuyện thực nghiệm cốt lõi vừa nêu đã được chúng tôi tổng hợp và chuyển hóa thành **Ma trận ánh xạ đặc trưng** trên Slide 13:*
 >
 > 1. *Nhịp sinh học & Đồ tươi $\rightarrow$ Nhóm biến Recency & Urgency (`days_since_last_basket`, `urgency_ratio`, `days_since_perishable`).*
 > 2. *Sức mua & Độ rộng giỏ hàng $\rightarrow$ Nhóm biến Quy mô & Độ phủ danh mục (`spend_30d/90d`, `aov_90d`, `department_breadth_90d`).*
-> 3. *Động lượng & Ngủ đông $\rightarrow$ Nhóm biến Gia tốc và Trễ chu kỳ (`frequency_momentum_30_vs_90`, `urgency_ratio`).*
+> 3. *Tần suất & Động lượng $\rightarrow$ Nhóm biến Gia tốc và Trôi dạt chu kỳ (`frequency_momentum_30_vs_90`, `baskets_count_14d/30d`).*
 > 4. *Nhân khẩu & Quy mô hộ $\rightarrow$ Nhóm biến Quy mô gia đình & Thu nhập (`hh_size`, `kid_category`, `income_desc`).*
 > 5. *Hiệu ứng mồi câu & Phễu tiếp thị $\rightarrow$ Lịch sử đổi phiếu và chiến dịch đang chạy (`coupon_redempt_count_180d`, `is_targeted_by_active_campaign`).*
 > 6. *Địa bàn & Trung thành $\rightarrow$ Chỉ số trung thành cửa hàng ruột (`store_loyalty_index`, `primary_store_id`).*
@@ -259,8 +242,8 @@
 
 ---
 
-### SLIDE 16: TỔNG KẾT GIAI ĐOẠN EDA & KẾ HOẠCH TIẾP THEO
-* **Tiêu đề:** 15. Tổng Kết Giá Trị Nền Tảng Của Giai Đoạn EDA
+### SLIDE 15: TỔNG KẾT GIAI ĐOẠN EDA & KẾ HOẠCH TIẾP THEO
+* **Tiêu đề:** 14. Tổng Kết Giá Trị Nền Tảng Của Giai Đoạn EDA
 * **Thời lượng:** 60 giây
 * **Điểm nhấn trực quan:** 4 đóng góp nền tảng ở cột trái và lời cảm ơn / chuyển sang Q&A ở cột phải.
 
@@ -269,7 +252,7 @@
 >
 > *Một là, xác lập cửa sổ dự báo tối ưu **$\Delta t = 14$ ngày** trên cơ sở 92.4% chu kỳ tự nhiên;*  
 > *Hai là, làm sạch triệt để 942 giỏ hàng $\le \$0$ và khử trùng 5,164 bản ghi coupon, bảo toàn 275,542 giỏ hàng thương mại sạch;*  
-> *Ba là, chuyển hóa **11 quy luật hành vi cốt lõi** thành bộ đặc trưng máy học có tính giải thích cao;*  
+> *Ba là, chuyển hóa **10 quy luật hành vi cốt lõi** thành bộ đặc trưng máy học có tính giải thích cao;*  
 > *Bốn là, chứng minh nhãn mục tiêu ổn định ở mức 68.25%, cho phép triển khai chiến lược huấn luyện trượt thời gian.*
 >
 > *Đây chính là bệ phóng vững chắc nhất để chúng tôi tự tin bước vào giai đoạn tiếp theo: Huấn luyện các mô hình phân loại LightGBM, XGBoost và CatBoost.*
