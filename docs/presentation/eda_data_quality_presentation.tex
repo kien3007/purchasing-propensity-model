@@ -93,7 +93,7 @@
       \end{alertblock}
       \vspace{0.2cm}
       \begin{exampleblock}{Mục Tiêu Khám Phá Hành Vi}
-        Chiết xuất \textbf{15 quy luật thực nghiệm} nhằm xác định cửa sổ dự báo tối ưu ($\Delta t$) và thiết kế hệ thống đặc trưng chống rò rỉ dữ liệu.
+        Chiết xuất \textbf{14 quy luật thực nghiệm} nhằm xác định cửa sổ dự báo tối ưu ($\Delta t$) và thiết kế hệ thống đặc trưng chống rò rỉ dữ liệu.
       \end{exampleblock}
     \end{column}
   \end{columns}
@@ -490,36 +490,9 @@
 \end{frame}
 
 % ==============================================================================
-% SLIDE 18: CÂU CHUYỆN 15 - PHÂN BỔ DOANH THU & HIỆP ĐỒNG CÂY XĂNG
+% SLIDE 18: MA TRẬN ÁNH XẠ EDA SANG HỆ THỐNG ĐẶC TRƯNG HỌC MÁY
 % ==============================================================================
-\begin{frame}{17. Cơ Cấu Doanh Thu Ngành Hàng \& Hiệp Đồng Cây Xăng}
-  \begin{columns}[c]
-    \begin{column}{0.60\textwidth}
-      \centering
-      \includegraphics[width=\linewidth,height=0.65\textheight,keepaspectratio]{../reports/figures/23_department_revenue_share.png}
-    \end{column}
-    \begin{column}{0.38\textwidth}
-      \small
-      \textbf{Hiệu Ứng Hiệp Đồng Ngành Hàng:}
-      \begin{itemize}\setlength{\itemsep}{1pt}
-        \item \textbf{Xương sống dòng tiền:} Bách hóa \& Hàng tiêu dùng cá nhân tạo nền tảng vững chắc cho 64\% doanh thu.
-        \item \textbf{Phễu gom khách từ cây xăng:} Cây xăng là trạm tiếp đón ngoại vi, kéo khách tiện đường rẽ vào siêu thị.
-        \item \textbf{Chu kỳ nhiên liệu:} Nhịp đổ xăng phản ánh chân thực nhịp di chuyển và sinh hoạt của hộ gia đình.
-      \end{itemize}
-      \vspace{0.06cm}
-      \begin{exampleblock}{Hiệp Đồng Cây Xăng}
-        \footnotesize
-        Thời gian từ lần đổ xăng gần nhất là tín hiệu độc lập:\\
-        $\rightarrow$ Biến: \texttt{days\_since\_last\_gas}.
-      \end{exampleblock}
-    \end{column}
-  \end{columns}
-\end{frame}
-
-% ==============================================================================
-% SLIDE 19: MA TRẬN ÁNH XẠ EDA SANG HỆ THỐNG ĐẶC TRƯNG HỌC MÁY
-% ==============================================================================
-\begin{frame}{18. Chuyển Hóa Phát Hiện EDA Sang Hệ Thống Đặc Trưng ML}
+\begin{frame}{17. Chuyển Hóa Phát Hiện EDA Sang Hệ Thống Đặc Trưng ML}
   \centering
   \scriptsize
   \renewcommand{\arraystretch}{1.0}
@@ -537,7 +510,7 @@
     \addlinespace
     \textbf{5. Hiệu ứng mồi câu \& Phễu} & Dùng coupon chi tiêu gấp 2.53 lần (\$67.60); Chiến dịch Loại A chuyển đổi 45\% & \texttt{coupon\_redempt\_count}, \texttt{is\_targeted\_type\_A/B/C} \\
     \addlinespace
-    \textbf{6. Địa bàn \& Cây xăng} & 66.4\% đi đa shop (73.4\% tiền ở shop ruột); Cây xăng đứng thứ 4 toàn chuỗi & \texttt{store\_loyalty\_index}, \texttt{days\_since\_last\_gas} \\
+    \textbf{6. Địa bàn \& Trung thành} & 66.4\% đi đa shop (73.4\% tiền ở shop ruột); phân hóa cửa hàng cốt lõi & \texttt{store\_loyalty\_index}, \texttt{primary\_store\_id} \\
     \bottomrule
   \end{tabularx}
   \vspace{0.15cm}
@@ -548,16 +521,16 @@
 \end{frame}
 
 % ==============================================================================
-% SLIDE 20: TỔNG KẾT GIAI ĐOẠN EDA
+% SLIDE 19: TỔNG KẾT GIAI ĐOẠN EDA
 % ==============================================================================
-\begin{frame}{19. Tổng Kết Giá Trị Nền Tảng Của Giai Đoạn EDA}
+\begin{frame}{18. Tổng Kết Giá Trị Nền Tảng Của Giai Đoạn EDA}
   \begin{columns}[T]
     \begin{column}{0.48\textwidth}
       \textbf{4 Đóng Góp Nền Tảng Cho Dự Án:}
       \begin{enumerate}\setlength{\itemsep}{4pt}
         \item \textbf{Khung Dự Báo Khoa Học:} Dựa trên 92.4\% chu kỳ hồi tiếp thực nghiệm, xác lập cửa sổ dự báo tối ưu $\Delta t = 14$ ngày.
         \item \textbf{Chuẩn Hóa Dữ Liệu Sạch:} Loại 942 giỏ hủy/tặng 0đ, khử trùng 5,164 bản ghi coupon, bảo toàn trọn vẹn 100\% tập 2,500 hộ.
-        \item \textbf{Cơ Sở Thiết Kế Đặc Trưng:} Chuyển hóa 15 phát hiện định lượng thành hệ thống biến phái sinh phản ánh trọn vẹn hành vi.
+        \item \textbf{Cơ Sở Thiết Kế Đặc Trưng:} Chuyển hóa 14 phát hiện định lượng thành hệ thống biến phái sinh phản ánh trọn vẹn hành vi.
         \item \textbf{Kiểm Định Vững Chắc:} Xác nhận tỷ lệ mục tiêu ổn định ở mức 68.25\%, không có hiện tượng trôi dạt dữ liệu theo thời gian.
       \end{enumerate}
     \end{column}

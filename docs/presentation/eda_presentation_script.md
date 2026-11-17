@@ -20,9 +20,9 @@
    │      • Gia tốc tiếp thị & Địa bàn đa cửa hàng (Slide 10-11)
    │      • Tác động nhân khẩu & Ổn định nhãn mục tiêu (Slide 12-13)
    │      • Kiểm định Pareto & Chiết khấu hai tầng (Slide 14-15)
-   │      • Nhãn hàng riêng, Phễu tiếp thị & Cây xăng (Slide 16-18)
+   │      • Nhãn hàng riêng & Phễu tiếp thị (Slide 16-17)
    │
-   └──> [Phần 3: Chuyển Giao Sang Học Máy] Ma trận đặc trưng & Kỷ luật thời gian (Slide 19-20)
+   └──> [Phần 3: Chuyển Giao Sang Học Máy] Ma trận đặc trưng & Kỷ luật thời gian (Slide 18-19)
 ```
 
 ---
@@ -54,7 +54,7 @@
 >
 > *Thách thức lớn nhất ở đây là dữ liệu thực tế luôn chứa đầy **nhiễu nghiệp vụ**: từ các thao tác hủy quẹt thẻ tại quầy POS, các giỏ hàng quà tặng 0 đồng, cho đến độ khuyết thiếu lớn về nhân khẩu học. Đặc biệt, để xây dựng mô hình dự báo hành vi trong tương lai, chúng ta phải tuân thủ nghiêm ngặt **kỷ luật thời gian**, phân định rạch ròi giữa quá khứ quan sát và tương lai dự báo.*
 >
-> *Từ thách thức đó, giai đoạn EDA của chúng tôi tập trung vào 2 mục tiêu cốt lõi: Thứ nhất, kiểm toán và bảo toàn 100% tập mẫu dữ liệu sạch; Thứ hai, bóc tách **15 quy luật thực nghiệm** để làm cơ sở toán học xác định cửa sổ dự báo và sinh đặc trưng cho mô hình."*
+> *Từ thách thức đó, giai đoạn EDA của chúng tôi tập trung vào 2 mục tiêu cốt lõi: Thứ nhất, kiểm toán và bảo toàn 100% tập mẫu dữ liệu sạch; Thứ hai, bóc tách **14 quy luật thực nghiệm** để làm cơ sở toán học xác định cửa sổ dự báo và sinh đặc trưng cho mô hình."*
 
 ---
 
@@ -272,41 +272,28 @@
 
 ---
 
-### SLIDE 18: CÂU CHUYỆN 15 - CƠ CẤU DOANH THU & HIỆP ĐỒNG CÂY XĂNG
-* **Tiêu đề:** 17. Cơ Cấu Doanh Thu Ngành Hàng & Hiệp Đồng Cây Xăng
-* **Biểu đồ:** Tỷ trọng doanh thu theo từng ngành hàng (Top 10 Departments).
-* **Thời lượng:** 45 giây
-* **Điểm nhấn trực quan:** Vị trí số 4 bất ngờ của ngành Nhiên liệu/Cây xăng (Gasoline).
-
-**Lời thoại trình bày:**
-> *"Cơ cấu doanh thu cho thấy ngành Bách hóa (`GROCERY`) và Hóa mỹ phẩm cá nhân (`DRUG GM`) đóng vai trò xương sống với 64% dòng tiền. Tuy nhiên, điều đáng chú ý nhất là **ngành Cây xăng/Nhiên liệu (`GASOLINE`) đứng vị trí thứ 4 toàn hệ thống**.*
->
-> *Cây xăng đặt cạnh siêu thị đóng vai trò như một **chiếc phễu gom khách ngoại vi**: Khách ghé đổ xăng định kỳ theo tuần và tiện đường rẽ vào mua hàng. Nhịp đổ xăng phản ánh chính xác chu kỳ di chuyển của hộ gia đình, do đó đặc trưng `days_since_last_gas` đem lại một tín hiệu dự báo độc lập rất giá trị."*
-
----
-
-### SLIDE 19: CHUYỂN HÓA PHÁT HIỆN EDA SANG HỆ THỐNG ĐẶC TRƯNG HỌC MÁY
-* **Tiêu đề:** 18. Chuyển Hóa Phát Hiện EDA Sang Hệ Thống Đặc Trưng ML
+### SLIDE 18: CHUYỂN HÓA PHÁT HIỆN EDA SANG HỆ THỐNG ĐẶC TRƯNG HỌC MÁY
+* **Tiêu đề:** 17. Chuyển Hóa Phát Hiện EDA Sang Hệ Thống Đặc Trưng ML
 * **Bảng:** Ma trận ánh xạ 6 nhóm hành vi sang hệ thống biến đặc trưng tương ứng.
 * **Thời lượng:** 60 giây
 * **Điểm nhấn trực quan:** Hàng alertbox dưới cùng nhấn mạnh Kỷ luật thời gian $DAY \le t_0$.
 
 **Lời thoại trình bày:**
-> *"Thưa quý vị, toàn bộ 15 câu chuyện thực nghiệm vừa nêu đã được chúng tôi tổng hợp và chuyển hóa thành **Ma trận ánh xạ đặc trưng** trên Slide 18:*
+> *"Thưa quý vị, toàn bộ 14 câu chuyện thực nghiệm vừa nêu đã được chúng tôi tổng hợp và chuyển hóa thành **Ma trận ánh xạ đặc trưng** trên Slide 17:*
 >
 > 1. *Nhịp sinh học & Đồ tươi $\rightarrow$ Nhóm biến Recency & Urgency (`days_since_last_basket`, `urgency_ratio`).*
 > 2. *Sức mua & Nhân khẩu $\rightarrow$ Nhóm biến Volume & Household Size.*
 > 3. *Tập trung doanh thu & Phân vị $\rightarrow$ Nhóm biến Phân vị khách hàng VIP (`spend_percentile_rank`).*
 > 4. *Chiết khấu 2 tầng $\rightarrow$ Tách riêng tỷ lệ giảm quầy kệ và giảm coupon.*
 > 5. *Hiệu ứng mồi câu & Phễu $\rightarrow$ Lịch sử đổi phiếu và phân loại chiến dịch A/B/C.*
-> 6. *Địa bàn & Cây xăng $\rightarrow$ Chỉ số trung thành cửa hàng và nhịp đổ xăng.*
+> 6. *Địa bàn & Trung thành $\rightarrow$ Chỉ số trung thành cửa hàng ruột (`store_loyalty_index`).*
 >
 > *Đặc biệt, **100% các đặc trưng này đều được tính toán nghiêm ngặt tại thời điểm quan sát $DAY \le t_0$**, tuyệt đối không nhìn trước dữ liệu tương lai, bảo đảm mô hình học máy khi triển khai thực tế sẽ đạt độ tin cậy cao nhất."*
 
 ---
 
-### SLIDE 20: TỔNG KẾT GIAI ĐOẠN EDA & KẾ HOẠCH TIẾP THEO
-* **Tiêu đề:** 19. Tổng Kết Giá Trị Nền Tảng Của Giai Đoạn EDA
+### SLIDE 19: TỔNG KẾT GIAI ĐOẠN EDA & KẾ HOẠCH TIẾP THEO
+* **Tiêu đề:** 18. Tổng Kết Giá Trị Nền Tảng Của Giai Đoạn EDA
 * **Thời lượng:** 60 giây
 * **Điểm nhấn trực quan:** 4 đóng góp nền tảng ở cột trái và lời cảm ơn / chuyển sang Q&A ở cột phải.
 
@@ -315,8 +302,12 @@
 >
 > *Một là, xác lập cửa sổ dự báo tối ưu **$\Delta t = 14$ ngày** trên cơ sở 92.4% chu kỳ tự nhiên;*  
 > *Hai là, làm sạch triệt để 942 giỏ hàng $\le \$0$ và khử trùng 5,164 bản ghi coupon, bảo toàn dữ liệu thương mại sạch;*  
-> *Ba là, chuyển hóa 15 quy luật hành vi thành bộ đặc trưng máy học có tính giải thích cao;*  
+> *Ba là, chuyển hóa 14 quy luật hành vi thành bộ đặc trưng máy học có tính giải thích cao;*  
 > *Bốn là, chứng minh nhãn mục tiêu ổn định ở mức 68.25%, cho phép triển khai chiến lược huấn luyện trượt thời gian.*
+>
+> *Đây chính là bệ phóng vững chắc nhất để chúng tôi tự tin bước vào giai đoạn tiếp theo: Huấn luyện các mô hình phân loại LightGBM, XGBoost và CatBoost.*
+>
+> *Xin chân thành cảm ơn quý thầy cô và các anh chị đã chú ý lắng nghe. Rất mong nhận được các câu hỏi và ý kiến đóng góp ạ!"*
 >
 > *Đây chính là bệ phóng vững chắc nhất để chúng tôi tự tin bước vào giai đoạn tiếp theo: Huấn luyện các mô hình phân loại LightGBM, XGBoost và CatBoost.*
 >

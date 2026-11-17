@@ -793,74 +793,11 @@ for t in types:
     print(f" - {t}: {camp_stats.loc[t, 'targeted_assignments']:,} lượt tiếp cận -> {camp_stats.loc[t, 'redemption_events']:,} lượt đổi phiếu | Tỷ lệ: {camp_stats.loc[t, 'conversion_rate']:.2f}%")
 """))
 
-    # Chart 15: Story 15 - Department Revenue & Gas Kiosk Synergy
+    # Section 16: Comprehensive Summary of 14 Discoveries
     cells.append(nbf.v4.new_markdown_cell("""---
-## 16. Câu Chuyện 15: Phân Bổ Doanh Thu Ngành Hàng & Sức Mạnh Hiệp Đồng Từ Cây Xăng Siêu Thị (Gas Kiosk Synergy)
-### 📌 Vì sao dùng Biểu đồ Thanh Ngang Xếp Hạng Doanh Thu Ngành Hàng (Department Spend Breakdown)?
-- **Lý do chọn biểu đồ**: Giúp quan sát trực tiếp thứ tự quy mô đóng góp từ lớn đến bé của toàn bộ 44 ngành hàng trong hệ thống bán lẻ.
-- **Ý nghĩa nghiệp vụ**:
-  - `GROCERY` (Bách hóa thiết yếu) dẫn đầu tuyệt đối với **51.00%** ($4.11 Triệu USD).
-  - `DRUG GM` (Hóa mỹ phẩm & Dược phẩm gia đình) đứng thứ hai với **13.12%** ($1.06 Triệu USD).
-  - `PRODUCE` (Rau củ quả tươi sống) đứng thứ ba với **6.86%** ($552,654 USD).
-  - **Điểm đột phá bất ngờ**: Cây xăng tích hợp tại siêu thị (`KIOSK-GAS`) đứng thứ **4 toàn hệ thống**, đóng góp **6.81% tổng doanh thu** ($548,477 USD), vượt qua cả Thịt tươi (`MEAT` - 6.71%) và Thịt chế biến sẵn (`MEAT-PCKGD` - 5.10%)!
-  - **Cơ chế hiệp đồng (Synergy Anchor)**: Cây xăng đóng vai trò thỏi nam châm hút khách ghé thăm siêu thị với nhịp định kỳ (đổ xăng xe mỗi 5-7 ngày và tiện ghé vào mua thực phẩm).
-- **Quyết định mô hình**: Tạo feature `days_since_last_gas_purchase` và `gas_spend_share_180d`. Chu kỳ đổ xăng là tín hiệu thời gian cực nhạy báo trước một chuyến mua sắm siêu thị sắp xảy ra.
-"""))
+## 16. Tổng Kết Toàn Diện 14 Phát Hiện Thực Nghiệm & Chuyển Giao Sang Huấn Luyện Mô Hình
 
-    cells.append(nbf.v4.new_code_cell("""# 5. Phân bổ doanh thu theo ngành hàng & Sức mạnh hiệp đồng từ Cây xăng siêu thị (Gas Kiosk)
-dept_spend = df_trans[['PRODUCT_ID', 'SALES_VALUE']].merge(
-    df_prod[['PRODUCT_ID', 'DEPARTMENT']], on='PRODUCT_ID', how='inner'
-).groupby('DEPARTMENT', observed=False)['SALES_VALUE'].sum().sort_values(ascending=False)
-
-total_dept_spend = dept_spend.sum()
-top8_dept = dept_spend.head(8).copy()
-others_spend = dept_spend.iloc[8:].sum()
-top8_dept['CÁC NGÀNH KHÁC (36 Ngành)'] = others_spend
-
-dept_pcts = (top8_dept / total_dept_spend) * 100
-
-dept_names_vn = {
-    'GROCERY': 'Bách Hóa Tiêu Dùng (GROCERY)',
-    'DRUG GM': 'Dược Phẩm & Hóa Mỹ Phẩm (DRUG GM)',
-    'PRODUCE': 'Rau Củ Quả Tươi (PRODUCE)',
-    'KIOSK-GAS': 'Cây Xăng Siêu Thị (KIOSK-GAS) ⛽',
-    'MEAT': 'Thịt Tươi Sống (MEAT)',
-    'MEAT-PCKGD': 'Thịt Đóng Gói (MEAT-PCKGD)',
-    'DELI': 'Thực Phẩm Chế Biến / Nguội (DELI)',
-    'PASTRY': 'Bánh Mì & Bánh Ngọt (PASTRY)',
-    'CÁC NGÀNH KHÁC (36 Ngành)': 'Các Ngành Hàng Khác (36 Ngành)'
-}
-
-labels_vn = [dept_names_vn.get(d, d) for d in top8_dept.index]
-
-fig, ax = plt.subplots(figsize=(11, 5.5))
-y = np.arange(len(top8_dept))
-colors = ['#1f77b4', '#aec7e8', '#2ca02c', '#d62728', '#98df8a', '#ff9896', '#9467bd', '#c5b0d5', '#7f7f7f']
-
-bars = ax.barh(y[::-1], dept_pcts.values[::-1], color=colors[::-1], edgecolor='black', height=0.6)
-ax.set_yticks(y[::-1])
-ax.set_yticklabels(labels_vn[::-1], fontweight='bold', fontsize=11)
-ax.set_xlabel('Tỷ trọng đóng góp vào tổng doanh thu hệ thống (%)', fontweight='bold')
-ax.set_title('Phân Bổ Doanh Thu 8 Ngành Hàng Hàng Đầu & Sức Hút Cây Xăng\\n(Cây xăng KIOSK-GAS chiếm 6.81% Doanh thu, đứng thứ 4 toàn hệ thống)', pad=15)
-ax.set_xlim(0, 60)
-
-for bar, val, spend_val in zip(bars, dept_pcts.values[::-1], top8_dept.values[::-1]):
-    ax.text(bar.get_width() + 0.8, bar.get_y() + bar.get_height()/2.0, f'{val:.2f}% (${spend_val:,.0f})', va='center', fontweight='bold', fontsize=10)
-
-plt.tight_layout()
-plt.savefig(FIG_DIR / '23_department_revenue_share.png', dpi=150, bbox_inches='tight')
-plt.show()
-
-print("📊 SỐ LIỆU DOANH THU CÁC NGÀNH HÀNG THỰC TẾ:")
-for d, val, p in zip(top8_dept.index, top8_dept.values, dept_pcts.values):
-    print(f" - {d:25s}: ${val:,.2f} ({p:.2f}%)")
-"""))
-
-    # Section 17: Comprehensive Summary of 15 Discoveries
-    cells.append(nbf.v4.new_markdown_cell("""---
-## 17. Tổng Kết Toàn Diện 15 Phát Hiện Thực Nghiệm & Chuyển Giao Sang Huấn Luyện Mô Hình
-
-Qua 15 biểu đồ trực quan từ **100% số liệu thực tế** của 2,500 hộ gia đình, 2.6 triệu giao dịch và 8 bảng dữ liệu:
+Qua 14 biểu đồ trực quan từ **100% số liệu thực tế** của 2,500 hộ gia đình, 2.6 triệu giao dịch và 8 bảng dữ liệu:
 
 | STT | Phát hiện thực nghiệm (Empirical Insight) | Căn cứ định lượng từ 2.6M giao dịch | Quyết định kỹ thuật / Feature trong Mô Hình |
 | :---: | :--- | :--- | :--- |
@@ -874,16 +811,15 @@ Qua 15 biểu đồ trực quan từ **100% số liệu thực tế** của 2,50
 | **8** | **Đa cửa hàng nhưng có shop ruột** | 66.4% đi $\ge 4$ shop, nhưng 73.35% tiền đổ về shop ruột | Feature `store_loyalty_index` & `primary_store_id` |
 | **9** | **Quy mô gia đình nâng cao AOV** | Gia đình đông con chi tiêu cao hơn 39.4% so với độc thân | Feature demographics dạng categorical |
 | **10** | **Ổn định mục tiêu Point-in-Time** | Tỷ lệ $P(Y=1)$ ổn định quanh 68% qua 16 mốc $t_0$ | Huấn luyện Multi-cutoff sliding window chống thiên lệch |
-| **11** | **Quy luật Pareto 80/20 & CLV** | Top 20% hộ gia đình tạo ra 53.05% tổng doanh thu ($4.27M) | Feature `lifetime_spend_rank` & CLV priority alert |
+| **11** | **Tập trung doanh thu (Gini = 0.50)** | Top 20% hộ gia đình tạo ra 53.05% tổng doanh thu ($4.27M); cần 44% hộ để đạt 80% (không theo Pareto 80/20) | Feature `lifetime_spend_rank` & CLV priority alert |
 | **12** | **Cấu trúc chiết khấu 2 tầng** | Giảm giá quầy lớn gấp 32.8 lần coupon ($1.4M vs $42.6k) | Tách biệt `retail_discount_ratio` & `coupon_discount_ratio` |
 | **13** | **Sức thâm nhập Nhãn hàng riêng** | Chỉ 15.0% SKU nhưng tạo 27.8% doanh thu & 28.8% sản lượng | Feature `private_label_spend_ratio_90d` |
 | **14** | **Phễu chuyển đổi chiến dịch** | Chiến dịch Loại A chuyển đổi 45.01% (gấp 3.5 lần Loại C) | Tách feature `is_targeted_type_A/B/C` riêng biệt |
-| **15** | **Hiệp đồng cây xăng KIOSK-GAS** | Cây xăng đứng thứ 4 toàn hệ thống (6.81% tổng doanh thu) | Feature `days_since_last_gas_purchase` & `gas_spend_ratio` |
 
 ---
 
 ### 🚀 Chuyển Giao Sang Giai Đoạn Feature Engineering & Mô Hình Hóa
-Toàn bộ 15 quy luật hành vi thực nghiệm trên đã được mã hóa trực tiếp vào pipeline tính toán biến đặc trưng point-in-time (`src/features/feature_builder.py`) và cung cấp đầu vào chất lượng cao cho mô hình **LightGBM Calibrated Classifier**!
+Toàn bộ 14 quy luật hành vi thực nghiệm trên đã được mã hóa trực tiếp vào pipeline tính toán biến đặc trưng point-in-time (`src/features/feature_builder.py`) và cung cấp đầu vào chất lượng cao cho mô hình **LightGBM Calibrated Classifier**!
 """))
 
     nb.cells = cells
