@@ -104,44 +104,23 @@
 % ==============================================================================
 \begin{frame}{2. Kiến Trúc 8 Bảng Dữ Liệu \& Kiểm Toán Chất Lượng}
   \centering
-  \scriptsize
-  \setlength{\tabcolsep}{4pt}
-  \renewcommand{\arraystretch}{0.96}
+  \footnotesize
+  \setlength{\tabcolsep}{5pt}
+  \renewcommand{\arraystretch}{1.12}
   \begin{tabularx}{\textwidth}{llrrY}
     \toprule
     \textbf{Bảng Dữ Liệu} & \textbf{Khóa Chính / Liên Kết} & \textbf{Số Dòng} & \textbf{Độ Phủ} & \textbf{Vai Trò Nghiệp Vụ \& Kiểm Toán Chất Lượng} \\
     \midrule
-    \texttt{transactions} & Dòng hóa đơn (\texttt{BASKET\_ID}) & 2,595,732 & 2,500 hộ & Lịch sử mua sắm 711 ngày; loại bỏ 942 giỏ hàng dị biệt $\le \$0$ \\
-    \texttt{products} & Mã sản phẩm (\texttt{PRODUCT\_ID}) & 92,353 & 44 ngành & Phân loại danh mục hàng hóa, bóc tách thực phẩm tươi sống \\
-    \texttt{demographics} & Mã hộ gia đình (\texttt{household\_key}) & 801 & 32.0\% & Tuổi, thu nhập, quy mô; xử lý \texttt{UNKNOWN} cho 68\% hộ thiếu dữ liệu \\
-    \texttt{campaign\_desc} & Mã chiến dịch (\texttt{CAMPAIGN}) & 30 & Toàn bộ & Lịch trình hoạt động tiếp thị (phân loại chiến dịch A, B, C) \\
+    \texttt{transactions} & Dòng hóa đơn & 2,595,732 & 2,500 hộ & Lịch sử mua sắm 711 ngày; loại bỏ 942 giỏ hàng dị biệt $\le \$0$ \\
+    \texttt{products} & Mã sản phẩm & 92,353 & 44 ngành & Phân loại danh mục hàng hóa, bóc tách thực phẩm tươi sống \\
+    \texttt{demographics} & Mã hộ gia đình & 801 & 32.0\% & Tuổi, thu nhập, quy mô; xử lý \texttt{UNKNOWN} cho 68\% hộ thiếu dữ liệu \\
+    \texttt{campaign\_desc} & Mã chiến dịch & 30 & Toàn bộ & Lịch trình hoạt động tiếp thị (phân loại chiến dịch A, B, C) \\
     \texttt{campaigns} & Hộ + Chiến dịch & 7,208 & 1,584 hộ & Danh sách hộ gia đình được gửi thư ưu đãi tiếp thị tận nhà \\
-    \texttt{coupons} & Mã coupon + Sản phẩm & 124,548 & Toàn bộ & Ánh xạ SKU; khử trùng \textbf{5,164 bản ghi trùng} (còn 119,384 dòng) \\
-    \texttt{redemptions} & Lượt đổi phiếu ưu đãi & 2,318 & 434 hộ & Lịch sử dùng coupon tại quầy; kiểm toán đạt 0 dòng trùng lặp \\
-    \texttt{causal\_data} & Tuần + Cửa hàng + SKU & 36,786,524 & Toàn bộ & Vị trí trưng bày quầy kệ nổi bật \& tờ rơi khuyến mãi phát hành \\
+    \texttt{coupons} & Mã ưu đãi + SKU & 124,548 & Toàn bộ & Ánh xạ SKU; khử trùng \textbf{5,164 bản ghi trùng} (còn 119,384 dòng) \\
+    \texttt{redemptions} & Lượt đổi phiếu & 2,318 & 434 hộ & Lịch sử dùng coupon tại quầy; kiểm toán đạt 0 dòng trùng lặp \\
+    \texttt{causal\_data} & Tuần + Cửa hàng & 36,786,524 & Toàn bộ & Vị trí trưng bày quầy kệ nổi bật \& tờ rơi khuyến mãi phát hành \\
     \bottomrule
   \end{tabularx}
-  \vspace{0.08cm}
-  \begin{columns}[T]
-    \begin{column}{0.32\textwidth}
-      \begin{alertblock}{1. Lọc Giỏ Hàng \$0}
-        \footnotesize
-        Loại 942 giỏ hủy POS/tặng 0đ ($\le \$0$) $\rightarrow$ bảo toàn \textbf{275,542 giỏ thương mại}, triệt tiêu nhiễu nhãn.
-      \end{alertblock}
-    \end{column}
-    \begin{column}{0.32\textwidth}
-      \begin{block}{2. Khử Trùng Coupon}
-        \footnotesize
-        Khử \textbf{5,164 dòng trùng 100\%} ở \texttt{coupons} $\rightarrow$ triệt tiêu nguy cơ nổ dòng khi kết nối bảng.
-      \end{block}
-    \end{column}
-    \begin{column}{0.32\textwidth}
-      \begin{exampleblock}{3. Khuyết Thiếu Dân Số}
-        \footnotesize
-        Gán nhãn \texttt{UNKNOWN} cho 68\% hộ, bảo toàn trọn vẹn \textbf{100\% tập 2,500 hộ gia đình}.
-      \end{exampleblock}
-    \end{column}
-  \end{columns}
 \end{frame}
 
 % ==============================================================================
