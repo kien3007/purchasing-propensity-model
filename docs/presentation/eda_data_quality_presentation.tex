@@ -357,27 +357,27 @@
 \end{frame}
 
 % ==============================================================================
-% SLIDE 12: CÂU CHUYỆN 10 - PHÂN HÓA DOANH THU & KIỂM ĐỊNH PARETO
+% SLIDE 12: CÂU CHUYỆN 10 - ĐỘNG LƯỢNG MUA SẮM & CẢNH BÁO NGỦ ĐÔNG
 % ==============================================================================
-\begin{frame}{12. Phân Hóa Giá Trị Khách Hàng (CLV) \& Kiểm Định Pareto}
+\begin{frame}{12. Động Lượng Mua Sắm \& Cảnh Báo Ngủ Đông (Momentum \& Urgency)}
   \begin{columns}[c]
     \begin{column}{0.60\textwidth}
       \centering
-      \includegraphics[width=\linewidth,height=0.65\textheight,keepaspectratio]{../reports/figures/19_clv_pareto_distribution.png}
+      \includegraphics[width=\linewidth,height=0.65\textheight,keepaspectratio]{../reports/figures/25_momentum_urgency_decay.png}
     \end{column}
     \begin{column}{0.38\textwidth}
       \small
-      \textbf{Đặc Thù Phân Hóa Bán Lẻ FMCG:}
+      \textbf{Cơ Chế Suy Giảm Tương Tác:}
       \begin{itemize}\setlength{\itemsep}{0pt}
-        \item \textbf{Không theo chuẩn 80/20:} Top 20\% hộ tạo \textbf{53.0\% doanh thu}; cần \textbf{44.0\% hộ (1,100 hộ)} mới đạt 80\% doanh số.
-        \item \textbf{Hệ số Gini = 0.503:} Hàng thiết yếu phân bổ đều hơn; không phân hóa cực đoan như SaaS hay xa xỉ.
-        \item \textbf{Nhóm hạt nhân VIP:} Dù vậy, 500 hộ dẫn đầu vẫn mang lại doanh số gấp 3.4 lần nửa dưới.
+        \item \textbf{Tắt hẳn động lượng:} 0 giỏ trong 30 ngày khiến xác suất mua rơi tự do từ \textbf{80.0\% xuống 32.6\%} (-47.4\%).
+        \item \textbf{Ngưỡng gãy chu kỳ:} Trễ hẹn gấp đôi chu kỳ bình thường ($UR > 2.0\times$) kéo tỷ lệ mua giảm còn \textbf{51.7\%}; mất dấu rơi về \textbf{14.1\%}.
+        \item \textbf{Giải mã nhãn $Y=0$:} Hộ không mua tập trung chính xác ở nhóm suy giảm vận tốc.
       \end{itemize}
-      \vspace{0.05cm}
-      \begin{alertblock}{Chiến Lược Khách Hàng VIP}
+      \vspace{0.02cm}
+      \begin{alertblock}{Đặc Trưng Phân Loại Số 1}
         \footnotesize
-        Phân khúc theo phân vị thực tế thay vì áp đặt tỷ lệ 80/20:\\
-        $\rightarrow$ Biến: \texttt{spend\_percentile\_rank}, \texttt{urgency\_ratio} $> 1.5$.
+        Phát hiện sớm trạng thái rời bỏ và chững lại:\\
+        $\rightarrow$ Biến: \texttt{frequency\_momentum\_30\_vs\_90}, \texttt{urgency\_ratio}.
       \end{alertblock}
     \end{column}
   \end{columns}
@@ -425,7 +425,7 @@
     \addlinespace
     \textbf{2. Sức mua \& Độ rộng giỏ} & Phân phối AOV \$29.24; độ phủ $\ge 12$ ngành neo giữ 96.5\% xác suất mua & \texttt{spend\_30d/90d}, \texttt{aov\_90d}, \texttt{department\_breadth\_90d} \\
     \addlinespace
-    \textbf{3. Tập trung doanh thu (Gini = 0.50)} & Top 20\% hộ tạo 53.0\% doanh thu; 500 hộ VIP mang lại doanh số gấp 3.4 lần & \texttt{spend\_percentile\_rank}, \texttt{lifetime\_spend\_to\_date} \\
+    \textbf{3. Động lượng \& Ngủ đông} & Đóng băng 30 ngày khiến xác suất mua rơi về 32.6\%; trễ chu kỳ $UR > 2.0$ & \texttt{frequency\_momentum\_30\_vs\_90}, \texttt{urgency\_ratio} \\
     \addlinespace
     \textbf{4. Nhân khẩu \& Quy mô hộ} & Gia đình đông con chi tiêu cao hơn +39.4\%; gán UNKNOWN cho 68\% hộ & \texttt{household\_size\_desc}, \texttt{kid\_category\_desc}, \texttt{income\_desc} \\
     \addlinespace

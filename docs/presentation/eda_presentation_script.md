@@ -210,18 +210,19 @@
 
 ---
 
-### SLIDE 13: CÂU CHUYỆN 10 - PHÂN HÓA DOANH THU & KIỂM ĐỊNH PARETO
-* **Tiêu đề:** 12. Phân Hóa Giá Trị Khách Hàng (CLV) & Kiểm Định Pareto
-* **Biểu đồ:** Đường cong Lorenz tích lũy doanh thu của 2,500 hộ gia đình đối sánh với mốc Pareto 80/20 lý thuyết.
+### SLIDE 13: CÂU CHUYỆN 10 - ĐỘNG LƯỢNG MUA SẮM & CẢNH BÁO NGỦ ĐÔNG
+* **Tiêu đề:** 12. Động Lượng Mua Sắm \& Cảnh Báo Ngủ Đông (Momentum \& Urgency)
+* **Biểu đồ:** Đối sánh Xác suất mua sắm 14 ngày theo Gia tốc động lượng (Frequency Momentum 30d vs 90d) và Độ trễ chu kỳ cá nhân hóa (Urgency Ratio).
 * **Thời lượng:** 50 giây
-* **Điểm nhấn trực quan:** Chỉ vào điểm dấu X màu xanh lá (Mốc Pareto 80/20 lý thuyết) và điểm thực tế màu đỏ (Top 20% chỉ đạt 53.0%, cần 44.0% hộ mới đạt 80% doanh thu).
+* **Điểm nhấn trực quan:** Cột xác suất rơi tự do từ 80.0% xuống 32.6% (-47.4%) khi tắt động lượng trong 30 ngày, và ngưỡng trượt dốc khi $UR > 2.0\times$ (giảm về 51.7%).
 
 **Lời thoại trình bày:**
-> *"Khi phân tích giá trị trọn đời (CLV) qua đường cong Lorenz, chúng tôi thu được một phát hiện thực nghiệm rất đắt giá: **Dữ liệu bán lẻ FMCG không tuân theo quy luật Pareto 80/20 kinh điển**.*
+> *"Slide 13 giải quyết trực diện câu hỏi hóc búa nhất của bài toán học máy: **Tại sao một bộ phận hộ gia đình KHÔNG MUA HÀNG trong 14 ngày tới (Nhãn $Y=0$)?** Dữ liệu thực nghiệm chỉ ra hai cơ chế suy giảm tương tác rõ rệt:*
 >
-> *Khác với mô hình phần mềm SaaS hay hàng hiệu xa xỉ – nơi 20% khách hàng có thể mang lại 80% doanh thu, trong ngành siêu thị bán lẻ, hàng hóa là nhu yếu phẩm thiết yếu nên mọi gia đình đều phải chi tiêu hàng tuần. Kết quả thực nghiệm cho thấy: Top 20% hộ gia đình chỉ đóng góp **53.0% tổng doanh thu** (\$4.27 triệu USD), và chúng ta phải cần tới **44.0% số hộ (khoảng 1,100 hộ)** mới đạt được 80% doanh số.*
+> 1. *Về mặt **Gia tốc động lượng (Panel A)**: Các hộ duy trì nhịp mua ổn định đạt xác suất mua **80.0%**. Tuy nhiên, nếu một hộ hoàn toàn không có giỏ hàng nào trong 30 ngày gần nhất (dù trước đó 90 ngày vẫn đi chợ), xác suất mua sắm trong 14 ngày tới **rơi tự do xuống chỉ còn 32.6%** (sụt giảm tới -47.4%).*
+> 2. *Về mặt **Độ trễ chu kỳ cá nhân hóa (Panel B)**: Khi số ngày chưa mua vượt quá 2 lần chu kỳ bình quân của chính hộ đó ($UR > 2.0\times$), xác suất mua gãy dốc xuống **51.7%**; và những hộ mất dấu rơi về **14.1%**.*
 >
-> *Hệ số Gini thực tế dừng ở mức **0.503** – thể hiện mức độ bất bình đẳng vừa phải. Dù không cực đoan như lý thuyết 80/20, nhóm 500 hộ dẫn đầu vẫn mang lại doanh số gấp 3.4 lần nửa dưới. Vì vậy, thay vì áp đặt tỷ lệ 80/20 cứng nhắc, mô hình của chúng tôi phân khúc khách hàng theo phân vị chi tiêu thực tế `spend_percentile_rank` và cảnh báo CRM khi khách VIP dãn chu kỳ mua (`urgency_ratio > 1.5`)."*
+> *Khám phá này chứng minh: Khách hàng không mua sắm ($Y=0$) không phải là hiện tượng ngẫu nhiên, mà luôn có tín hiệu cảnh báo sớm từ sự tắt dần động lượng. Đây là lý do tại sao `frequency_momentum_30_vs_90` và `urgency_ratio` là cặp đặc trưng phân loại mạnh nhất của mô hình."*
 
 ---
 
@@ -249,7 +250,7 @@
 >
 > 1. *Nhịp sinh học & Đồ tươi $\rightarrow$ Nhóm biến Recency & Urgency (`days_since_last_basket`, `urgency_ratio`, `days_since_perishable`).*
 > 2. *Sức mua & Độ rộng giỏ hàng $\rightarrow$ Nhóm biến Quy mô & Độ phủ danh mục (`spend_30d/90d`, `aov_90d`, `department_breadth_90d`).*
-> 3. *Tập trung doanh thu & Phân vị $\rightarrow$ Nhóm biến Phân vị khách hàng VIP (`spend_percentile_rank`).*
+> 3. *Động lượng & Ngủ đông $\rightarrow$ Nhóm biến Gia tốc và Trễ chu kỳ (`frequency_momentum_30_vs_90`, `urgency_ratio`).*
 > 4. *Nhân khẩu & Quy mô hộ $\rightarrow$ Nhóm biến Quy mô gia đình & Thu nhập (`hh_size`, `kid_category`, `income_desc`).*
 > 5. *Hiệu ứng mồi câu & Phễu tiếp thị $\rightarrow$ Lịch sử đổi phiếu và chiến dịch đang chạy (`coupon_redempt_count_180d`, `is_targeted_by_active_campaign`).*
 > 6. *Địa bàn & Trung thành $\rightarrow$ Chỉ số trung thành cửa hàng ruột (`store_loyalty_index`, `primary_store_id`).*
