@@ -2,7 +2,7 @@
 
 **Dự án:** Dự Đoán Xác Suất Mua Hàng Của Hộ Gia Đình (Purchasing Propensity Model)  
 **Tập dữ liệu:** Dunnhumby - The Complete Journey (2.6M giao dịch, 2,500 hộ, 711 ngày)  
-**Thời lượng dự kiến:** 12 – 15 phút thuyết trình + 5 phút Q&A  
+**Thời lượng dự kiến:** 10 – 12 phút thuyết trình + 5 phút Q&A  
 
 ---
 
@@ -13,16 +13,14 @@
    │
    ├──> [Phần 1: Kiểm Toán & Làm Sạch Dữ Liệu] Kiến trúc 8 bảng & Tiêu chuẩn sạch (Slide 3)
    │
-   ├──> [Phần 2: 15 Quy Luật Thực Nghiệm Hành Vi] Nhịp sinh học & Bản chất mua sắm (Slide 4-18)
+   ├──> [Phần 2: 10 Quy Luật Thực Nghiệm Cốt Lõi] Nhịp sinh học & Bản chất mua sắm (Slide 4-13)
    │      • Nhịp đi chợ & Giá trị giỏ hàng (Slide 4-5)
-   │      • Nhịp sinh học tuần & 24 giờ (Slide 6-7)
-   │      • Đồ tươi sống & Hiệu ứng lan tỏa coupon (Slide 8-9)
-   │      • Gia tốc tiếp thị & Địa bàn đa cửa hàng (Slide 10-11)
-   │      • Tác động nhân khẩu & Ổn định nhãn mục tiêu (Slide 12-13)
-   │      • Kiểm định Pareto & Chiết khấu hai tầng (Slide 14-15)
-   │      • Nhãn hàng riêng & Phễu tiếp thị (Slide 16-17)
+   │      • Đồ tươi sống & Hiệu ứng mồi câu coupon (Slide 6-7)
+   │      • Gia tốc tiếp thị & Địa bàn đa cửa hàng (Slide 8-9)
+   │      • Tác động nhân khẩu & Ổn định nhãn mục tiêu (Slide 10-11)
+   │      • Phân hóa giá trị CLV & Phễu chuyển đổi tiếp thị (Slide 12-13)
    │
-   └──> [Phần 3: Chuyển Giao Sang Học Máy] Ma trận đặc trưng & Kỷ luật thời gian (Slide 18-19)
+   └──> [Phần 3: Chuyển Giao Sang Học Máy] Ma trận đặc trưng & Tổng kết (Slide 14-15)
 ```
 
 ---
@@ -54,7 +52,7 @@
 >
 > *Thách thức lớn nhất ở đây là dữ liệu thực tế luôn chứa đầy **nhiễu nghiệp vụ**: từ các thao tác hủy quẹt thẻ tại quầy POS, các giỏ hàng quà tặng 0 đồng, cho đến độ khuyết thiếu lớn về nhân khẩu học. Đặc biệt, để xây dựng mô hình dự báo hành vi trong tương lai, chúng ta phải tuân thủ nghiêm ngặt **kỷ luật thời gian**, phân định rạch ròi giữa quá khứ quan sát và tương lai dự báo.*
 >
-> *Từ thách thức đó, giai đoạn EDA của chúng tôi tập trung vào 2 mục tiêu cốt lõi: Thứ nhất, kiểm toán và bảo toàn 100% tập mẫu dữ liệu sạch; Thứ hai, bóc tách **14 quy luật thực nghiệm** để làm cơ sở toán học xác định cửa sổ dự báo và sinh đặc trưng cho mô hình."*
+> *Từ thách thức đó, giai đoạn EDA của chúng tôi tập trung vào 2 mục tiêu cốt lõi: Thứ nhất, kiểm toán và bảo toàn 100% tập mẫu dữ liệu sạch; Thứ hai, bóc tách **10 quy luật thực nghiệm cốt lõi** để làm cơ sở toán học xác định cửa sổ dự báo và sinh đặc trưng cho mô hình."*
 
 ---
 
@@ -70,14 +68,14 @@
 > 2. *Tại bảng `coupons`: Chúng tôi khử trùng **5,164 bản ghi trùng lặp 100%**, triệt tiêu nguy cơ nổ dòng (cartesian explosion) khi kết nối sang bảng giao dịch.*
 > 3. *Tại bảng `demographics`: Dữ liệu nhân khẩu học khuyết thiếu ở 68% số hộ gia đình. Thay vì xóa bỏ gây mất mát mẫu, chúng tôi chuẩn hóa gán nhãn `UNKNOWN` để đưa vào mô hình dưới dạng một nhóm danh mục độc lập, bảo toàn trọn vẹn 100% tập 2,500 hộ gia đình.*
 >
-> *Sau khi nền tảng dữ liệu đã đạt chuẩn sạch, chúng ta cùng bước vào 15 quy luật hành vi thực nghiệm."*
+> *Sau khi nền tảng dữ liệu đã đạt chuẩn sạch, chúng ta cùng bước vào 10 quy luật hành vi thực nghiệm cốt lõi."*
 
 ---
 
 ### SLIDE 4: CÂU CHUYỆN 1 - NHỊP SINH HỌC ĐI CHỢ & CHU KỲ MUA SẮM
 * **Tiêu đề:** 3. Nhịp Sinh Học Đi Chợ & Chu Kỳ Mua Sắm Của Hộ Gia Đình
 * **Biểu đồ:** Phân phối khoảng cách thời gian giữa các chuyến đi chợ liên tiếp (Inter-trip Days).
-* **Thời lượng:** 60 giây
+* **Thời lượng:** 50 giây
 * **Điểm nhấn trực quan:** Chỉ vào đường tích lũy màu đỏ đạt 82.3% tại mốc 7 ngày và đạt 92.4% tại mốc 14 ngày.
 
 **Lời thoại trình bày:**
@@ -104,64 +102,38 @@
 
 ---
 
-### SLIDE 6: CÂU CHUYỆN 3 - PHÂN BỔ NHỊP MUA SẮM THEO CÁC NGÀY TRONG TUẦN
-* **Tiêu đề:** 5. Phân Bổ Nhịp Mua Sắm Theo Các Ngày Trong Tuần
-* **Biểu đồ:** Số lượng giỏ hàng phân bổ từ Thứ Hai đến Chủ Nhật.
-* **Thời lượng:** 40 giây
-* **Điểm nhấn trực quan:** Đáy vào Thứ Ba - Thứ Tư và hai cột đỉnh vọt lên ở Thứ Bảy - Chủ Nhật.
-
-**Lời thoại trình bày:**
-> *"Quy luật ngày trong tuần bộc lộ rõ nhịp sống của các hộ gia đình: Giữa tuần (Thứ Ba, Thứ Tư) là điểm đáy tiêu dùng khi mọi người bận rộn đi làm. Ngược lại, Thứ Bảy và Chủ Nhật bùng nổ nhu cầu mua sắm tích trữ với lượng giao dịch tăng vọt **30% đến 35%**.*
->
-> *Vì hành vi tiêu dùng gắn chặt với chu kỳ tuần, chúng tôi đưa đặc trưng `day_of_week` tại thời điểm quan sát $t_0$ và `days_to_weekend` vào mô hình, giúp thuật toán nắm bắt được xung lực mua sắm trước kỳ nghỉ."*
-
----
-
-### SLIDE 7: CÂU CHUYỆN 4 - NHỊP SINH HỌC MUA SẮM SUỐT 24 GIỜ
-* **Tiêu đề:** 6. Nhịp Sinh Học Mua Sắm Suốt 24 Giờ Trong Ngày
-* **Biểu đồ:** Phân phối giờ mua sắm trong ngày (Hourly Rhythm).
-* **Thời lượng:** 45 giây
-* **Điểm nhấn trực quan:** Hai đỉnh: Đỉnh trưa (11h--13h) và Đỉnh chiều tối (16h--18h).
-
-**Lời thoại trình bày:**
-> *"Mổ xẻ sâu hơn vào 24 giờ trong ngày, dữ liệu xuất hiện **cấu trúc hai đỉnh nhịp sinh học rất rõ nét**: Đỉnh 1 vào giờ nghỉ trưa (11h--13h) và Đỉnh 2 mạnh nhất vào lúc tan sở (16h--18h) khi khách hàng ghé mua thực phẩm chuẩn bị bữa tối. Hơn 65% tổng hóa đơn tập trung trong khung 7 tiếng này.*
->
-> *Từ góc độ vận hành tiếp thị và CRM, phát hiện này chỉ ra **'khung giờ vàng' để gửi thông báo ưu đãi hoặc email nhắc nhở là khoảng 9h đến 10h sáng** – đón đầu đúng trước khi nhu cầu đi chợ buổi trưa và buổi chiều phát sinh."*
-
----
-
-### SLIDE 8: CÂU CHUYỆN 5 - ĐỒ TƯƠI SỐNG: ĐỘNG LỰC THÚC ĐẨY MUA SẮM
-* **Tiêu đề:** 7. Thực Phẩm Tươi Sống & Động Lực Thúc Đẩy Mua Sắm
+### SLIDE 6: CÂU CHUYỆN 3 - ĐỒ TƯƠI SỐNG: ĐỘNG LỰC THÚC ĐẨY MUA SẮM
+* **Tiêu đề:** 5. Thực Phẩm Tươi Sống & Động Lực Thúc Đẩy Mua Sắm
 * **Biểu đồ:** So sánh chu kỳ quay lại giữa giỏ có đồ tươi (Perishable) và giỏ chỉ có đồ khô.
-* **Thời lượng:** 50 giây
+* **Thời lượng:** 45 giây
 * **Điểm nhấn trực quan:** Đường phân phối của giỏ có đồ tươi lệch hẳn về bên trái (chu kỳ ngắn hơn 1.8 ngày).
 
 **Lời thoại trình bày:**
-> *"Một trong những phát hiện thú vị nhất về mặt tâm lý tiêu dùng là **hiệu ứng chiếc đồng hồ đếm ngược của thực phẩm tươi sống** (thịt, rau củ, sữa tươi).*
+> *"Một trong những phát hiện thực tế nhất về mặt tâm lý tiêu dùng là **hiệu ứng chiếc đồng hồ đếm ngược của thực phẩm tươi sống** (thịt, rau củ, sữa tươi).*
 >
 > *Do hạn sử dụng ngắn (chỉ 2 đến 5 ngày), hộ gia đình mua đồ tươi có khoảng cách quay lại siêu thị ngắn hơn gần **1.8 ngày** so với các giỏ hàng chỉ mua đồ khô hoặc hóa mỹ phẩm. Chiếc tủ lạnh hết thức ăn tươi chính là động lực tự nhiên mạnh nhất thúc đẩy chuyến đi kế tiếp.*
 >
-> *Vì vậy, các đặc trưng như `days_since_last_perishable` và `perishable_ratio_90d` trở thành nhóm tín hiệu dự báo có trọng số cực cao trong mô hình."*
+> *Vì vậy, các đặc trưng như `days_since_last_perishable` và `perishable_basket_ratio_90d` trở thành nhóm tín hiệu dự báo có trọng số cực cao trong mô hình."*
 
 ---
 
-### SLIDE 9: CÂU CHUYỆN 6 - HIỆU ỨNG MỒI CÂU & ĐỘ LAN TỎA COUPON
-* **Tiêu đề:** 8. Hiệu Ứng Mồi Câu & Độ Lan Tỏa Của Phiếu Giảm Giá
+### SLIDE 7: CÂU CHUYỆN 4 - HIỆU ỨNG MỒI CÂU & ĐỘ LAN TỎA COUPON
+* **Tiêu đề:** 6. Hiệu Ứng Mồi Câu & Độ Lan Tỏa Của Phiếu Giảm Giá
 * **Biểu đồ:** Cấu trúc chi tiêu của giỏ hàng có dùng Coupon (Spend with vs. without Coupon).
-* **Thời lượng:** 50 giây
+* **Thời lượng:** 45 giây
 * **Điểm nhấn trực quan:** Cột giá trị giỏ hàng có coupon cao gấp 2.5 lần (\$67.60 vs \$26.70).
 
 **Lời thoại trình bày:**
-> *"Slide 8 minh họa **Hiệu ứng Mồi câu (Halo Effect)** của các phiếu giảm giá. Khách hàng sử dụng coupon có giá trị giỏ hàng trung bình lên tới **\$67.60**, cao gấp **2.53 lần** so với giỏ hàng thông thường (\$26.70).*
+> *"Slide 7 minh họa **Hiệu ứng Mồi câu (Halo Effect)** của các phiếu giảm giá. Khách hàng sử dụng coupon có giá trị giỏ hàng trung bình lên tới **\$67.60**, cao gấp **2.53 lần** so với giỏ hàng thông thường (\$26.70).*
 >
 > *Mặc dù phiếu ưu đãi chỉ giảm cho một vài món cụ thể, nhưng khi đã cầm coupon đến siêu thị, khách hàng dạo qua các quầy hàng khác và mua sắm chéo rất nhiều. Hơn **80%** giá trị giỏ hàng có coupon đến từ các sản phẩm nguyên giá đi kèm.*
 >
-> *Điều này khẳng định: Nhóm khách hàng chủ động dùng coupon là nhóm khách hàng có giá trị cao nhất (VIP), và tần suất dùng phiếu `coupon_redempt_count` là tín hiệu vàng của lòng trung thành."*
+> *Điều này khẳng định: Nhóm khách hàng chủ động dùng coupon là nhóm khách hàng có giá trị cao nhất (VIP), và tần suất dùng phiếu `coupon_redempt_count_180d` là tín hiệu vàng của lòng trung thành."*
 
 ---
 
-### SLIDE 10: CÂU CHUYỆN 7 - SỨC BẬT CHU KỲ TỪ CHIẾN DỊCH TIẾP THỊ
-* **Tiêu đề:** 9. Sức Bật Chu Kỳ Từ Các Chiến Dịch Tiếp Thị
+### SLIDE 8: CÂU CHUYỆN 5 - SỨC BẬT CHU KỲ TỪ CHIẾN DỊCH TIẾP THỊ
+* **Tiêu đề:** 7. Sức Bật Chu Kỳ Từ Các Chiến Dịch Tiếp Thị
 * **Biểu đồ:** So sánh chu kỳ tái mua trong đợt chiến dịch (Active Campaign) vs. ngoài chiến dịch.
 * **Thời lượng:** 45 giây
 * **Điểm nhấn trực quan:** Chu kỳ tái mua bị rút ngắn gần 3 ngày khi chiến dịch được kích hoạt.
@@ -171,12 +143,12 @@
 >
 > *Trong các giai đoạn chiến dịch hoạt động, thời gian chờ mua hàng của hộ gia đình được rút ngắn gần **3 ngày** so với giai đoạn thông thường, đồng thời tần suất mua sắm tăng gần gấp đôi.*
 >
-> *Do đó, biến cờ `is_targeted_by_campaign` tại thời điểm quan sát là một đặc trưng ngoại sinh quan trọng giúp mô hình bắt được sự gia tốc hành vi."*
+> *Do đó, biến cờ `is_targeted_by_active_campaign` tại thời điểm quan sát là một đặc trưng ngoại sinh quan trọng giúp mô hình bắt được sự gia tốc hành vi."*
 
 ---
 
-### SLIDE 11: CÂU CHUYỆN 8 - HÀNH VI MUA SẮM ĐA CỬA HÀNG & LÒNG TRUNG THÀNH
-* **Tiêu đề:** 10. Hành Vi Mua Sắm Đa Cửa Hàng & Lòng Trung Thành
+### SLIDE 9: CÂU CHUYỆN 6 - HÀNH VI MUA SẮM ĐA CỬA HÀNG & LÒNG TRUNG THÀNH
+* **Tiêu đề:** 8. Hành Vi Mua Sắm Đa Cửa Hàng & Lòng Trung Thành
 * **Biểu đồ:** Tỷ lệ phân bổ chi tiêu giữa Cửa hàng chính (Primary Store) và các cửa hàng phụ.
 * **Thời lượng:** 45 giây
 * **Điểm nhấn trực quan:** Miếng bánh 73.4% ngân sách tập trung vào 1 cửa hàng duy nhất.
@@ -190,27 +162,27 @@
 
 ---
 
-### SLIDE 12: CÂU CHUYỆN 9 - QUY MÔ HỘ GIA ĐÌNH & GIÁ TRỊ GIỎ HÀNG
-* **Tiêu đề:** 11. Quy Mô Hộ Gia Đình & Tác Động Lên Giá Trị Giỏ Hàng
+### SLIDE 10: CÂU CHUYỆN 7 - QUY MÔ HỘ GIA ĐÌNH & GIÁ TRỊ GIỎ HÀNG
+* **Tiêu đề:** 9. Quy Mô Hộ Gia Đình & Tác Động Lên Giá Trị Giỏ Hàng
 * **Biểu đồ:** Tương quan giữa Quy mô hộ gia đình (1, 2, 3, 4, 5+ thành viên) và AOV.
 * **Thời lượng:** 40 giây
 * **Điểm nhấn trực quan:** Đường bậc thang đi lên vững chắc từ \$22 lên tới \$36/giỏ hàng.
 
 **Lời thoại trình bày:**
-> *"Mối liên hệ giữa nhân khẩu học và quy mô giỏ hàng diễn ra theo quan hệ tuyến tính rất đẹp: Số miệng ăn trong gia đình quy định trực tiếp giá trị hóa đơn. Các hộ gia đình từ 5 người trở lên có AOV cao hơn **+39.4%** so với hộ độc thân.*
+> *"Mối liên hệ giữa nhân khẩu học và quy mô giỏ hàng diễn ra theo quan hệ tuyến tính: Số miệng ăn trong gia đình quy định trực tiếp giá trị hóa đơn. Các hộ gia đình từ 5 người trở lên có AOV cao hơn **+39.4%** so với hộ độc thân.*
 >
 > *Đặc biệt, sự xuất hiện của trẻ nhỏ kéo theo nhu cầu về các dòng sản phẩm giá trị cao như sữa bột, tã bỉm và đồ ăn dặm. Mặc dù 68% hộ bị thiếu dữ liệu này, việc nhóm chúng vào danh mục `UNKNOWN` vẫn cho phép mô hình khai thác triệt để tín hiệu từ 32% hộ có thông tin mà không làm méo mó phân phối."*
 
 ---
 
-### SLIDE 13: CÂU CHUYỆN 10 - ĐỘ ỔN ĐỊNH NHÃN MỤC TIÊU THEO THỜI GIAN
-* **Tiêu đề:** 12. Độ Ổn Định Nhãn Mục Tiêu Theo Dòng Thời Gian
+### SLIDE 11: CÂU CHUYỆN 8 - ĐỘ ỔN ĐỊNH NHÃN MỤC TIÊU THEO THỜI GIAN
+* **Tiêu đề:** 10. Độ Ổn Định Nhãn Mục Tiêu Theo Dòng Thời Gian
 * **Biểu đồ:** Tỷ lệ nhãn mục tiêu ($Y = 1$) qua từng tuần trong suốt 711 ngày.
 * **Thời lượng:** 50 giây
 * **Điểm nhấn trực quan:** Đường ngang phẳng lì dao động quanh mốc 68.25% (dải biên độ chỉ $\pm 2.2\%$).
 
 **Lời thoại trình bày:**
-> *"Slide 13 là một trong những slide quan trọng nhất về mặt toán học và kiểm định: **Kiểm tra hiện tượng trôi dạt dữ liệu (Data Drift / Concept Drift)** của nhãn mục tiêu.*
+> *"Slide 11 là một trong những slide quan trọng nhất về mặt toán học và kiểm định: **Kiểm tra hiện tượng trôi dạt dữ liệu (Data Drift / Concept Drift)** của nhãn mục tiêu.*
 >
 > *Khi chúng tôi tính tỷ lệ hộ gia đình có đi chợ trong 14 ngày tới trên toàn bộ trục thời gian 1.5 năm, kết quả cho thấy đường tỷ lệ duy trì ổn định tuyệt đối quanh mức **68.25%**, với độ lệch chuẩn rất hẹp chỉ $\pm 2.2\%$.*
 >
@@ -218,8 +190,8 @@
 
 ---
 
-### SLIDE 14: CÂU CHUYỆN 11 - PHÂN HÓA DOANH THU & KIỂM ĐỊNH PARETO
-* **Tiêu đề:** 13. Phân Hóa Giá Trị Khách Hàng (CLV) & Kiểm Định Pareto
+### SLIDE 12: CÂU CHUYỆN 9 - PHÂN HÓA DOANH THU & KIỂM ĐỊNH PARETO
+* **Tiêu đề:** 11. Phân Hóa Giá Trị Khách Hàng (CLV) & Kiểm Định Pareto
 * **Biểu đồ:** Đường cong Lorenz tích lũy doanh thu của 2,500 hộ gia đình đối sánh với mốc Pareto 80/20 lý thuyết.
 * **Thời lượng:** 50 giây
 * **Điểm nhấn trực quan:** Chỉ vào điểm dấu X màu xanh lá (Mốc Pareto 80/20 lý thuyết) và điểm thực tế màu đỏ (Top 20% chỉ đạt 53.0%, cần 44.0% hộ mới đạt 80% doanh thu).
@@ -233,34 +205,8 @@
 
 ---
 
-### SLIDE 15: CÂU CHUYỆN 12 - CƠ CHẾ CHIẾT KHẤU HAI TẦNG
-* **Tiêu đề:** 14. Cơ Chế Chiết Khấu Hai Tầng: Quầy Kệ & Phiếu Giảm Giá
-* **Biểu đồ:** Đối sánh tổng ngân sách giảm giá tại quầy (Markdown) vs. giảm giá qua Coupon.
-* **Thời lượng:** 45 giây
-* **Điểm nhấn trực quan:** Cột Markdown \$1.4M cao vượt trội gấp 32.8 lần cột Coupon \$42.6k.
-
-**Lời thoại trình bày:**
-> *"Dữ liệu ghi nhận hai cơ chế chiết khấu hoàn toàn khác nhau về bản chất: Giảm giá niêm yết tại quầy kệ (`RETAIL_DISC`) đạt tới **\$1.4 triệu USD**, lớn gấp **32.8 lần** so với giá trị giảm qua phiếu coupon (`COUPON_DISC` đạt \$42.6k).*
->
-> *Giảm giá quầy kệ là cơ chế đại trà tác động lên toàn bộ người mua sắm tại điểm bán, trong khi coupon là hành vi chủ động đòi hỏi nỗ lực sưu tầm. Vì phản ánh hai tâm lý đối lập, chúng tôi bắt buộc phải tách riêng thành hai biến: `retail_discount_ratio` và `coupon_discount_ratio` thay vì gộp chung."*
-
----
-
-### SLIDE 16: CÂU CHUYỆN 13 - SỨC THÂM NHẬP CỦA NHÃN HÀNG RIÊNG (PRIVATE LABEL)
-* **Tiêu đề:** 15. Sức Thâm Nhập Doanh Thu Của Nhãn Hàng Riêng
-* **Biểu đồ:** Tỷ trọng doanh thu & số lượng mặt hàng của Private Label so với Thương hiệu Quốc gia.
-* **Thời lượng:** 40 giây
-* **Điểm nhấn trực quan:** Hiệu suất doanh thu của Private Label gấp 1.9 lần tỷ trọng số lượng mặt hàng.
-
-**Lời thoại trình bày:**
-> *"Nhãn hàng riêng (Private Label của Kroger) thể hiện hiệu quả kinh tế đáng kinh ngạc: Dù chỉ chiếm danh mục SKU gọn nhẹ, nhưng nhãn riêng đem lại doanh số và sản lượng gấp **1.9 lần** mức bình quân.*
->
-> *Khách hàng tin dùng nhãn riêng cho các nhu cầu thiết yếu hàng ngày vì giá thành hợp lý. Mua sắm nhãn riêng chính là một chỉ dấu quan trọng phản ánh sự gắn bó chặt chẽ với chuỗi siêu thị, được đo lường qua biến `private_label_ratio_90d`."*
-
----
-
-### SLIDE 17: CÂU CHUYỆN 14 - PHỄU CHUYỂN ĐỔI THEO NHÓM CHIẾN DỊCH
-* **Tiêu đề:** 16. Phễu Chuyển Đổi Tiếp Thị Theo Nhóm Chiến Dịch
+### SLIDE 13: CÂU CHUYỆN 10 - PHỄU CHUYỂN ĐỔI THEO NHÓM CHIẾN DỊCH
+* **Tiêu đề:** 12. Phễu Chuyển Đổi Tiếp Thị Theo Nhóm Chiến Dịch
 * **Biểu đồ:** Tỷ lệ đổi phiếu thành công của Chiến dịch Loại A, B và C.
 * **Thời lượng:** 45 giây
 * **Điểm nhấn trực quan:** Cột Chiến dịch Loại A dẫn đầu với tỷ lệ đổi phiếu vượt trội ~45%.
@@ -268,32 +214,32 @@
 **Lời thoại trình bày:**
 > *"Khi phân tích hiệu quả của 30 chiến dịch tiếp thị, ta thấy rõ sự phân hóa chất lượng: **Chiến dịch Loại A đạt tỷ lệ đổi phiếu thành công cao nhất (~45%)**, trong khi Loại B và C có tỷ lệ chuyển đổi khiêm tốn hơn nhiều.*
 >
-> *Lý do là Loại A có độ phủ sản phẩm đa ngành rất rộng, giúp mọi hộ gia đình dễ dàng tìm thấy mặt hàng phù hợp với nhu cầu. Việc mô hình hóa bắt buộc phải phân rã chi tiết thành `is_targeted_type_A`, `type_B` và `type_C` thay vì đánh đồng mọi chiến dịch như nhau."*
+> *Lý do là Loại A có độ phủ sản phẩm đa ngành rất rộng, giúp mọi hộ gia đình dễ dàng tìm thấy mặt hàng phù hợp với nhu cầu. Việc mô hình hóa tập trung vào biến ngoại sinh `is_targeted_by_active_campaign` để nắm bắt sự thúc đẩy chuyển đổi này."*
 
 ---
 
-### SLIDE 18: CHUYỂN HÓA PHÁT HIỆN EDA SANG HỆ THỐNG ĐẶC TRƯNG HỌC MÁY
-* **Tiêu đề:** 17. Chuyển Hóa Phát Hiện EDA Sang Hệ Thống Đặc Trưng ML
+### SLIDE 14: CHUYỂN HÓA PHÁT HIỆN EDA SANG HỆ THỐNG ĐẶC TRƯNG HỌC MÁY
+* **Tiêu đề:** 13. Chuyển Hóa Phát Hiện EDA Sang Hệ Thống Đặc Trưng ML
 * **Bảng:** Ma trận ánh xạ 6 nhóm hành vi sang hệ thống biến đặc trưng tương ứng.
 * **Thời lượng:** 60 giây
 * **Điểm nhấn trực quan:** Hàng alertbox dưới cùng nhấn mạnh Kỷ luật thời gian $DAY \le t_0$.
 
 **Lời thoại trình bày:**
-> *"Thưa quý vị, toàn bộ 14 câu chuyện thực nghiệm vừa nêu đã được chúng tôi tổng hợp và chuyển hóa thành **Ma trận ánh xạ đặc trưng** trên Slide 17:*
+> *"Thưa quý vị, toàn bộ 10 câu chuyện thực nghiệm cốt lõi vừa nêu đã được chúng tôi tổng hợp và chuyển hóa thành **Ma trận ánh xạ đặc trưng** trên Slide 13:*
 >
-> 1. *Nhịp sinh học & Đồ tươi $\rightarrow$ Nhóm biến Recency & Urgency (`days_since_last_basket`, `urgency_ratio`).*
-> 2. *Sức mua & Nhân khẩu $\rightarrow$ Nhóm biến Volume & Household Size.*
+> 1. *Nhịp sinh học & Đồ tươi $\rightarrow$ Nhóm biến Recency & Urgency (`days_since_last_basket`, `urgency_ratio`, `days_since_perishable`).*
+> 2. *Sức mua & Động lượng $\rightarrow$ Nhóm biến Quy mô & Gia tốc (`spend_30d/90d`, `aov_90d`, `frequency_momentum_30_vs_90`).*
 > 3. *Tập trung doanh thu & Phân vị $\rightarrow$ Nhóm biến Phân vị khách hàng VIP (`spend_percentile_rank`).*
-> 4. *Chiết khấu 2 tầng $\rightarrow$ Tách riêng tỷ lệ giảm quầy kệ và giảm coupon.*
-> 5. *Hiệu ứng mồi câu & Phễu $\rightarrow$ Lịch sử đổi phiếu và phân loại chiến dịch A/B/C.*
-> 6. *Địa bàn & Trung thành $\rightarrow$ Chỉ số trung thành cửa hàng ruột (`store_loyalty_index`).*
+> 4. *Nhân khẩu & Quy mô hộ $\rightarrow$ Nhóm biến Quy mô gia đình & Thu nhập (`hh_size`, `kid_category`, `income_desc`).*
+> 5. *Hiệu ứng mồi câu & Phễu tiếp thị $\rightarrow$ Lịch sử đổi phiếu và chiến dịch đang chạy (`coupon_redempt_count_180d`, `is_targeted_by_active_campaign`).*
+> 6. *Địa bàn & Trung thành $\rightarrow$ Chỉ số trung thành cửa hàng ruột (`store_loyalty_index`, `primary_store_id`).*
 >
 > *Đặc biệt, **100% các đặc trưng này đều được tính toán nghiêm ngặt tại thời điểm quan sát $DAY \le t_0$**, tuyệt đối không nhìn trước dữ liệu tương lai, bảo đảm mô hình học máy khi triển khai thực tế sẽ đạt độ tin cậy cao nhất."*
 
 ---
 
-### SLIDE 19: TỔNG KẾT GIAI ĐOẠN EDA & KẾ HOẠCH TIẾP THEO
-* **Tiêu đề:** 18. Tổng Kết Giá Trị Nền Tảng Của Giai Đoạn EDA
+### SLIDE 15: TỔNG KẾT GIAI ĐOẠN EDA & KẾ HOẠCH TIẾP THEO
+* **Tiêu đề:** 14. Tổng Kết Giá Trị Nền Tảng Của Giai Đoạn EDA
 * **Thời lượng:** 60 giây
 * **Điểm nhấn trực quan:** 4 đóng góp nền tảng ở cột trái và lời cảm ơn / chuyển sang Q&A ở cột phải.
 
@@ -301,13 +247,9 @@
 > *"Để khép lại phần báo cáo, giai đoạn EDA và Kiểm toán Chất lượng đã mang lại **4 đóng góp nền tảng** cho toàn bộ dự án:*
 >
 > *Một là, xác lập cửa sổ dự báo tối ưu **$\Delta t = 14$ ngày** trên cơ sở 92.4% chu kỳ tự nhiên;*  
-> *Hai là, làm sạch triệt để 942 giỏ hàng $\le \$0$ và khử trùng 5,164 bản ghi coupon, bảo toàn dữ liệu thương mại sạch;*  
-> *Ba là, chuyển hóa 14 quy luật hành vi thành bộ đặc trưng máy học có tính giải thích cao;*  
+> *Hai là, làm sạch triệt để 942 giỏ hàng $\le \$0$ và khử trùng 5,164 bản ghi coupon, bảo toàn 275,542 giỏ hàng thương mại sạch;*  
+> *Ba là, chuyển hóa **10 quy luật hành vi cốt lõi** thành bộ đặc trưng máy học có tính giải thích cao;*  
 > *Bốn là, chứng minh nhãn mục tiêu ổn định ở mức 68.25%, cho phép triển khai chiến lược huấn luyện trượt thời gian.*
->
-> *Đây chính là bệ phóng vững chắc nhất để chúng tôi tự tin bước vào giai đoạn tiếp theo: Huấn luyện các mô hình phân loại LightGBM, XGBoost và CatBoost.*
->
-> *Xin chân thành cảm ơn quý thầy cô và các anh chị đã chú ý lắng nghe. Rất mong nhận được các câu hỏi và ý kiến đóng góp ạ!"*
 >
 > *Đây chính là bệ phóng vững chắc nhất để chúng tôi tự tin bước vào giai đoạn tiếp theo: Huấn luyện các mô hình phân loại LightGBM, XGBoost và CatBoost.*
 >

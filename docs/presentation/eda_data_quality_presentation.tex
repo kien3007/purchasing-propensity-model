@@ -93,7 +93,7 @@
       \end{alertblock}
       \vspace{0.2cm}
       \begin{exampleblock}{Mục Tiêu Khám Phá Hành Vi}
-        Chiết xuất \textbf{14 quy luật thực nghiệm} nhằm xác định cửa sổ dự báo tối ưu ($\Delta t$) và thiết kế hệ thống đặc trưng chống rò rỉ dữ liệu.
+        Chiết xuất \textbf{10 quy luật thực nghiệm cốt lõi} nhằm xác định cửa sổ dự báo tối ưu ($\Delta t$) và thiết kế hệ thống đặc trưng chống rò rỉ dữ liệu.
       \end{exampleblock}
     \end{column}
   \end{columns}
@@ -176,60 +176,9 @@
 \end{frame}
 
 % ==============================================================================
-% SLIDE 6: CÂU CHUYỆN 3 - CHU KỲ TUẦN
+% SLIDE 5: CÂU CHUYỆN 3 - ĐỒ TƯƠI SỐNG
 % ==============================================================================
-\begin{frame}{5. Phân Bổ Nhịp Mua Sắm Theo Các Ngày Trong Tuần}
-  \begin{columns}[c]
-    \begin{column}{0.60\textwidth}
-      \centering
-      \includegraphics[width=\linewidth,height=0.65\textheight,keepaspectratio]{../reports/figures/03_day_of_week_distribution.png}
-    \end{column}
-    \begin{column}{0.38\textwidth}
-      \small
-      \textbf{Quy Luật Nhịp Điệu Tuần:}
-      \begin{itemize}\setlength{\itemsep}{2pt}
-        \item \textbf{Tích trữ cuối tuần:} T7 và Chủ Nhật bùng nổ nhu cầu mua lớn; giữa tuần (T3--T4) chỉ mua bù đắp.
-        \item \textbf{Biên độ dao động:} Lượng giỏ cuối tuần tăng 30--35\% so với đáy giữa tuần.
-      \end{itemize}
-      \vspace{0.08cm}
-      \begin{block}{Quyết Định Kỹ Thuật}
-        \footnotesize
-        Hành vi gắn chặt với lịch nghỉ ngơi.\\
-        $\rightarrow$ Biến: \texttt{day\_of\_week} tại mốc $t_0$, khoảng cách thời gian tới ngày cuối tuần.
-      \end{block}
-    \end{column}
-  \end{columns}
-\end{frame}
-
-% ==============================================================================
-% SLIDE 7: CÂU CHUYỆN 4 - NHỊP SINH HỌC 24 GIỜ
-% ==============================================================================
-\begin{frame}{6. Nhịp Sinh Học Mua Sắm Suốt 24 Giờ Trong Ngày}
-  \begin{columns}[c]
-    \begin{column}{0.60\textwidth}
-      \centering
-      \includegraphics[width=\linewidth,height=0.65\textheight,keepaspectratio]{../reports/figures/04_hourly_shopping_rhythm.png}
-    \end{column}
-    \begin{column}{0.38\textwidth}
-      \small
-      \textbf{Nhịp Điệu Hoạt Động Trong Ngày:}
-      \begin{itemize}\setlength{\itemsep}{2pt}
-        \item \textbf{Đỉnh đôi sinh hoạt:} Làn sóng mua trưa (11h--13h) và cao trào tan sở (16h--18h) chuẩn bị bữa tối.
-        \item \textbf{Tập trung giao dịch:} Hơn 65\% hóa đơn xuất hiện trong khung 7 tiếng ban ngày.
-      \end{itemize}
-      \vspace{0.08cm}
-      \begin{alertblock}{Ứng Dụng Tiếp Thị CRM}
-        \footnotesize
-        Khung giờ vàng gửi ưu đãi là \textbf{9:00 -- 10:00 sáng}, đón đầu nhu cầu mua sắm phát sinh trong ngày.
-      \end{alertblock}
-    \end{column}
-  \end{columns}
-\end{frame}
-
-% ==============================================================================
-% SLIDE 8: CÂU CHUYỆN 5 - ĐỒ TƯƠI SỐNG
-% ==============================================================================
-\begin{frame}{7. Thực Phẩm Tươi Sống \& Động Lực Thúc Đẩy Mua Sắm}
+\begin{frame}{5. Thực Phẩm Tươi Sống \& Động Lực Thúc Đẩy Mua Sắm}
   \begin{columns}[c]
     \begin{column}{0.60\textwidth}
       \centering
@@ -253,9 +202,9 @@
 \end{frame}
 
 % ==============================================================================
-% SLIDE 9: CÂU CHUYỆN 6 - HIỆU ỨNG MỒI CÂU COUPON
+% SLIDE 6: CÂU CHUYỆN 4 - HIỆU ỨNG MỒI CÂU COUPON
 % ==============================================================================
-\begin{frame}{8. Hiệu Ứng Mồi Câu \& Độ Lan Tỏa Của Phiếu Giảm Giá}
+\begin{frame}{6. Hiệu Ứng Mồi Câu \& Độ Lan Tỏa Của Phiếu Giảm Giá}
   \begin{columns}[c]
     \begin{column}{0.60\textwidth}
       \centering
@@ -279,9 +228,9 @@
 \end{frame}
 
 % ==============================================================================
-% SLIDE 10: CÂU CHUYỆN 7 - GIA TỐC CHIẾN DỊCH TIẾP THỊ
+% SLIDE 7: CÂU CHUYỆN 5 - GIA TỐC CHIẾN DỊCH TIẾP THỊ
 % ==============================================================================
-\begin{frame}{9. Sức Bật Chu Kỳ Từ Các Chiến Dịch Tiếp Thị}
+\begin{frame}{7. Sức Bật Chu Kỳ Từ Các Chiến Dịch Tiếp Thị}
   \begin{columns}[c]
     \begin{column}{0.60\textwidth}
       \centering
@@ -298,16 +247,16 @@
       \begin{block}{Quyết Định Kỹ Thuật}
         \footnotesize
         Chiến dịch là chất xúc tác ngoại sinh tăng tốc chu kỳ.\\
-        $\rightarrow$ Biến: \texttt{is\_targeted\_by\_campaign} tại $t_0$.
+        $\rightarrow$ Biến: \texttt{is\_targeted\_by\_active\_campaign}.
       \end{block}
     \end{column}
   \end{columns}
 \end{frame}
 
 % ==============================================================================
-% SLIDE 11: CÂU CHUYỆN 8 - HIỆN TƯỢNG NHẢY CÓC CỬA HÀNG
+% SLIDE 8: CÂU CHUYỆN 6 - HIỆN TƯỢNG NHẢY CÓC CỬA HÀNG
 % ==============================================================================
-\begin{frame}{10. Hành Vi Mua Sắm Đa Cửa Hàng \& Lòng Trung Thành}
+\begin{frame}{8. Hành Vi Mua Sắm Đa Cửa Hàng \& Lòng Trung Thành}
   \begin{columns}[c]
     \begin{column}{0.60\textwidth}
       \centering
@@ -331,9 +280,9 @@
 \end{frame}
 
 % ==============================================================================
-% SLIDE 12: CÂU CHUYỆN 9 - NHÂN KHẨU HỌC & AOV
+% SLIDE 9: CÂU CHUYỆN 7 - NHÂN KHẨU HỌC & AOV
 % ==============================================================================
-\begin{frame}{11. Quy Mô Hộ Gia Đình \& Tác Động Lên Giá Trị Giỏ Hàng}
+\begin{frame}{9. Quy Mô Hộ Gia Đình \& Tác Động Lên Giá Trị Giỏ Hàng}
   \begin{columns}[c]
     \begin{column}{0.60\textwidth}
       \centering
@@ -357,9 +306,9 @@
 \end{frame}
 
 % ==============================================================================
-% SLIDE 13: CÂU CHUYỆN 10 - ĐỘ ỔN ĐỊNH NHÃN MỤC TIÊU
+% SLIDE 10: CÂU CHUYỆN 8 - ĐỘ ỔN ĐỊNH NHÃN MỤC TIÊU
 % ==============================================================================
-\begin{frame}{12. Độ Ổn Định Nhãn Mục Tiêu Theo Dòng Thời Gian}
+\begin{frame}{10. Độ Ổn Định Nhãn Mục Tiêu Theo Dòng Thời Gian}
   \begin{columns}[c]
     \begin{column}{0.60\textwidth}
       \centering
@@ -382,9 +331,9 @@
 \end{frame}
 
 % ==============================================================================
-% SLIDE 14: CÂU CHUYỆN 11 - PHÂN HÓA DOANH THU & KIỂM ĐỊNH PARETO
+% SLIDE 11: CÂU CHUYỆN 9 - PHÂN HÓA DOANH THU & KIỂM ĐỊNH PARETO
 % ==============================================================================
-\begin{frame}{13. Phân Hóa Giá Trị Khách Hàng (CLV) \& Kiểm Định Pareto}
+\begin{frame}{11. Phân Hóa Giá Trị Khách Hàng (CLV) \& Kiểm Định Pareto}
   \begin{columns}[c]
     \begin{column}{0.60\textwidth}
       \centering
@@ -409,63 +358,9 @@
 \end{frame}
 
 % ==============================================================================
-% SLIDE 15: CÂU CHUYỆN 12 - CHIẾT KHẤU 2 TẦNG
+% SLIDE 12: CÂU CHUYỆN 10 - PHỄU CHUYỂN ĐỔI THEO LOẠI CHIẾN DỊCH
 % ==============================================================================
-\begin{frame}{14. Cơ Chế Chiết Khấu Hai Tầng: Quầy Kệ \& Phiếu Giảm Giá}
-  \begin{columns}[c]
-    \begin{column}{0.60\textwidth}
-      \centering
-      \includegraphics[width=\linewidth,height=0.65\textheight,keepaspectratio]{../reports/figures/20_markdown_vs_coupon_spend.png}
-    \end{column}
-    \begin{column}{0.38\textwidth}
-      \small
-      \textbf{Bản Chất Khuyến Mãi 2 Kênh:}
-      \begin{itemize}\setlength{\itemsep}{1pt}
-        \item \textbf{Giảm giá quầy (Bán lẻ):} Chương trình đại trà toàn diện tại điểm bán nhằm đẩy tồn kho và kích cầu.
-        \item \textbf{Coupon (Chủ động):} Đòi hỏi nỗ lực sưu tầm, chỉ nhóm khách nhạy cảm giá cao mới tận dụng.
-        \item \textbf{Quy mô áp đảo:} Ngân sách quầy kệ là động lực chính định hình quyết định mua sắm.
-      \end{itemize}
-      \vspace{0.06cm}
-      \begin{exampleblock}{Tách Biệt Feature}
-        \footnotesize
-        Hai cơ chế phản ánh tâm lý đối lập; bắt buộc tách riêng:\\
-        $\rightarrow$ \texttt{retail\_discount\_ratio} và \texttt{coupon\_discount\_ratio}.
-      \end{exampleblock}
-    \end{column}
-  \end{columns}
-\end{frame}
-
-% ==============================================================================
-% SLIDE 16: CÂU CHUYỆN 13 - SỨC THÂM NHẬP NHÃN HÀNG RIÊNG
-% ==============================================================================
-\begin{frame}{15. Sức Thâm Nhập Doanh Thu Của Nhãn Hàng Riêng}
-  \begin{columns}[c]
-    \begin{column}{0.60\textwidth}
-      \centering
-      \includegraphics[width=\linewidth,height=0.65\textheight,keepaspectratio]{../reports/figures/21_private_label_penetration.png}
-    \end{column}
-    \begin{column}{0.38\textwidth}
-      \small
-      \textbf{Hiệu Quả Kinh Tế Nhãn Riêng:}
-      \begin{itemize}\setlength{\itemsep}{1pt}
-        \item \textbf{Hiệu suất sinh lời đột biến:} Danh mục SKU nhỏ gọn nhưng tạo doanh thu \& sản lượng gấp 1.9 lần.
-        \item \textbf{Lựa chọn thiết yếu tiết kiệm:} Khách tin dùng nhãn riêng cho nhu cầu cơ bản nhờ lợi thế giá.
-        \item \textbf{Chỉ dấu gắn kết:} Mua nhãn riêng gắn chặt với sự gắn bó lâu dài cùng chuỗi siêu thị.
-      \end{itemize}
-      \vspace{0.06cm}
-      \begin{block}{Quyết Định Kỹ Thuật}
-        \footnotesize
-        Phản ánh độ nhạy cảm chi tiêu và phân khúc khách hàng:\\
-        $\rightarrow$ Biến: \texttt{private\_label\_ratio\_90d}.
-      \end{block}
-    \end{column}
-  \end{columns}
-\end{frame}
-
-% ==============================================================================
-% SLIDE 17: CÂU CHUYỆN 14 - PHỄU CHUYỂN ĐỔI THEO LOẠI CHIẾN DỊCH
-% ==============================================================================
-\begin{frame}{16. Phễu Chuyển Đổi Tiếp Thị Theo Nhóm Chiến Dịch}
+\begin{frame}{12. Phễu Chuyển Đổi Tiếp Thị Theo Nhóm Chiến Dịch}
   \begin{columns}[c]
     \begin{column}{0.60\textwidth}
       \centering
@@ -483,32 +378,32 @@
       \begin{alertblock}{Quyết Định Tiếp Thị \& ML}
         \footnotesize
         Mô hình bắt buộc phân rã theo loại hình chiến dịch:\\
-        $\rightarrow$ Tách riêng: \texttt{is\_targeted\_type\_A/B/C}.
+        $\rightarrow$ Tách riêng: \texttt{is\_targeted\_by\_active\_campaign}.
       \end{alertblock}
     \end{column}
   \end{columns}
 \end{frame}
 
 % ==============================================================================
-% SLIDE 18: MA TRẬN ÁNH XẠ EDA SANG HỆ THỐNG ĐẶC TRƯNG HỌC MÁY
+% SLIDE 13: MA TRẬN ÁNH XẠ EDA SANG HỆ THỐNG ĐẶC TRƯNG HỌC MÁY
 % ==============================================================================
-\begin{frame}{17. Chuyển Hóa Phát Hiện EDA Sang Hệ Thống Đặc Trưng ML}
+\begin{frame}{13. Chuyển Hóa Phát Hiện EDA Sang Hệ Thống Đặc Trưng ML}
   \centering
   \scriptsize
-  \renewcommand{\arraystretch}{1.0}
+  \renewcommand{\arraystretch}{1.08}
   \begin{tabularx}{\textwidth}{p{3.8cm}Y>{\raggedright\arraybackslash}p{4.2cm}}
     \toprule
     \textbf{Nhóm Hành Vi Tiêu Dùng} & \textbf{Quy Luật Thực Nghiệm Từ 2.6M Giao Dịch} & \textbf{Đặc Trưng Mô Hình Hóa Đại Diện} \\
     \midrule
     \textbf{1. Nhịp sinh học \& Đồ tươi} & 82\% mua lại trong 7 ngày (P50 = 2 ngày); cạn đồ tươi kích thích đi chợ & \texttt{days\_since\_last\_basket}, \texttt{urgency\_ratio}, \texttt{days\_since\_perishable} \\
     \addlinespace
-    \textbf{2. Sức mua \& Nhân khẩu} & Phân phối AOV \$29.24 lệch phải; gia đình đông con chi tiêu cao hơn +39.4\% & \texttt{spend\_30d/90d}, \texttt{aov\_90d}, \texttt{hh\_size}, \texttt{kid\_category} \\
+    \textbf{2. Sức mua \& Động lượng} & Phân phối AOV \$29.24 lệch phải; tần suất biến thiên theo chu kỳ & \texttt{spend\_30d/90d}, \texttt{aov\_90d}, \texttt{frequency\_momentum\_30\_vs\_90} \\
     \addlinespace
-    \textbf{3. Tập trung doanh thu (Gini = 0.50)} & Top 20\% hộ tạo 53.0\% doanh thu; cần 44\% hộ để đạt 80\% (không theo Pareto 80/20) & \texttt{spend\_percentile\_rank}, \texttt{lifetime\_spend\_to\_date} \\
+    \textbf{3. Tập trung doanh thu (Gini = 0.50)} & Top 20\% hộ tạo 53.0\% doanh thu; 500 hộ VIP mang lại doanh số gấp 3.4 lần & \texttt{spend\_percentile\_rank}, \texttt{lifetime\_spend\_to\_date} \\
     \addlinespace
-    \textbf{4. Chiết khấu 2 tầng} & Giảm giá tại quầy lớn gấp 32.8 lần coupon (\$1.4M vs \$42.6k) & \texttt{retail\_discount\_ratio}, \texttt{coupon\_discount\_ratio} \\
+    \textbf{4. Nhân khẩu \& Quy mô hộ} & Gia đình đông con chi tiêu cao hơn +39.4\%; gán UNKNOWN cho 68\% hộ & \texttt{household\_size\_desc}, \texttt{kid\_category\_desc}, \texttt{income\_desc} \\
     \addlinespace
-    \textbf{5. Hiệu ứng mồi câu \& Phễu} & Dùng coupon chi tiêu gấp 2.53 lần (\$67.60); Chiến dịch Loại A chuyển đổi 45\% & \texttt{coupon\_redempt\_count}, \texttt{is\_targeted\_type\_A/B/C} \\
+    \textbf{5. Hiệu ứng mồi câu \& Phễu tiếp thị} & Dùng coupon chi tiêu gấp 2.53 lần (\$67.60); Chiến dịch Loại A chuyển đổi 45\% & \texttt{coupon\_redempt\_count\_180d}, \texttt{is\_targeted\_by\_active\_campaign} \\
     \addlinespace
     \textbf{6. Địa bàn \& Trung thành} & 66.4\% đi đa shop (73.4\% tiền ở shop ruột); phân hóa cửa hàng cốt lõi & \texttt{store\_loyalty\_index}, \texttt{primary\_store\_id} \\
     \bottomrule
@@ -521,16 +416,16 @@
 \end{frame}
 
 % ==============================================================================
-% SLIDE 19: TỔNG KẾT GIAI ĐOẠN EDA
+% SLIDE 14: TỔNG KẾT GIAI ĐOẠN EDA
 % ==============================================================================
-\begin{frame}{18. Tổng Kết Giá Trị Nền Tảng Của Giai Đoạn EDA}
+\begin{frame}{14. Tổng Kết Giá Trị Nền Tảng Của Giai Đoạn EDA}
   \begin{columns}[T]
     \begin{column}{0.48\textwidth}
       \textbf{4 Đóng Góp Nền Tảng Cho Dự Án:}
       \begin{enumerate}\setlength{\itemsep}{4pt}
         \item \textbf{Khung Dự Báo Khoa Học:} Dựa trên 92.4\% chu kỳ hồi tiếp thực nghiệm, xác lập cửa sổ dự báo tối ưu $\Delta t = 14$ ngày.
         \item \textbf{Chuẩn Hóa Dữ Liệu Sạch:} Loại 942 giỏ hủy/tặng 0đ, khử trùng 5,164 bản ghi coupon, bảo toàn trọn vẹn 100\% tập 2,500 hộ.
-        \item \textbf{Cơ Sở Thiết Kế Đặc Trưng:} Chuyển hóa 14 phát hiện định lượng thành hệ thống biến phái sinh phản ánh trọn vẹn hành vi.
+        \item \textbf{Cơ Sở Thiết Kế Đặc Trưng:} Chuyển hóa \textbf{10 phát hiện định lượng cốt lõi} thành hệ thống biến phái sinh phản ánh trọn vẹn hành vi.
         \item \textbf{Kiểm Định Vững Chắc:} Xác nhận tỷ lệ mục tiêu ổn định ở mức 68.25\%, không có hiện tượng trôi dạt dữ liệu theo thời gian.
       \end{enumerate}
     \end{column}
