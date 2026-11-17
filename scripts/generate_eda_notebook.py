@@ -549,7 +549,7 @@ ax.annotate(f'Top 10% Hộ tạo ra {top10_spend_pct:.1f}% Doanh thu\\n(${hh_clv
             arrowprops=dict(arrowstyle='->', lw=1.5, color='#d62728'),
             fontweight='bold', fontsize=10, bbox=dict(boxstyle='round,pad=0.3', facecolor='#fee8c8', edgecolor='#d62728'))
 
-ax.annotate(f'Top 20% Hộ tạo ra {top20_spend_pct:.1f}% Doanh thu\\n(Quy luật Pareto: ${hh_clv.iloc[:500]["basket_spend"].sum():,.0f})',
+ax.annotate(f'Top 20% Hộ tạo ra {top20_spend_pct:.1f}% Doanh thu\\n(Khác biệt so với 80% lý thuyết: ${hh_clv.iloc[:500]["basket_spend"].sum():,.0f})',
             xy=(20, top20_spend_pct), xytext=(35, top20_spend_pct - 5),
             arrowprops=dict(arrowstyle='->', lw=1.5, color='#d62728'),
             fontweight='bold', fontsize=10, bbox=dict(boxstyle='round,pad=0.3', facecolor='#fee8c8', edgecolor='#d62728'))
@@ -561,7 +561,7 @@ ax.annotate(f'Top 50% Hộ tạo ra {top50_spend_pct:.1f}% Doanh thu\\n(Bottom 5
 
 ax.set_xlabel('Tỷ lệ tích lũy hộ gia đình (Sắp xếp từ chi nhiều nhất -> ít nhất) (%)', fontweight='bold')
 ax.set_ylabel('Tỷ lệ tích lũy doanh thu thực tế (%)', fontweight='bold')
-ax.set_title(f'Biểu đồ 11: Phân Hóa Doanh Thu Hộ Gia Đình Theo Quy Luật Pareto 80/20\\n(Tổng chi tiêu 2 năm: ${total_spend:,.2f} | 2,500 Hộ gia đình)', pad=15)
+ax.set_title(f'Biểu đồ 11: Mức Độ Tập Trung Doanh Thu & Đường Cong Lorenz (CLV)\\n(Tổng chi tiêu 2 năm: ${total_spend:,.2f} | 2,500 Hộ gia đình | Không tuân theo Pareto 80/20)', pad=15)
 ax.set_xlim(0, 100)
 ax.set_ylim(0, 100)
 ax.legend(loc='lower right', frameon=True, facecolor='white', framealpha=0.9)

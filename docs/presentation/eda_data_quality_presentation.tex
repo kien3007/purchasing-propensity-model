@@ -382,9 +382,9 @@
 \end{frame}
 
 % ==============================================================================
-% SLIDE 14: CÂU CHUYỆN 11 - QUY LUẬT PARETO & CLV
+% SLIDE 14: CÂU CHUYỆN 11 - PHÂN HÓA DOANH THU & KIỂM ĐỊNH PARETO
 % ==============================================================================
-\begin{frame}{13. Quy Luật Pareto 80/20 \& Giá Trị Trọn Đời Khách Hàng}
+\begin{frame}{13. Phân Hóa Giá Trị Khách Hàng (CLV) \& Kiểm Định Pareto}
   \begin{columns}[c]
     \begin{column}{0.60\textwidth}
       \centering
@@ -392,16 +392,16 @@
     \end{column}
     \begin{column}{0.38\textwidth}
       \small
-      \textbf{Bất Bình Đẳng Doanh Thu:}
-      \begin{itemize}\setlength{\itemsep}{1pt}
-        \item \textbf{Tập trung hóa cực đoan:} Dòng tiền phụ thuộc sống còn vào thiểu số 500 hộ hạt nhân dẫn đầu.
-        \item \textbf{Thiệt hại rời bỏ:} Mất 1 khách VIP bằng tổn thất của 10 khách hàng thông thường cộng lại.
-        \item \textbf{Tối ưu hóa ngân sách:} Chi phí giữ chân khách VIP mang lại ROI vượt trội so với dàn trải đại trà.
+      \textbf{Đặc Thù Phân Hóa Bán Lẻ FMCG:}
+      \begin{itemize}\setlength{\itemsep}{0pt}
+        \item \textbf{Không theo chuẩn 80/20:} Top 20\% hộ tạo \textbf{53.0\% doanh thu}; cần \textbf{44.0\% hộ (1,100 hộ)} mới đạt 80\% doanh số.
+        \item \textbf{Hệ số Gini = 0.503:} Hàng thiết yếu phân bổ đều hơn; không phân hóa cực đoan như SaaS hay xa xỉ.
+        \item \textbf{Nhóm hạt nhân VIP:} Dù vậy, 500 hộ dẫn đầu vẫn mang lại doanh số gấp 3.4 lần nửa dưới.
       \end{itemize}
-      \vspace{0.06cm}
-      \begin{alertblock}{Chiến Lược Giữ Chân VIP}
+      \vspace{0.05cm}
+      \begin{alertblock}{Chiến Lược Khách Hàng VIP}
         \footnotesize
-        Cảnh báo CRM tức thì khi khách VIP dãn chu kỳ mua:\\
+        Phân khúc theo phân vị thực tế thay vì áp đặt tỷ lệ 80/20:\\
         $\rightarrow$ Biến: \texttt{spend\_percentile\_rank}, \texttt{urgency\_ratio} $> 1.5$.
       \end{alertblock}
     \end{column}
@@ -531,7 +531,7 @@
     \addlinespace
     \textbf{2. Sức mua \& Nhân khẩu} & Phân phối AOV \$29.24 lệch phải; gia đình đông con chi tiêu cao hơn +39.4\% & \texttt{spend\_30d/90d}, \texttt{aov\_90d}, \texttt{hh\_size}, \texttt{kid\_category} \\
     \addlinespace
-    \textbf{3. Tập trung Pareto 80/20} & Top 20\% hộ đóng góp 53.05\% doanh thu (\$4.27M); bottom 50\% chỉ chiếm 15.6\% & \texttt{spend\_percentile\_rank}, \texttt{lifetime\_spend\_to\_date} \\
+    \textbf{3. Tập trung doanh thu (Gini = 0.50)} & Top 20\% hộ tạo 53.0\% doanh thu; cần 44\% hộ để đạt 80\% (không theo Pareto 80/20) & \texttt{spend\_percentile\_rank}, \texttt{lifetime\_spend\_to\_date} \\
     \addlinespace
     \textbf{4. Chiết khấu 2 tầng} & Giảm giá tại quầy lớn gấp 32.8 lần coupon (\$1.4M vs \$42.6k) & \texttt{retail\_discount\_ratio}, \texttt{coupon\_discount\_ratio} \\
     \addlinespace

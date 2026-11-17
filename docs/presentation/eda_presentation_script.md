@@ -19,7 +19,7 @@
    │      • Đồ tươi sống & Hiệu ứng lan tỏa coupon (Slide 8-9)
    │      • Gia tốc tiếp thị & Địa bàn đa cửa hàng (Slide 10-11)
    │      • Tác động nhân khẩu & Ổn định nhãn mục tiêu (Slide 12-13)
-   │      • Quy luật Pareto 80/20 & Chiết khấu hai tầng (Slide 14-15)
+   │      • Kiểm định Pareto & Chiết khấu hai tầng (Slide 14-15)
    │      • Nhãn hàng riêng, Phễu tiếp thị & Cây xăng (Slide 16-18)
    │
    └──> [Phần 3: Chuyển Giao Sang Học Máy] Ma trận đặc trưng & Kỷ luật thời gian (Slide 19-20)
@@ -218,16 +218,18 @@
 
 ---
 
-### SLIDE 14: CÂU CHUYỆN 11 - QUY LUẬT PARETO 80/20 & GIÁ TRỊ TRỌN ĐỜI
-* **Tiêu đề:** 13. Quy Luật Pareto 80/20 & Giá Trị Trọn Đời Khách Hàng
-* **Biểu đồ:** Đường cong Pareto tích lũy doanh thu (Lorenz Curve) của 2,500 hộ gia đình.
+### SLIDE 14: CÂU CHUYỆN 11 - PHÂN HÓA DOANH THU & KIỂM ĐỊNH PARETO
+* **Tiêu đề:** 13. Phân Hóa Giá Trị Khách Hàng (CLV) & Kiểm Định Pareto
+* **Biểu đồ:** Đường cong Lorenz tích lũy doanh thu của 2,500 hộ gia đình đối sánh với mốc Pareto 80/20 lý thuyết.
 * **Thời lượng:** 50 giây
-* **Điểm nhấn trực quan:** Vùng 20% hộ đầu tiên đóng góp tới 53.05% doanh thu; vùng 50% hộ cuối chỉ đóng góp 15.6%.
+* **Điểm nhấn trực quan:** Chỉ vào điểm dấu X màu xanh lá (Mốc Pareto 80/20 lý thuyết) và điểm thực tế màu đỏ (Top 20% chỉ đạt 53.0%, cần 44.0% hộ mới đạt 80% doanh thu).
 
 **Lời thoại trình bày:**
-> *"Phân tích giá trị trọn đời (CLV) bộc lộ **sự tập trung hóa doanh thu cực đoan**: Top 20% hộ gia đình dẫn đầu (khoảng 500 hộ) đóng góp tới **53.05% tổng doanh thu** (\$4.27 triệu USD), trong khi nửa dưới đáy (50% hộ) chỉ tạo ra 15.6% doanh số.*
+> *"Khi phân tích giá trị trọn đời (CLV) qua đường cong Lorenz, chúng tôi thu được một phát hiện thực nghiệm rất đắt giá: **Dữ liệu bán lẻ FMCG không tuân theo quy luật Pareto 80/20 kinh điển**.*
 >
-> *Về mặt kinh doanh, việc mất đi 1 khách hàng VIP gây tổn thất ngang bằng với việc rời bỏ của 10 khách hàng thông thường. Do đó, mô hình của chúng tôi đưa vào đặc trưng phân vị chi tiêu `spend_percentile_rank` và cơ chế cảnh báo sớm khi khách VIP dãn chu kỳ (`urgency_ratio > 1.5`)."*
+> *Khác với mô hình phần mềm SaaS hay hàng hiệu xa xỉ – nơi 20% khách hàng có thể mang lại 80% doanh thu, trong ngành siêu thị bán lẻ, hàng hóa là nhu yếu phẩm thiết yếu nên mọi gia đình đều phải chi tiêu hàng tuần. Kết quả thực nghiệm cho thấy: Top 20% hộ gia đình chỉ đóng góp **53.0% tổng doanh thu** (\$4.27 triệu USD), và chúng ta phải cần tới **44.0% số hộ (khoảng 1,100 hộ)** mới đạt được 80% doanh số.*
+>
+> *Hệ số Gini thực tế dừng ở mức **0.503** – thể hiện mức độ bất bình đẳng vừa phải. Dù không cực đoan như lý thuyết 80/20, nhóm 500 hộ dẫn đầu vẫn mang lại doanh số gấp 3.4 lần nửa dưới. Vì vậy, thay vì áp đặt tỷ lệ 80/20 cứng nhắc, mô hình của chúng tôi phân khúc khách hàng theo phân vị chi tiêu thực tế `spend_percentile_rank` và cảnh báo CRM khi khách VIP dãn chu kỳ mua (`urgency_ratio > 1.5`)."*
 
 ---
 
@@ -294,7 +296,7 @@
 >
 > 1. *Nhịp sinh học & Đồ tươi $\rightarrow$ Nhóm biến Recency & Urgency (`days_since_last_basket`, `urgency_ratio`).*
 > 2. *Sức mua & Nhân khẩu $\rightarrow$ Nhóm biến Volume & Household Size.*
-> 3. *Tập trung Pareto $\rightarrow$ Nhóm biến Phân vị khách hàng VIP (`spend_percentile_rank`).*
+> 3. *Tập trung doanh thu & Phân vị $\rightarrow$ Nhóm biến Phân vị khách hàng VIP (`spend_percentile_rank`).*
 > 4. *Chiết khấu 2 tầng $\rightarrow$ Tách riêng tỷ lệ giảm quầy kệ và giảm coupon.*
 > 5. *Hiệu ứng mồi câu & Phễu $\rightarrow$ Lịch sử đổi phiếu và phân loại chiến dịch A/B/C.*
 > 6. *Địa bàn & Cây xăng $\rightarrow$ Chỉ số trung thành cửa hàng và nhịp đổ xăng.*
