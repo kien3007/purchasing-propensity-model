@@ -26,9 +26,8 @@
    │      • Sức thâm nhập vượt trội của Nhãn hàng riêng - Private Label (Slide 16)
    │      • Nhịp điệu thời gian vi mô: Ngày trong tuần & Giờ cao điểm (Slide 17)
    │
-   └──> [Phần III: Chuyển Giao Sang Học Máy & Tổng Kết] (Slide 18-19)
-          • Ma trận chuyển hóa phát hiện EDA sang Đặc trưng ML & CRM (Slide 18)
-          • 4 đóng góp nền tảng & Chuyển giao sang giai đoạn Mô hình hóa (Slide 19)
+   └──> [Phần III: Chuyển Giao Sang Học Máy & Vận Hành CRM] (Slide 18)
+          • Ma trận chuyển hóa 15 phát hiện EDA sang Đặc trưng ML & Chiến lược CRM
 ```
 
 ---
@@ -309,8 +308,8 @@
 ### SLIDE 18: MA TRẬN CHUYỂN HÓA PHÁT HIỆN EDA SANG HỆ THỐNG ĐẶC TRƯNG & VẬN HÀNH
 * **Tiêu đề:** 17. Chuyển Hóa Phát Hiện EDA Sang Đặc Trưng ML & Vận Hành CRM
 * **Bảng:** Ma trận ánh xạ 7 trụ cột phát hiện thực nghiệm sang Đặc trưng ML và Giải pháp vận hành CRM.
-* **Thời lượng:** 60 giây
-* **Điểm nhấn trực quan:** Nhấn mạnh dòng Kỷ luật thời gian màu cam ở cuối: 100% biến ML tuân thủ ranh giới $DAY \le t_0$.
+* **Thời lượng:** 75 giây
+* **Điểm nhấn trực quan:** Nhấn mạnh dòng Kỷ luật thời gian màu cam ở cuối: 100% biến ML tuân thủ ranh giới $DAY \le t_0$, cùng lời cảm ơn chuyển sang Q&A.
 
 **Lời thoại trình bày:**
 > *"Thưa quý vị, toàn bộ 15 phát hiện thực nghiệm vừa nêu đã được chúng tôi tổng hợp và chuyển hóa thành **Ma trận chuyển giao 2 tầng** trên Slide 17:*
@@ -327,24 +326,7 @@
 > * *Mở rộng danh mục sản phẩm Nhãn hàng riêng.*
 > * *Tối ưu ca trực thu ngân và lịch gửi thông báo kích cầu cuối tuần.*
 >
-> *Đặc biệt, **100% đặc trưng học máy đều được tính toán nghiêm ngặt tại thời điểm $DAY \le t_0$**, tuyệt đối không nhìn trước tương lai, triệt tiêu hoàn toàn rủi ro rò rỉ dữ liệu."*
-
----
-
-### SLIDE 19: TỔNG KẾT GIAI ĐOẠN EDA & KẾ HOẠCH TIẾP THEO
-* **Tiêu đề:** 18. Tổng Kết Giá Trị Nền Tảng Của Giai Đoạn EDA
-* **Thời lượng:** 60 giây
-* **Điểm nhấn trực quan:** 4 đóng góp nền tảng ở cột trái và lời cảm ơn / chuyển sang Q&A ở cột phải.
-
-**Lời thoại trình bày:**
-> *"Để khép lại phần báo cáo, giai đoạn EDA và Kiểm toán Chất lượng đã mang lại **4 đóng góp nền tảng** cho toàn bộ dự án:*
->
-> *Một là, xác lập cửa sổ dự báo tối ưu **$\Delta t = 14$ ngày** trên cơ sở 92.4% chu kỳ tự nhiên;*  
-> *Hai là, làm sạch triệt để 942 giỏ hàng $\le \$0$ và khử trùng 5,164 bản ghi coupon, bảo toàn 275,542 giỏ hàng thương mại sạch;*  
-> *Ba là, chuyển hóa **15 phát hiện định lượng cốt lõi** thành 28 đặc trưng máy học chuẩn mực cùng bộ khuyến nghị chiến lược vận hành thực chiến;*  
-> *Bốn là, chứng minh nhãn mục tiêu ổn định ở mức 68.25%, cho phép triển khai chiến lược huấn luyện trượt thời gian (Multi-cutoff).*
->
-> *Đây chính là bệ phóng vững chắc nhất để chúng tôi tự tin bước vào giai đoạn tiếp theo: Huấn luyện và hiệu chuẩn mô hình phân loại LightGBM Calibrated Classifier.*
+> *Đặc biệt, **100% đặc trưng học máy đều được tính toán nghiêm ngặt tại thời điểm $DAY \le t_0$**, tuyệt đối không nhìn trước tương lai, triệt tiêu hoàn toàn rủi ro rò rỉ dữ liệu. Đây là bệ phóng vững chắc nhất để chuyển giao sang giai đoạn Huấn luyện mô hình LightGBM Calibrated Classifier.*
 >
 > *Xin chân thành cảm ơn quý thầy cô và các anh chị đã chú ý lắng nghe. Nhóm chúng tôi rất mong nhận được các câu hỏi và ý kiến đóng góp ạ!"*
 
