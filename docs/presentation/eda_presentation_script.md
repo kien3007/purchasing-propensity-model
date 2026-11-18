@@ -74,18 +74,20 @@
 ---
 
 ### Slide 3: Kiến trúc dữ liệu và kết quả kiểm toán chất lượng
-* **Tiêu đề:** 2. Kiến trúc dữ liệu và kết quả kiểm toán chất lượng
+* **Tiêu đề:** 2. Kiến trúc 8 bảng dữ liệu và kết quả kiểm toán làm sạch
 * **Thời lượng:** 60 giây
-* **Trực quan:** Bảng tổng hợp 8 bảng dữ liệu, tập trung vào 3 điểm kiểm toán ở cột bên phải.
+* **Trực quan:** Sơ đồ thực thể liên kết (ERD) 8 bảng dữ liệu bên trái và danh sách kết quả kiểm toán, xử lý làm sạch ở cột bên phải.
 
 **Lời thoại trình bày:**
-> *"Trên màn hình là kiến trúc tổng thể 8 bảng dữ liệu trong hệ sinh thái Dunnhumby, bao gồm 2.59 triệu dòng giao dịch của 2,500 hộ gia đình trong 711 ngày liên tục. Quá trình kiểm toán chất lượng đã xử lý dứt điểm 3 vấn đề then chốt:
+> *"Trên màn hình bên trái là sơ đồ kiến trúc tổng thể 8 bảng dữ liệu trong hệ sinh thái Dunnhumby, chia thành hai khối: các bảng dữ liệu phát sinh (Data tables) xoay quanh `transaction_data`, và các bảng danh mục tra cứu (Lookup tables).
 >
-> 1. **Loại bỏ 942 giỏ hàng hoàn/hủy/quẹt thẻ đơn lẻ có giá trị $\le \$0$**: Kiểm toán chi tiết cho thấy hơn 62% dòng hàng là thao tác kỹ thuật tại máy POS (quẹt thẻ hội viên, mở ngăn kéo) hoặc quẹt mã coupon đơn lẻ; gần 38% còn lại là quà tặng mẫu dùng thử \$0. Đây không phải là hành vi mua sắm thương mại. Việc loại bỏ triệt để 942 giỏ này giúp loại bỏ nhiễu nhãn (label noise) và giữ lại đúng **275,542 giỏ hàng thương mại thuần túy**.
-> 2. **Khử trùng 5,164 bản ghi coupon trùng lặp 100%**: Triệt tiêu nguy cơ nổ dòng (cartesian explosion) khi liên kết bảng coupon với bảng giao dịch.
-> 3. **Chuẩn hóa nhóm nhân khẩu học khuyết thiếu**: Dữ liệu nhân khẩu bị khuyết ở 68% số hộ (1,699/2,500 hộ). Thay vì điền khuyết nhân tạo làm sai lệch phân phối, chúng tôi chuẩn hóa gán nhãn `UNKNOWN` dạng danh mục độc lập, bảo toàn trọn vẹn 100% tập 2,500 hộ gia đình.
->
-> Ngoài ra, bảng `causal_data` (36.8 triệu dòng về vị trí trưng bày sản phẩm) được chủ động loại khỏi phạm vi bài toán do dữ liệu cấp hộ gia đình không theo dõi được thời gian dừng chân thực tế tại kệ hàng."*
+> Ở cột bên phải là các kết quả xử lý dữ liệu then chốt đã hoàn tất:
+> 1. **`transaction_data` (2.6M dòng):** Loại bỏ triệt để 942 giỏ hàng hoàn/hủy/tặng $0 (0.34% giỏ, $0 doanh thu); bảo toàn 275,542 giỏ hàng thương mại sạch cho toàn bộ 2,500 hộ gia đình trong 711 ngày.
+> 2. **`coupon` (124.5k dòng):** Khử trùng 5,164 bản ghi trùng lặp 100% (exact duplicates); thu gọn về 119,384 dòng ánh xạ SKU hợp lệ để tránh rủi ro nhân đôi dòng khi join.
+> 3. **`hh_demographic` (801 hộ, 32.0%):** Không drop 68% hộ thiếu (tránh sai lệch chọn mẫu); chuẩn hóa thành nhóm `UNKNOWN` độc lập, bảo toàn trọn vẹn 100% tập 2,500 hộ gia đình.
+> 4. **`campaigns` & `campaign_desc`:** Chuẩn hóa 3 loại chiến dịch (Loại A, B, C) gửi đến 1,584 hộ; kiểm toán `coupon_redempt` (2,318 lượt đổi) đạt 0 bản ghi trùng lặp.
+> 5. **`product` (92.4k SKU):** Bóc tách danh mục thực phẩm tươi sống (`perishables`) cho 44 ngành hàng để xây dựng chỉ báo chu kỳ tiêu dùng nhanh.
+> 6. **`causal_data` (36.8 triệu dòng):** Chủ động loại bỏ khỏi baseline mô hình do dữ liệu ở cấp cửa hàng/tuần (*store-week*), độ thưa cao, không đo trực tiếp hành vi cấp hộ gia đình."*
 
 ---
 

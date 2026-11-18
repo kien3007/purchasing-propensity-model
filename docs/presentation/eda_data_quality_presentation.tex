@@ -107,25 +107,25 @@
 % ==============================================================================
 % SLIDE 3: KIẾN TRÚC 8 BẢNG & KIỂM TOÁN CHẤT LƯỢNG
 % ==============================================================================
-\begin{frame}{2. Kiến trúc 8 bảng dữ liệu và kết quả kiểm toán làm sạch \hfill \scriptsize\textcolor{primaryNavy}{[Nền tảng dữ liệu]}}
-  \centering
-  \scriptsize
-  \setlength{\tabcolsep}{4pt}
-  \renewcommand{\arraystretch}{1.08}
-  \begin{tabularx}{\textwidth}{llrrY}
-    \toprule
-    \textbf{Bảng dữ liệu} & \textbf{Khóa liên kết} & \textbf{Số dòng gốc} & \textbf{Độ phủ} & \textbf{Kiểm toán chất lượng \& Xử lý làm sạch} \\
-    \midrule
-    \texttt{transactions} & Dòng hóa đơn & 2,595,732 & 2,500 hộ & Lịch sử 711 ngày; loại 942 giỏ hoàn/hủy/tặng \$0 (0.34\% giỏ, \$0 doanh thu), giữ đủ 275,542 giỏ hàng thương mại sạch. \\
-    \texttt{products} & Mã sản phẩm & 92,353 & 44 ngành & Danh mục hàng hóa; bóc tách thực phẩm tươi sống phục vụ tạo đặc trưng chu kỳ. \\
-    \texttt{demographics} & Mã hộ gia đình & 801 & 32.0\% & Tuổi, thu nhập, quy mô; phân loại 68\% hộ khuyết thiếu vào nhóm \texttt{UNKNOWN}, giữ đủ 2,500 hộ. \\
-    \texttt{campaign\_desc} & Mã chiến dịch & 30 & Toàn bộ & Lịch trình hoạt động tiếp thị (gồm 3 nhóm: Loại A, B, C). \\
-    \texttt{campaigns} & Hộ + Chiến dịch & 7,208 & 1,584 hộ & Danh sách hộ gia đình được gửi thư ưu đãi tiếp thị tận nhà. \\
-    \texttt{coupons} & Mã ưu đãi + SKU & 124,548 & Toàn bộ & Ánh xạ SKU; loại bỏ \textbf{5,164 bản ghi trùng lặp 100\%} (giữ 119,384 dòng hợp lệ). \\
-    \texttt{redemptions} & Lượt đổi phiếu & 2,318 & 434 hộ & Lịch sử sử dụng coupon tại quầy; kiểm toán đạt 0 dòng trùng lặp. \\
-    \texttt{causal\_data} & Tuần + Cửa hàng & 36,786,524 & Toàn bộ & Vị trí trưng bày quầy kệ \& tờ rơi; \textbf{loại bỏ khỏi baseline} do ở cấp cửa hàng, độ thưa cao, không đóng góp trực tiếp vào xác suất mua cấp hộ. \\
-    \bottomrule
-  \end{tabularx}
+\begin{frame}{2. Kiến trúc 8 bảng dữ liệu và kết quả kiểm toán làm sạch}
+  \begin{columns}[c]
+    \begin{column}{0.51\textwidth}
+      \centering
+      \includegraphics[width=\linewidth,height=0.78\textheight,keepaspectratio]{../reports/figures/00_dunnhumby_schema_erd.png}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \scriptsize
+      \textbf{Kết quả kiểm toán chất lượng \& xử lý làm sạch:}
+      \begin{itemize}\setlength{\itemsep}{2.5pt}
+        \item \textbf{\texttt{transaction\_data} (2.6M dòng):} Loại bỏ \textbf{942 giỏ hàng hoàn/hủy/tặng \$0} (0.34\% giỏ, \$0 doanh thu); bảo toàn \textbf{275,542 giỏ hàng thương mại sạch} cho đủ \textbf{2,500 hộ gia đình}.
+        \item \textbf{\texttt{coupon} (124.5k dòng):} Loại bỏ \textbf{5,164 bản ghi trùng lặp 100\%} (exact duplicates); thu gọn còn \textbf{119,384 dòng ánh xạ SKU hợp lệ}.
+        \item \textbf{\texttt{hh\_demographic} (801 hộ, 32.0\%):} Không drop 68\% hộ thiếu (tránh selection bias); mã hóa thành nhóm \texttt{'UNKNOWN'} độc lập, bảo toàn 100\% tập mẫu.
+        \item \textbf{\texttt{campaigns} \& \texttt{campaign\_desc}:} Chuẩn hóa 3 loại chiến dịch (\texttt{TypeA}, \texttt{TypeB}, \texttt{TypeC}) gửi đến 1,584 hộ; \textbf{\texttt{coupon\_redempt}} (2,318 lượt đổi) đạt 0 dòng trùng lặp.
+        \item \textbf{\texttt{product} (92.4k SKU):} Bóc tách danh mục thực phẩm tươi sống (\texttt{perishables}) cho 44 ngành hàng để đo lường chu kỳ tiêu dùng.
+        \item \textbf{\texttt{causal\_data} (36.8M dòng):} \textbf{Loại bỏ khỏi baseline} do ở cấp cửa hàng/tuần (\textit{store-week}), độ thưa cao, không đo trực tiếp hành vi cấp hộ gia đình.
+      \end{itemize}
+    \end{column}
+  \end{columns}
 \end{frame}
 
 % ==============================================================================
