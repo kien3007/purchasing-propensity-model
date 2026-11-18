@@ -258,9 +258,9 @@ def plot_gold_standard(df_agg, col_cohort, col_p, col_n, title, xlabel, fig_name
     # Nhãn giá trị trên từng cột
     for idx, bar in enumerate(bars):
         h = bar.get_height()
-        n = df_agg[col_n].iloc[idx]
+        n_val = int(round(df_agg[col_n].iloc[idx]))
         ax.text(bar.get_x() + bar.get_width() / 2, h + 2.0,
-                f"{h:.1f}%\\n(n={n:,})",
+                f"{h:.1f}%\\n(n = {n_val:,})",
                 ha='center', va='bottom', fontsize=9.5, fontweight='bold', color='#1a1a1a')
 
     # Bỏ phần trong ngoặc của tên biểu đồ
@@ -589,56 +589,52 @@ plot_gold_standard(df_breadth, 'breadth_group', 'p_y1', 'n',
 Kiểm định trạng thái nhắm mục tiêu của các chiến dịch Direct Mail đang kích hoạt tại $t_0$, kết hợp phân tích tỷ lệ chuyển đổi đổi phiếu thực tế (conversion) trên từng cặp `(household_key, CAMPAIGN)`.
 """))
 
-    cells.append(nbf.v4.new_code_cell("""# 1. Kiểm tra xác suất mua lại P(Y=1) khi có chiến dịch kích hoạt tại t0 = 450
-q_camp = f\"\"\"
-WITH active_camps AS (
-    SELECT c.household_key, cd.DESCRIPTION AS camp_type
-    FROM df_camp c
-    JOIN df_camp_desc cd ON c.CAMPAIGN = cd.CAMPAIGN
-    WHERE {t0} BETWEEN cd.START_DAY AND cd.END_DAY
-),
-camp_status AS (
-    SELECT h.household_key,
-           CASE
-               WHEN MAX(CASE WHEN ac.camp_type = 'Type A' THEN 1 ELSE 0 END) = 1 THEN 'Chiến dịch Loại A'
-               WHEN MAX(CASE WHEN ac.camp_type = 'Type B' THEN 1 ELSE 0 END) = 1 THEN 'Chiến dịch Loại B'
-               WHEN MAX(CASE WHEN ac.camp_type = 'Type C' THEN 1 ELSE 0 END) = 1 THEN 'Chiến dịch Loại C'
-               ELSE 'Không có chiến dịch'
-           END AS campaign_group,
-           CASE
-               WHEN MAX(CASE WHEN ac.camp_type = 'Type A' THEN 1 ELSE 0 END) = 1 THEN 1
-               WHEN MAX(CASE WHEN ac.camp_type = 'Type B' THEN 1 ELSE 0 END) = 1 THEN 2
-               WHEN MAX(CASE WHEN ac.camp_type = 'Type C' THEN 1 ELSE 0 END) = 1 THEN 3
-               ELSE 4
-           END AS grp_order
-    FROM (SELECT DISTINCT household_key FROM baskets) h
-    LEFT JOIN active_camps ac ON h.household_key = ac.household_key
-    GROUP BY h.household_key
-),
-target AS (
-    SELECT household_key,
-           CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END AS y
-    FROM baskets
-    WHERE DAY > {t0} AND DAY <= {t0 + 14}
-    GROUP BY household_key
-)
-SELECT cs.campaign_group,
-       COUNT(*) AS n,
-       ROUND(AVG(COALESCE(t.y, 0)) * 100.0, 1) AS p_y1
-FROM camp_status cs
-LEFT JOIN target t ON cs.household_key = t.household_key
-GROUP BY cs.campaign_group, cs.grp_order
-ORDER BY cs.grp_order
-\"\"\"
-df_camp_p = con.execute(q_camp).df()
+    cells.append(nbf.v4.new_code_cell("""# 1. Kiểm tra xác suất mua lại P(Y=1) khi có chiến dịch kích hoạt (Trung bình qua 5 mốc chốt sổ)
+camp_res = []
+for t0_val in [250, 350, 450, 550, 650]:
+    q_camp = f\"\"\"
+    WITH active_camps AS (
+        SELECT c.household_key, d.DESCRIPTION AS camp_type
+        FROM df_camp c
+        JOIN df_camp_desc d ON c.CAMPAIGN = d.CAMPAIGN
+        WHERE d.START_DAY <= {t0_val} AND d.END_DAY >= {t0_val}
+    ),
+    camp_summary AS (
+        SELECT 
+            household_key,
+            MAX(CASE WHEN camp_type = 'TypeA' THEN 1 ELSE 0 END) AS has_type_a,
+            MAX(CASE WHEN camp_type = 'TypeB' THEN 1 ELSE 0 END) AS has_type_b,
+            MAX(CASE WHEN camp_type = 'TypeC' THEN 1 ELSE 0 END) AS has_type_c
+        FROM active_camps GROUP BY household_key
+    ),
+    all_hh AS (SELECT DISTINCT household_key FROM df_trans),
+    fut AS (SELECT DISTINCT household_key FROM baskets WHERE DAY > {t0_val} AND DAY <= {t0_val + 14})
+    SELECT 
+        CASE 
+            WHEN s.has_type_a = 1 THEN 'Chiến dịch Loại A'
+            WHEN s.has_type_b = 1 THEN 'Chiến dịch Loại B'
+            WHEN s.has_type_c = 1 THEN 'Chiến dịch Loại C'
+            ELSE 'Không có chiến dịch'
+        END AS camp_cohort,
+        COUNT(*) AS n_hh,
+        ROUND(SUM(CASE WHEN f.household_key IS NOT NULL THEN 1 ELSE 0 END)*100.0/COUNT(*), 2) AS p_y1
+    FROM all_hh a
+    LEFT JOIN camp_summary s ON a.household_key = s.household_key
+    LEFT JOIN fut f ON a.household_key = f.household_key
+    GROUP BY 1
+    \"\"\"
+    camp_res.append(con.execute(q_camp).df())
+
+df_camp_p = pd.concat(camp_res).groupby('camp_cohort').agg(n=('n_hh', 'mean'), p_y1=('p_y1', 'mean')).reindex([
+    'Không có chiến dịch', 'Chiến dịch Loại C', 'Chiến dịch Loại B', 'Chiến dịch Loại A'
+]).reset_index()
 display(df_camp_p)
 
-plot_gold_standard(df_camp_p, 'campaign_group', 'p_y1', 'n',
-                   title="Xác suất mua hàng P(Y=1) theo chiến dịch tiếp thị đang kích hoạt tại t0",
-                   xlabel="Nhóm chiến dịch tiếp thị đang nhắm mục tiêu tại t0",
+plot_gold_standard(df_camp_p, 'camp_cohort', 'p_y1', 'n',
+                   title="Nhắm mục tiêu chiến dịch tiếp thị tại t_0 và xác suất mua 14 ngày tới",
+                   xlabel="Phân loại chiến dịch tiếp thị đang kích hoạt đối với hộ gia đình",
                    fig_name="07_p_y1_campaign_targeting.png",
-                   delta_idx=(-1, 0), delta_label="Hiệu ứng tiếp thị",
-                   bar_color='#e7298a')
+                   bar_color='#756bb1')
 
 # 2. Bóc tách tỷ lệ đổi phiếu thực tế (Conversion) trên từng cặp (household, CAMPAIGN)
 q_conv = \"\"\"
