@@ -301,11 +301,11 @@ rec_calc AS (
 rec_binned AS (
     SELECT household_key,
            CASE
-               WHEN recency_days <= 3 THEN '1-3 ngày'
+               WHEN recency_days <= 3 THEN '0-3 ngày'
                WHEN recency_days <= 7 THEN '4-7 ngày'
                WHEN recency_days <= 14 THEN '8-14 ngày'
                WHEN recency_days <= 30 THEN '15-30 ngày'
-               ELSE '> 30 ngày'
+               ELSE '> 30 ngày / Chưa mua'
            END AS rec_group,
            CASE
                WHEN recency_days <= 3 THEN 1
@@ -541,7 +541,7 @@ WITH breadth_calc AS (
 breadth_binned AS (
     SELECT h.household_key,
            CASE
-               WHEN bc.depts_count IS NULL THEN '0 ngành (199 hộ)'
+               WHEN bc.depts_count IS NULL THEN '0 ngành (Không mua)'
                WHEN bc.depts_count <= 2 THEN '1-2 ngành'
                WHEN bc.depts_count <= 6 THEN '3-6 ngành'
                WHEN bc.depts_count <= 11 THEN '7-11 ngành'
@@ -569,7 +569,6 @@ SELECT bb.breadth_group,
        ROUND(AVG(COALESCE(t.y, 0)) * 100.0, 1) AS p_y1
 FROM breadth_binned bb
 LEFT JOIN target t ON bb.household_key = t.household_key
-WHERE bb.grp_order > 0  -- 2,301 hộ có phát sinh giao dịch trong 90 ngày
 GROUP BY bb.breadth_group, bb.grp_order
 ORDER BY bb.grp_order
 \"\"\"
@@ -678,9 +677,9 @@ WITH coup_calc AS (
 coup_binned AS (
     SELECT household_key,
            CASE
-               WHEN redempt_count = 0 THEN '0 lần (2,317 hộ)'
-               WHEN redempt_count <= 2 THEN '1-2 lần (93 hộ)'
-               ELSE '≥ 3 lần (90 hộ)'
+               WHEN redempt_count = 0 THEN '0 lần (Chưa đổi)'
+               WHEN redempt_count <= 2 THEN '1-2 lần'
+               ELSE '≥ 3 lần'
            END AS coup_group,
            CASE
                WHEN redempt_count = 0 THEN 1
@@ -742,10 +741,10 @@ loyalty_calc AS (
 loyalty_binned AS (
     SELECT household_key,
            CASE
-               WHEN loyalty_ratio IS NULL THEN '0 giỏ (198 hộ)'
-               WHEN loyalty_ratio >= 0.80 THEN '≥ 80% (1,419 hộ)'
-               WHEN loyalty_ratio >= 0.50 THEN '50-80% (687 hộ)'
-               ELSE '< 50% (196 hộ)'
+               WHEN loyalty_ratio IS NULL THEN '0 giỏ (Không mua)'
+               WHEN loyalty_ratio >= 0.80 THEN 'Tập trung cao (≥ 80%)'
+               WHEN loyalty_ratio >= 0.50 THEN 'Trung bình (50-80%)'
+               ELSE 'Phân tán (< 50%)'
            END AS loyalty_group,
            CASE
                WHEN loyalty_ratio IS NULL THEN 0
@@ -873,8 +872,10 @@ tot_rev = hh_spend.sum()
 cum_rev = np.cumsum(hh_spend) / tot_rev
 cum_hh = np.arange(1, len(hh_spend) + 1) / len(hh_spend)
 
-# Hệ số Gini
-gini = (1.0 - 2.0 * np.trapz(cum_rev[::-1], cum_hh[::-1]))
+# Hệ số Gini chuẩn hóa (phân vị rời rạc)
+x_sort = np.sort(hh_spend)
+n_h = len(x_sort)
+gini = (2.0 * np.sum(np.arange(1, n_h + 1) * x_sort) - (n_h + 1) * np.sum(x_sort)) / (n_h * np.sum(x_sort))
 
 top10_share = cum_rev[int(len(cum_hh) * 0.10) - 1] * 100.0
 top20_share = cum_rev[int(len(cum_hh) * 0.20) - 1] * 100.0

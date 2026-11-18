@@ -142,7 +142,8 @@ print("✅ Generated 01_horizon_selection_curve.png")
 rec_results = []
 for t0 in cutoffs:
     q = f"""
-    WITH last_b AS (
+    WITH all_hh AS (SELECT DISTINCT household_key FROM df_trans),
+    last_b AS (
         SELECT household_key, MAX(DAY) AS last_day
         FROM baskets WHERE DAY <= {t0} GROUP BY household_key
     ),
@@ -151,25 +152,27 @@ for t0 in cutoffs:
     )
     SELECT 
         CASE 
-            WHEN ({t0} - l.last_day) <= 3 THEN '1 - 3 ngày'
+            WHEN l.last_day IS NULL OR ({t0} - l.last_day) > 30 THEN '> 30 ngày / Chưa mua'
+            WHEN ({t0} - l.last_day) <= 3 THEN '0 - 3 ngày'
             WHEN ({t0} - l.last_day) <= 7 THEN '4 - 7 ngày'
             WHEN ({t0} - l.last_day) <= 14 THEN '8 - 14 ngày'
-            WHEN ({t0} - l.last_day) <= 30 THEN '15 - 30 ngày'
-            ELSE '> 30 ngày'
+            ELSE '15 - 30 ngày'
         END AS recency_bin,
         COUNT(*) AS n_hh,
         ROUND(SUM(CASE WHEN f.household_key IS NOT NULL THEN 1 ELSE 0 END)*100.0/COUNT(*), 2) AS p_y1
-    FROM last_b l LEFT JOIN fut f ON l.household_key = f.household_key
+    FROM all_hh a
+    LEFT JOIN last_b l ON a.household_key = l.household_key
+    LEFT JOIN fut f ON a.household_key = f.household_key
     GROUP BY 1
     """
     rec_results.append(con.execute(q).df())
 
-df_rec = pd.concat(rec_results).groupby('recency_bin').agg(n=('n_hh', 'mean'), p=('p_y1', 'mean')).reindex(['1 - 3 ngày', '4 - 7 ngày', '8 - 14 ngày', '15 - 30 ngày', '> 30 ngày']).reset_index()
+df_rec = pd.concat(rec_results).groupby('recency_bin').agg(n=('n_hh', 'mean'), p=('p_y1', 'mean')).reindex(['0 - 3 ngày', '4 - 7 ngày', '8 - 14 ngày', '15 - 30 ngày', '> 30 ngày / Chưa mua']).reset_index()
 plot_gold_standard_bar(df_rec, 'recency_bin', 'p', 'n',
                        title='Khoảng cách từ lần mua gần nhất và xác suất mua 14 ngày tới\n(Biến: days_since_last_basket | n = 2,500 hộ)',
                        xlabel='Khoảng cách từ chuyến đi chợ gần nhất đến thời điểm t_0',
                        fig_name='02_p_y1_recency.png',
-                       delta_idx=(4, 0), delta_label='Chênh lệch (1-3 ngày vs >30 ngày)',
+                       delta_idx=(4, 0), delta_label='Chênh lệch (0-3 ngày vs >30 ngày)',
                        bar_color='#3182bd')
 
 
@@ -255,38 +258,42 @@ plot_gold_standard_bar(df_sp, 'spend_tier', 'p', 'n',
 breadth_res = []
 for t0 in cutoffs:
     q = f"""
-    WITH items AS (
-        SELECT t.household_key, t.BASKET_ID, t.DAY, p.DEPARTMENT
+    WITH all_hh AS (SELECT DISTINCT household_key FROM df_trans),
+    items AS (
+        SELECT t.household_key, COUNT(DISTINCT p.DEPARTMENT) AS num_depts
         FROM df_trans t JOIN df_prod p ON t.PRODUCT_ID = p.PRODUCT_ID
         WHERE t.DAY <= {t0} AND t.DAY >= {t0 - 90} AND t.SALES_VALUE > 0
-    ),
-    hh_breadth AS (
-        SELECT household_key, COUNT(DISTINCT DEPARTMENT) AS num_depts FROM items GROUP BY household_key
+        GROUP BY t.household_key
     ),
     fut AS (
         SELECT DISTINCT household_key FROM df_trans WHERE DAY > {t0} AND DAY <= {t0 + 14} AND SALES_VALUE > 0
     )
     SELECT 
-        CASE WHEN num_depts >= 12 THEN 'Toàn diện (>=12 ngành)'
-             WHEN num_depts BETWEEN 7 AND 11 THEN 'Phổ thông (7-11 ngành)'
-             WHEN num_depts BETWEEN 3 AND 6 THEN 'Thứ yếu (3-6 ngành)'
-             ELSE 'Đơn ngành (1-2 ngành)' END AS breadth_tier,
+        CASE 
+            WHEN COALESCE(h.num_depts, 0) = 0 THEN '0 ngành (Không mua)'
+            WHEN h.num_depts <= 2 THEN '1 - 2 ngành'
+            WHEN h.num_depts <= 6 THEN '3 - 6 ngành'
+            WHEN h.num_depts <= 11 THEN '7 - 11 ngành'
+            ELSE '>= 12 ngành'
+        END AS breadth_tier,
         COUNT(*) AS total_hh,
         ROUND(SUM(CASE WHEN f.household_key IS NOT NULL THEN 1 ELSE 0 END) * 100.0 / COUNT(*), 2) AS propensity_pct
-    FROM hh_breadth h LEFT JOIN fut f ON h.household_key = f.household_key
+    FROM all_hh a 
+    LEFT JOIN items h ON a.household_key = h.household_key
+    LEFT JOIN fut f ON a.household_key = f.household_key
     GROUP BY 1
     """
     breadth_res.append(con.execute(q).df())
 
 df_all_breadth = pd.concat(breadth_res).groupby('breadth_tier').agg(n=('total_hh', 'mean'), p=('propensity_pct', 'mean')).reindex([
-    'Đơn ngành (1-2 ngành)', 'Thứ yếu (3-6 ngành)', 'Phổ thông (7-11 ngành)', 'Toàn diện (>=12 ngành)'
+    '0 ngành (Không mua)', '1 - 2 ngành', '3 - 6 ngành', '7 - 11 ngành', '>= 12 ngành'
 ]).reset_index()
 
 plot_gold_standard_bar(df_all_breadth, 'breadth_tier', 'p', 'n',
-                       title='Độ phủ ngành hàng 90 ngày và xác suất mua 14 ngày tới\n(Biến: department_breadth_90d | n = 2,301 hộ có phát sinh giỏ hàng)',
+                       title='Độ phủ ngành hàng 90 ngày và xác suất mua 14 ngày tới\\n(Biến: department_breadth_90d | n = 2,500 hộ)',
                        xlabel='Số lượng ngành hàng đã mua sắm trong 90 ngày quan sát',
                        fig_name='24_category_breadth_stickiness.png',
-                       delta_idx=(0, 3), delta_label='Chênh lệch (Toàn diện vs Đơn ngành)',
+                       delta_idx=(0, 4), delta_label='Chênh lệch (>=12 ngành vs 0 ngành)',
                        bar_color='#08519c')
 
 

@@ -167,9 +167,9 @@
       \footnotesize
       \textbf{Quy luật suy giảm theo khoảng cách:}
       \begin{itemize}\setlength{\itemsep}{3pt}
-        \item \textbf{Nhóm mua gần (1--3 ngày):} Xác suất mua 14 ngày tới đạt \textbf{88.5\%} ($n = 959$ hộ), cao hơn +20.2 điểm phần trăm so với base rate.
+        \item \textbf{Nhóm mua gần (0--3 ngày):} Xác suất mua 14 ngày tới đạt \textbf{88.5\%} ($n = 959$ hộ), cao hơn +20.2 điểm phần trăm so với base rate.
         \item \textbf{Suy giảm dần:} 4--7 ngày đạt 79.8\%; 8--14 ngày đạt 69.9\%; 15--30 ngày giảm còn 54.9\%.
-        \item \textbf{Nguy cơ rời bỏ (>30 ngày):} Xác suất rơi xuống \textbf{24.1\%} ($n = 465$ hộ), giảm -44.2 điểm phần trăm.
+        \item \textbf{Nguy cơ rời bỏ (>30 ngày / Chưa mua):} Xác suất rơi xuống \textbf{24.0\%} ($n = 468$ hộ), giảm -44.3 điểm phần trăm so với base rate.
       \end{itemize}
       \vspace{0.08cm}
       \begin{alertblock}{Đặc trưng chuyển giao}
@@ -249,17 +249,18 @@
       \includegraphics[width=\linewidth,height=0.58\textheight,keepaspectratio]{../reports/figures/24_category_breadth_stickiness.png}
     \end{column}
     \begin{column}{0.40\textwidth}
-      \footnotesize
-      \textbf{Tương quan giữa độ rộng giỏ và xác suất mua:}
+      \scriptsize
+      \textbf{Tương quan giữa độ rộng danh mục và xác suất mua:}
       \begin{itemize}\setlength{\itemsep}{1pt}
-        \item \textbf{Khách mua toàn diện ($\ge 12$ ngành):} Xác suất mua đạt kỷ lục \textbf{96.5\%} ($n = 160$ hộ).
-        \item \textbf{Phổ thông (7--11 ngành):} Đạt 83.5\% ($n = 723$ hộ).
-        \item \textbf{Đơn ngành (1--2 ngành):} Rơi xuống \textbf{31.8\%} ($n = 240$ hộ), chênh lệch \textbf{64.7 điểm phần trăm}.
-        \item \textbf{Giải thích quy mô mẫu:} Tổng $n = 2,301$ hộ có phát sinh giỏ hàng trong 90 ngày; 199 hộ còn lại không có giỏ hàng nào ($P(Y=1) = 12.3\%$).
+        \item \textbf{Toàn diện ($\ge 12$ ngành):} Xác suất mua đạt \textbf{96.5\%} ($n = 241$ hộ).
+        \item \textbf{Phổ thông (7--11 ngành):} Đạt \textbf{83.5\%} ($n = 1,178$ hộ); \textbf{Thứ yếu (3--6 ngành):} Đạt \textbf{57.8\%} ($n = 723$ hộ).
+        \item \textbf{Đơn ngành (1--2 ngành):} Đạt \textbf{31.8\%} ($n = 160$ hộ).
+        \item \textbf{Không mua 90d (0 ngành):} Rơi xuống \textbf{12.3\%} ($n = 198$ hộ).
+        \item \textbf{Bảo toàn 100\% mẫu:} Bao quát trọn vẹn $n = 2,500$ hộ, độ phân tách đạt \textbf{84.2 điểm phần trăm}.
       \end{itemize}
-      \vspace{0.02cm}
+      \vspace{0.05cm}
       \begin{alertblock}{Đặc trưng chuyển giao}
-        \footnotesize
+        \scriptsize
         Độ phủ danh mục là chỉ số gắn kết mạnh hàng đầu:\\
         $\rightarrow$ \texttt{department\_breadth\_90d}, \texttt{avg\_items\_per\_basket\_90d}.
       \end{alertblock}

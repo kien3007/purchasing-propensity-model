@@ -136,10 +136,10 @@
 > *"Từ Slide 6 đến Slide 13, chúng tôi áp dụng một **khuôn mẫu trực quan chuẩn mực thống nhất**: Trục hoành là phân nhóm giá trị của đặc trưng, trục tung là xác suất mua hàng thực tế $P(Y=1)$ trong 14 ngày tới, trên mỗi cột hiển thị rõ tỷ lệ phần trăm và cỡ mẫu $n$, cùng đường tham chiếu mức trung bình nền tảng 68.3%.
 >
 > Slide 6 kiểm định đặc trưng **Recency (Số ngày kể từ lần mua gần nhất)**:
-> * Hộ vừa mua trong vòng **1–3 ngày qua ($n = 959$)** có xác suất mua lại trong 14 ngày tới lên tới **88.5%** (cao hơn 20.2 điểm phần trăm so với mức trung bình).
-> * Khi thời gian chưa mua kéo dài ra **15–30 ngày ($n = 300$)**, xác suất rơi xuống **54.9%**; và với nhóm **trên 30 ngày ($n = 465$)**, xác suất sụt giảm mạnh về **24.1%**.
+> * Hộ vừa mua trong vòng **0–3 ngày qua ($n = 959$)** có xác suất mua lại trong 14 ngày tới lên tới **88.5%** (cao hơn 20.2 điểm phần trăm so với mức trung bình).
+> * Khi thời gian chưa mua kéo dài ra **4–7 ngày ($n = 436$)**, xác suất đạt **79.8%**; **8–14 ngày ($n = 337$)** đạt **69.9%**; **15–30 ngày ($n = 300$)** rơi xuống **54.9%**; và với nhóm **trên 30 ngày hoặc chưa mua ($n = 468$)**, xác suất sụt giảm mạnh về **24.0%**.
 >
-> Mức độ chênh lệch lên tới **-64.4 điểm phần trăm**. Đây là tín hiệu đơn điệu mạnh mẽ nhất trong dữ liệu, khẳng định `days_since_last_basket` là đặc trưng rường cột của mô hình."*
+> Mức độ chênh lệch lên tới **-64.5 điểm phần trăm**. Đây là tín hiệu đơn điệu mạnh mẽ nhất trong dữ liệu, khẳng định `days_since_last_basket` là đặc trưng rường cột của mô hình."*
 
 ---
 
@@ -198,16 +198,17 @@
 * **Tiêu đề:** 9. Tác động của độ rộng ngành hàng đối với xác suất mua lại
 * **Biểu đồ:** Xác suất $P(Y=1)$ theo số ngành hàng đã mua trong 90 ngày (`department_breadth_90d`).
 * **Thời lượng:** 50 giây
-* **Trực quan:** Cột 1–2 ngành đạt 31.8%, tăng đều lên 96.5% ở nhóm $\ge 12$ ngành; độ chênh +64.7 điểm phần trăm.
+* **Trực quan:** 5 cột bao quát đủ 2,500 hộ: 0 ngành đạt 12.3%, 1–2 ngành đạt 31.8%, tăng dần lên 96.5% ở nhóm $\ge 12$ ngành; độ phân tách đạt 84.2 điểm phần trăm.
 
 **Lời thoại trình bày:**
 > *"Slide 10 phân tích mức độ đa dạng danh mục mua sắm thông qua biến `department_breadth_90d`.
 >
-> Biểu đồ cho thấy sự phân hóa sâu sắc:
-> * Nhóm hộ chỉ mua từ **1–2 ngành hàng ($n = 240$)** có xác suất mua lại chỉ đạt **31.8%** — phản ánh những người chỉ ghé siêu thị tiện đường mua một vài món đồ lẻ.
-> * Khi số ngành hàng tăng lên 3–6 ngành, xác suất đạt **57.8%**; từ 7–11 ngành đạt **83.5%**; và nhóm mua từ **$\ge 12$ ngành hàng trở lên ($n = 160$)** có xác suất mua lại lên tới **96.5%**.
+> Biểu đồ bao quát trọn vẹn 100% tập mẫu 2,500 hộ gia đình phân theo 5 mức độ rộng danh mục:
+> * Nhóm **không mua gì trong 90 ngày (0 ngành, $n = 198$)** có xác suất mua 14 ngày tới chỉ đạt **12.3%**.
+> * Nhóm **đơn ngành (1–2 ngành, $n = 160$)** đạt **31.8%** — phản ánh những khách hàng chỉ ghé tiện đường mua một vài món đồ lẻ.
+> * Khi danh mục mở rộng lên **thứ yếu (3–6 ngành, $n = 723$)**, xác suất đạt **57.8%**; **phổ thông (7–11 ngành, $n = 1,178$)** đạt **83.5%**; và nhóm mua **toàn diện ($\ge 12$ ngành, $n = 241$)** đạt tới **96.5%**.
 >
-> Chênh lệch giữa nhóm đa ngành và đơn ngành lên tới **+64.7 điểm phần trăm**. Chú thích rõ: Tổng 4 cột là 2,301 hộ đang phát sinh giao dịch; 199 hộ còn lại không có giao dịch trong 90 ngày qua có xác suất mua là 12.3%. Khi một gia đình tin tưởng mua sắm đa ngành, siêu thị đã trở thành điểm đến mua sắm thiết yếu trọn gói của họ."*
+> Toàn bộ 2,500 hộ được bảo toàn nguyên vẹn, không có hộ nào biến mất; độ phân tách giữa nhóm toàn diện và nhóm không mua lên tới **84.2 điểm phần trăm** (96.5% so với 12.3%). Khi một gia đình mua sắm đa ngành, siêu thị đã trở thành điểm đến mua sắm thiết yếu trọn gói của họ."*
 
 ---
 
@@ -232,7 +233,7 @@
 * **Tiêu đề:** 11. Tác động của lịch sử đổi coupon tới xác suất mua lại
 * **Biểu đồ:** Xác suất $P(Y=1)$ theo số lần đổi coupon trong 180 ngày (0 lần, 1–2 lần, $\ge 3$ lần).
 * **Thời lượng:** 45 giây
-* **Trực quan:** 0 lần = 66.3% ($n=2,317$), 1–2 lần = 93.2% ($n=93$), $\ge 3$ lần = 93.6% ($n=90$).
+* **Trực quan:** 0 lần (Chưa đổi) = 66.3% ($n=2,317$), 1–2 lần = 93.2% ($n=94$), $\ge 3$ lần = 93.6% ($n=90$).
 
 **Lời thoại trình bày:**
 > *"Slide 12 kiểm định hành vi sử dụng phiếu giảm giá trong cửa sổ 180 ngày qua biến `coupon_redemptions_180d`.
