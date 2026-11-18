@@ -10,14 +10,14 @@ Bài thuyết trình kéo dài **15 phút** (gồm 12 phút trình bày mạch c
 
 1. **Phần 1: Thiết kế bài toán & Kiểm toán chất lượng dữ liệu (Slides 1 – 3 | 2.5 phút):**
    - Thiết lập bài toán học máy: Đơn vị hộ gia đình ($n = 2,500$ hộ panel), chân trời dự báo $\Delta t = 14$ ngày, kỷ luật thời gian Point-in-Time ($DAY \le t_0$).
-   - Kết quả kiểm toán 8 bảng dữ liệu Dunnhumby: Khử trùng 5,164 dòng coupon, mã hóa 1,699 hộ `UNKNOWN`, kiểm chứng JOIN đạt 100%, loại 942 giỏ hàng phi thương mại (chỉ làm thay đổi 0.016% nhãn).
+   - Kết quả kiểm toán 8 bảng dữ liệu: Phân tách rõ ràng đơn vị dòng (2.59M), giỏ (275.5k sạch) và hộ (2,500 panel với 1,699 hộ `UNKNOWN`), kiểm chứng JOIN 100%, kiểm định tác động nhãn của việc loại 942 giỏ hàng phi thương mại (chỉ thay đổi 0.016% nhãn).
 2. **Phần 2: Căn cứ xác lập chân trời dự báo & Phân tích tín hiệu hành vi (Slides 4 – 9 | 6.5 phút):**
    - Căn cứ thực nghiệm chọn $\Delta t = 14$ ngày (Base rate 68.3%, std $\pm 1.0\%$).
-   - Khám phá 8 nhóm đặc trưng học máy cốt lõi (Recency $\times$ Frequency heatmap, Phân tầng Spend & Breadth, Hàng tươi sống, Chiến dịch & Coupon, Mạng lưới cửa hàng & Nhóm UNKNOWN).
-3. **Phần 3: Ma trận chuyển giao 28 đặc trưng sang Feature Engineering (Slide 10 | 1.5 phút):**
-   - Chuyển giao 28 biến đặc trưng đã kiểm chứng thực nghiệm, tuân thủ 100% ranh giới Point-in-Time.
+   - Khám phá các nhóm tín hiệu cốt lõi: Ma trận kết hợp 2D Recency $\times$ Frequency (heatmap), phân tầng kiểm soát Spend & Breadth, chỉ báo chu kỳ thực phẩm tươi sống, tương quan chiến dịch & coupon, cấu trúc mạng lưới cửa hàng và nhóm `UNKNOWN`.
+3. **Phần 3: Đề xuất 28 đặc trưng sang Feature Engineering (Slide 10 | 1.5 phút):**
+   - Đề xuất 28 biến đặc trưng Point-in-Time (bao gồm biến quan sát trực tiếp và biến dẫn xuất động lượng/tỷ lệ) sẵn sàng cho pipeline mô hình hóa.
 4. **Phần 4: Phụ lục chuyên sâu & Quản trị bán lẻ (Slides 11 – 16 | 1.5 phút dùng khi tra cứu hoặc phản biện):**
-   - Sơ đồ ERD 8 bảng dữ liệu, phân phối AOV giỏ hàng, quy luật Pareto & Gini ($0.5028$), cấu trúc chiết khấu 2 tầng, thâm nhập nhãn hàng riêng (Private Label), và nhịp điệu mua sắm theo giờ.
+   - Sơ đồ ERD 8 bảng dữ liệu, phân phối AOV giỏ hàng ($17.18 USD), quy luật Pareto ($53.0\%$) & Gini ($0.5028$), cấu trúc chiết khấu 2 tầng, thâm nhập nhãn hàng riêng (Private Label), và nhịp điệu mua sắm theo giờ.
 5. **Phần 5: Bộ câu hỏi & trả lời dự phòng cho phần Q&A (3.0 phút).**
 
 ---
@@ -26,7 +26,7 @@ Bài thuyết trình kéo dài **15 phút** (gồm 12 phút trình bày mạch c
 
 ### Slide 1: Tiêu đề báo cáo
 * **Tiêu đề:** Khám phá dữ liệu (EDA) & kiểm toán chất lượng dữ liệu
-* **Phụ đề:** Nền tảng thực nghiệm cho bài toán dự đoán xác suất mua hàng bán lẻ
+* **Phụ đề:** Nền tảng thực nghiệm cho bài toán dự đoán xác suất mua hàng bán lẻ (14 ngày)
 * **Thời lượng:** 30 giây
 
 **Lời thoại trình bày:**
@@ -46,7 +46,7 @@ Bài thuyết trình kéo dài **15 phút** (gồm 12 phút trình bày mạch c
 > - **Đơn vị dự báo:** Cấp hộ gia đình (`household_key`). Toàn bộ 2,500 hộ gia đình là một panel khách hàng cố định được chuỗi siêu thị theo dõi xuyên suốt nghiên cứu.
 > - **Cửa sổ quan sát hành vi ($T_{obs}$):** 90 ngày trước mốc chốt sổ $t_0$ ($DAY \le t_0$) để trích xuất các đặc trưng tần suất, chi tiêu và danh mục.
 > - **Cửa sổ dự báo ($\Delta t$):** 14 ngày tới ($DAY \in (t_0, t_0 + 14]$).
-> - **Nhãn mục tiêu ($Y$):** Biến nhị phân $Y \in \{0, 1\}$. $Y = 1$ nếu hộ có phát sinh ít nhất một giỏ hàng sạch có chi tiêu dương ($SALES\_VALUE > 0$) trong 14 ngày tiếp theo; ngược lại $Y = 0$.
+> - **Nhãn mục tiêu ($Y$):** Biến nhị phân $Y \in \{0, 1\}$. $Y = 1$ nếu hộ có phát sinh ít nhất một giỏ hàng sạch có chi tiêu dương ($SALES\_VALUE > 0$) trong 14 ngày tiếp theo; ngược lại $Y = 0$. Tỷ lệ dương toàn mẫu đạt khoảng 68.3%.
 >
 > Về mặt phương pháp luận, chúng em áp dụng triệt để **kỷ luật Point-in-Time**: 100% biến đặc trưng chỉ được tính toán từ các sự kiện phát sinh trước hoặc tại thời điểm $t_0$. Mọi thông tin sau $t_0$ tuyệt đối chỉ được dùng để gán nhãn mục tiêu $Y$, triệt tiêu hoàn toàn nguy cơ rò rỉ dữ liệu từ tương lai (data leakage).
 >
@@ -57,15 +57,14 @@ Bài thuyết trình kéo dài **15 phút** (gồm 12 phút trình bày mạch c
 ### Slide 3: 2. Kiểm toán 8 bảng: Loại bỏ nhiễu, chuẩn hóa khóa nối và bảo toàn mẫu
 * **Tiêu đề:** 2. Kiểm toán 8 bảng: Loại bỏ nhiễu, chuẩn hóa khóa nối và bảo toàn mẫu
 * **Thời lượng:** 60 giây
-* **Trực quan:** Bảng kiểm toán số dòng thô vs dòng sạch cho từng bảng ở cột trái; 3 kết luận kiểm chứng toàn vẹn & nhãn ở cột phải.
+* **Trực quan:** Bảng kiểm toán tách bạch theo từng đơn vị (Dòng, Giỏ, Hộ) ở cột trái; 3 kết luận kiểm chứng toàn vẹn & kiểm định nhãn ở cột phải.
 
 **Lời thoại trình bày:**
-> *"Trên màn hình là kết quả kiểm toán chất lượng và xử lý làm sạch then chốt trên 8 bảng dữ liệu:
-> 1. **Bảng giao dịch `transaction_data` (2.59M dòng):** Chúng em kiểm toán và loại bỏ 942 giỏ hàng phi thương mại có chi tiêu $\le \$0$ (chiếm 0.34% tổng số giỏ hàng, đóng góp đúng \$0 doanh thu). Kiểm toán định lượng trên toàn bộ 12,500 cặp (hộ, cutoff) qua 5 mốc chốt sổ cho thấy việc loại 942 giỏ này chỉ làm thay đổi đúng 2 nhãn từ 1 sang 0 tại mốc $t_0 = 550$ (tỷ lệ ảnh hưởng chỉ 0.016%), hoàn toàn không gây sai lệch nhãn mục tiêu trong khi giúp dữ liệu giỏ hàng hoàn toàn sạch (275,542 giỏ hàng sạch).
-> 2. **Bảng `coupon` (124.5k dòng):** Khử trùng triệt để 5,164 bản ghi trùng lặp 100% (exact duplicates), thu gọn còn 119,384 dòng ánh xạ SKU hợp lệ để ngăn chặn hiện tượng nhân đôi dòng khi kết nối bảng.
-> 3. **Bảng nhân khẩu học `hh_demographic` (801 hộ, 32.0%):** Nhóm kiên quyết không drop 68% số hộ thiếu thông tin để tránh sai lệch chọn mẫu (selection bias). Thay vào đó, 1,699 hộ khuyết thiếu được mã hóa thành một nhóm `UNKNOWN` độc lập, bảo toàn trọn vẹn 100% cỡ mẫu 2,500 hộ gia đình.
-> 4. **Kiểm chứng JOIN Audit đạt toàn vẹn 100%:** Khớp nối 2.59M dòng giao dịch sang bảng sản phẩm đạt 100% (0 SKU lệch, 0 nhân đôi dòng). Khớp nối bảng chiến dịch (1,584 hộ) và bảng đổi coupon (2,318 lượt đổi của 434 hộ) hoàn toàn toàn vẹn khóa ngoại.
-> 5. **Bảng `causal_data` (36.8 triệu dòng):** Nhóm chủ động loại bỏ khỏi baseline vì dữ liệu ở cấp cửa hàng/tuần (*store-week*), độ thưa cao và không liên kết được với hành vi dừng chân thực tế của từng hộ gia đình."*
+> *"Để đảm bảo tính minh bạch tuyệt đối, ở bảng bên trái nhóm tách bạch rõ ràng theo từng đơn vị quan sát:
+> 1. **Bảng giao dịch `transaction_data`:** Ở cấp dòng, dữ liệu thô có 2,595,732 dòng chi tiết thuộc 276,484 chuyến đi chợ (giỏ hàng). Nhóm kiểm toán và loại bỏ 942 giỏ hàng phi thương mại có tổng chi tiêu $\le \$0$ (hoàn hàng, quẹt thẻ kỹ thuật, quà tặng \$0), tương ứng với 1,054 dòng giao dịch. Sau làm sạch, chúng em thu được đúng 2,594,678 dòng sạch và 275,542 giỏ hàng thương mại sạch.
+> 2. **Kiểm định tác động nhãn:** Kiểm toán định lượng trên toàn bộ 12,500 lượt đánh giá qua 5 mốc chốt sổ cho thấy việc loại 942 giỏ này chỉ làm đổi đúng 2 nhãn từ 1 sang 0 tại duy nhất mốc $t_0 = 550$ (tỷ lệ ảnh hưởng chỉ 0.016%), chứng minh việc làm sạch không hề gây sai lệch biến mục tiêu.
+> 3. **Bảng nhân khẩu học `hh_demographic`:** Ở cấp hộ gia đình, chỉ có 801 hộ khai báo thông tin. Nhóm kiên quyết không drop 68% số hộ thiếu dữ liệu để tránh sai lệch chọn mẫu (selection bias). Thay vào đó, 1,699 hộ khuyết thiếu được mã hóa thành phân nhóm `UNKNOWN` độc lập, bảo toàn trọn vẹn 100% cỡ mẫu 2,500 hộ panel.
+> 4. **Khử trùng và kiểm chứng khóa nối:** Bảng coupon được khử trùng 5,164 bản ghi trùng 100%, thu gọn còn 119,384 dòng ánh xạ; kiểm toán JOIN đạt toàn vẹn 100% không phát sinh SKU lệch; bảng `causal_data` (36.8M dòng store-week) được loại bỏ khỏi baseline do độ thưa cao."*
 
 ---
 
@@ -85,84 +84,77 @@ Bài thuyết trình kéo dài **15 phút** (gồm 12 phút trình bày mạch c
 ### Slide 5: 4. Recency và Frequency: Cặp bài trùng phân tách quán tính mua sắm
 * **Tiêu đề:** 4. Recency và Frequency: Cặp bài trùng phân tách quán tính mua sắm
 * **Thời lượng:** 65 giây
-* **Biểu đồ:** Heatmap 2D đồng thời biểu diễn xác suất $P(Y=1)$ và cỡ mẫu $n$ trên lưới giao thoa giữa 5 nhóm Recency và 5 nhóm Frequency 90 ngày.
+* **Biểu đồ:** Heatmap 2D ma trận kết hợp giữa 5 nhóm Recency và 4 nhóm Frequency 90 ngày; mỗi ô hiển thị xác suất $P(Y=1)$ và số hộ trung bình $n$ qua 5 mốc cutoff (tổng $n=2,500$ hộ).
 
 **Lời thoại trình bày:**
-> *"Bước sang khám phá các đặc trưng hành vi, Recency và Frequency là cặp biến quan trọng bậc nhất tạo nên lực phân tách nền tảng của mô hình. Trên màn hình là biểu đồ Heatmap tương tác 2 chiều:
-> - **Hiệu ứng biên Recency:** Giảm từ **88.5%** ở nhóm vừa đi chợ trong 1–3 ngày qua ($n = 959$ hộ) xuống chỉ còn **24.1%** ở nhóm trên 30 ngày chưa mua sắm ($n = 465$ hộ). Biên độ phân tách đơn lẻ đạt tới **64.4 điểm phần trăm**.
-> - **Hiệu ứng biên Frequency:** Nhóm hoàn toàn không có giao dịch trong 90 ngày ($n = 199$ hộ) chỉ đạt xác suất mua **12.4%** (nhóm khách hàng đã rời bỏ hoặc ngủ đông). Khi tần suất tăng lên $\ge 25$ giỏ, xác suất mua đạt tới **92.5%** (chênh lệch tới **80.1 điểm phần trăm**).
-> - **Tương tác 2 chiều trên Heatmap:** Ngay cả trong cùng nhóm khách hàng vừa mua cách đây 1–3 ngày, nếu tần suất 90 ngày thấp (1–5 giỏ), xác suất mua chỉ là 66.7%; nhưng nếu tần suất cao ($\ge 25$ giỏ), xác suất vọt lên tới 93.6%. Ngược lại, hộ có tần suất cao nhưng đã quá 30 ngày chưa quay lại thì xác suất rơi về 40.0%. Hai biến số bổ trợ khăng khít cho nhau để nhận diện độ tươi mới và độ bền vững của quán tính mua sắm."*
+> *"Bước sang khám phá các đặc trưng hành vi, Recency và Frequency là cặp biến cốt lõi tạo nên lực phân tách nền tảng của bài toán. Thay vì nhìn đơn lẻ, ma trận Heatmap 2 chiều trên màn hình bóc tách sự tương tác hiệp đồng giữa hai biến:
+> - **Xét đơn biến:** Nhìn theo từng chiều biên độ, Recency đơn biến phân tách từ **88.5%** ở nhóm vừa mua 0–3 ngày xuống **24.0%** ở nhóm trên 30 ngày. Tương tự, Frequency đơn biến phân tách từ **12.3%** ở nhóm 0 giỏ lên **95.5%** ở nhóm $\ge 16$ giỏ.
+> - **Hiệu ứng hiệp đồng trên ma trận 2D:** Sự kết hợp 2 chiều mang lại lực phân loại vượt trội: Nhóm khách hàng vừa đi chợ gần ($\le 3$ ngày) kết hợp với tần suất cao ($\ge 16$ giỏ) đạt đỉnh xác suất mua lên tới **97.4%** (trung bình 599 hộ mỗi mốc). Ngược lại, nhóm vắng bóng trên 30 ngày và hoàn toàn không có giỏ hàng nào trong 90 ngày rơi về đáy xác suất chỉ còn **12.4%** (199 hộ).
+> - **Biên độ phân tách cực đại:** Khoảng cách giữa 2 cực đạt tới **85.0 điểm phần trăm**. Recency đo lường độ trễ ngắn hạn, trong khi Frequency đo quán tính nền tảng dài hạn; sự kết hợp này cung cấp bộ lọc phân loại cơ sở mạnh nhất cho mô hình học máy."*
 
 ---
 
-### Slide 6: 5. Spend và Breadth: Tín hiệu gia tăng độc lập ngoài Tần suất
-* **Tiêu đề:** 5. Spend và Breadth: Tín hiệu gia tăng độc lập ngoài Tần suất
+### Slide 6: 5. Spend và Breadth: Tín hiệu bổ trợ trong các phân tầng Tần suất
+* **Tiêu đề:** 5. Spend và Breadth: Tín hiệu bổ trợ trong các phân tầng Tần suất
 * **Thời lượng:** 65 giây
-* **Biểu đồ:** 2 panel phân tầng kiểm soát (Stratified Analysis): Panel trái biểu diễn Spend theo tầng Frequency; Panel phải biểu diễn Breadth theo tầng Frequency.
+* **Biểu đồ:** 2 panel phân tầng kiểm soát (Stratified Analysis) trên 2,301 hộ active trong 90 ngày (Base rate tập active: 73.2% vs Base rate toàn mẫu 68.3%): Panel trái là Spend theo tầng Frequency; Panel phải là Breadth theo tầng Frequency.
 
 **Lời thoại trình bày:**
-> *"Một câu hỏi phương pháp luận lớn đặt ra là: Chi tiêu (Spend) và Độ rộng ngành hàng (Breadth) có thực sự mang lại tín hiệu dự báo độc lập hay chỉ là hệ quả phái sinh của việc đi chợ nhiều lần? Để chứng minh, nhóm thực hiện phân tích phân tầng cố định theo Tần suất:
-> - **Ở Panel bên trái (Phân tầng Spend):** Khi kiểm soát cố định trong cùng tầng Frequency thấp (1–5 giỏ hàng), những hộ chi tiêu cao (\$300–\$700) đạt xác suất mua **76.0%**, vượt xa mức **38.4%** của những hộ chỉ tiêu dưới \$100 (chênh lệch độc lập lên tới **+37.6 điểm phần trăm**). Spend đo lường độ gắn kết về mặt ví tiền (share of wallet), không bị tần suất triệt tiêu.
-> - **Ở Panel bên phải (Phân tầng Breadth):** Trong cùng tầng Frequency trung bình (6–15 giỏ), hộ mua sắm đa ngành ($\ge 7$ ngành) đạt xác suất mua **83.7%**, vượt trội **+19.7 điểm phần trăm** so với hộ chỉ mua 1–2 ngành hàng tiện lợi rời rạc (64.0%). Độ phủ ngành hàng phản ánh hộ đã xem siêu thị là điểm đến trọn gói (one-stop shop) của gia đình."*
+> *"Một câu hỏi phương pháp luận quan trọng là: Mức chi tiêu (Spend) và Độ rộng ngành hàng (Breadth) có mang lại tín hiệu bổ trợ hay chỉ phản ánh việc đi chợ nhiều lần? Để kiểm tra, nhóm thực hiện phân tích phân tầng có điều kiện trên 2,301 hộ gia đình có phát sinh giao dịch trong 90 ngày:
+> - **Lưu ý về Base rate:** Tập 2,301 hộ active này có tỷ lệ cơ sở là **73.2%**, cao hơn mức 68.3% của toàn bộ 2,500 hộ panel.
+> - **Ở Panel bên trái (Phân tầng Spend):** Khi cố định trong cùng tầng Tần suất thấp (1–5 giỏ), những hộ chi tiêu cao (\$300–\$700) đạt xác suất mua **76.0%**, vượt xa mức **38.4%** của hộ chi tiêu dưới \$100 (chênh lệch $+37.6$ điểm phần trăm). Spend đo lường độ gắn kết ví tiền (share of wallet).
+> - **Ở Panel bên phải (Phân tầng Breadth):** Trong cùng tầng Tần suất vừa (6–15 giỏ), hộ mua sắm danh mục rộng ($\ge 11$ ngành) đạt xác suất mua **83.7%**, vượt trội **+19.7 điểm phần trăm** so với hộ chỉ mua 1–4 ngành hàng rời rạc (64.0%).
+> - **Ý nghĩa phương pháp:** Trong các phân tầng khảo sát, độ dốc dương được duy trì rõ rệt. Tuy nhiên, nhóm nhấn mạnh đây là phân tích phân tầng có điều kiện; khi chuyển giao sang Feature Engineering, mô hình đa biến sẽ tiếp tục đánh giá trọng số đóng góp thực tế của từng biến."*
 
 ---
 
 ### Slide 7: 6. Hàng tươi sống: Chỉ báo chu kỳ tiêu dùng thực phẩm ngắn hạn
 * **Tiêu đề:** 6. Hàng tươi sống: Chỉ báo chu kỳ tiêu dùng thực phẩm ngắn hạn
 * **Thời lượng:** 50 giây
-* **Biểu đồ:** Tỷ lệ $P(Y=1)$ theo 5 nhóm Recency của danh mục hàng tươi sống (`days_since_last_perishable`).
+* **Biểu đồ:** Tỷ lệ $P(Y=1)$ theo khoảng cách ngày kể từ lần mua thực phẩm tươi sống gần nhất (`days_since_last_perishable`).
 
 **Lời thoại trình bày:**
 > *"Đặc trưng thứ năm là Khoảng cách mua thực phẩm tươi sống (`days_since_last_perishable`):
-> - **Làm rõ ranh giới danh mục:** Nhóm đã chuẩn hóa danh mục hàng tươi sống chuẩn mực (gồm Rau củ quả, Thịt tươi, Thịt đóng gói, Thủy hải sản, Sữa, Bánh mì tươi, Thực phẩm chín chế biến sẵn), loại bỏ hoàn toàn ngành hàng `GROCERY` khô thông thường để tránh méo mó chu kỳ bảo quản thực phẩm.
-> - Kết quả thực nghiệm cho thấy: Hộ vừa mua thực phẩm tươi sống trong **0–3 ngày qua** đạt xác suất mua **89.7%** ($n = 658$ hộ), phản ánh nhóm khách hàng có thói quen đi chợ nấu ăn đều đặn hàng tuần.
-> - Khi thời gian vắng bóng đồ tươi vượt quá **30 ngày**, xác suất mua rơi về **35.0%** (giảm 54.7 điểm phần trăm). Nhu cầu bổ sung thực phẩm tươi sống chính là xung lực tự nhiên thúc đẩy nhịp điệu quay lại siêu thị."*
+> - **Chuẩn hóa danh mục:** Nhóm đã phân loại danh mục tươi sống chuẩn mực (Rau củ quả, Thịt tươi, Thịt chế biến, Thủy hải sản, Sữa, Bánh mì tươi, Chế biến sẵn), loại trừ hoàn toàn ngành hàng `GROCERY` khô để nắm bắt đúng chu kỳ bảo quản thực phẩm ngắn hạn.
+> - **Quan sát thực nghiệm:** Xác suất mua sắm 14 ngày tới có mối tương quan đơn biến rất chặt chẽ với độ tươi mới của giỏ hàng: Hộ vừa mua đồ tươi trong 0–3 ngày qua đạt xác suất mua **89.7%** ($n = 658$ hộ); khi vắng bóng đồ tươi quá 30 ngày, xác suất rơi dốc về **35.0%** ($n = 712$ hộ, giảm 54.7 điểm phần trăm).
+> - **Lưu ý mô hình hóa:** Chúng em lưu ý rằng ở mức độ EDA, đây là một chỉ báo chu kỳ đơn biến mang tính trực quan cao. Vì khoảng cách mua đồ tươi thường có mức độ tương quan cao (collinearity) với khoảng cách mua giỏ hàng chung, pipeline Feature Engineering sẽ cần kiểm soát tương quan này để tránh hiện tượng đa cộng tuyến."*
 
 ---
 
 ### Slide 8: 7. Chiến dịch & Coupon: Tín hiệu tương quan dự báo tại mốc chốt sổ
 * **Tiêu đề:** 7. Chiến dịch & Coupon: Tín hiệu tương quan dự báo tại mốc chốt sổ
 * **Thời lượng:** 60 giây
-* **Biểu đồ:** 2 panel: Panel trái thể hiện xác suất $P(Y=1)$ theo nhóm chiến dịch active tại $t_0$; Panel phải thể hiện xác suất $P(Y=1)$ theo lịch sử đổi coupon 180 ngày.
+* **Biểu đồ:** 2 panel song song: Panel trái thể hiện xác suất $P(Y=1)$ theo nhóm chiến dịch active tại $t_0$; Panel phải thể hiện xác suất $P(Y=1)$ theo lịch sử đổi coupon 180 ngày.
 
 **Lời thoại trình bày:**
-> *"Slide 8 khám phá các biến động lực tiếp thị tại mốc chốt sổ $t_0$:
-> - **Ở Panel bên trái (Chiến dịch active tại $t_0$):** Hộ có chiến dịch đang có hiệu lực tại $t_0$ đạt xác suất mua **86.7% đến 90.7%**, cao hơn vượt bậc **+27 đến +30 điểm phần trăm** so với nhóm không có chiến dịch nào kích hoạt (59.9%, $n = 1,827$ hộ). Chiến dịch Loại A (Đa ngành hàng) có tỷ lệ chuyển đổi đổi coupon đạt 15.96%, cao gấp đôi Loại B và C.
-> - **Ở Panel bên phải (Lịch sử đổi coupon 180 ngày):** Hộ gia đình có lịch sử đổi 1–2 lần coupon đạt xác suất mua **92.5%** ($n = 80$ hộ). Với nhóm đổi từ 3 lần trở lên, xác suất mua đạt tới **94.7%** ($n = 14$ hộ), so với mức 67.4% ở nhóm chưa từng đổi coupon.
-> - **Ranh giới phương pháp luận:** Nhóm xin nhấn mạnh đây là **mối liên hệ tương quan mang giá trị dự báo (predictive association)** do bộ phận marketing chủ động nhắm hộ tích cực; chúng em tuyệt đối không diễn giải đây là tác động nhân quả (causality hay uplift)."*
+> *"Slide 8 khảo sát hai biến động lực tiếp thị tại mốc chốt sổ $t_0$:
+> - **Ở Panel bên trái (Chiến dịch active tại $t_0$):** Hộ có chiến dịch đang có hiệu lực tại $t_0$ đạt xác suất mua **86.7% đến 90.7%**, cao hơn vượt trội **+27 đến +30 điểm phần trăm** so với nhóm không có chiến dịch nào kích hoạt (59.9%, $n = 1,827$ hộ).
+> - **Ở Panel bên phải (Lịch sử đổi coupon 180 ngày):** Hộ có lịch sử đổi coupon đạt xác suất mua **92.5% đến 94.7%**, so với mức 67.4% ở nhóm chưa từng đổi coupon (2,406 hộ).
+> - **Ranh giới phương pháp luận quan trọng:** Nhóm xin nhấn mạnh đây là **mối liên hệ tương quan mang giá trị dự báo (predictive association)** xuất phát từ việc bộ phận tiếp thị chủ động nhắm mục tiêu vào các hộ khách hàng tiềm năng. Chúng em tuyệt đối **không suy diễn đây là tác động nhân quả (causality hay uplift)** rằng chiến dịch đã làm tăng hành vi mua hàng."*
 
 ---
 
 ### Slide 9: 8. Mạng lưới cửa hàng & Phân nhóm UNKNOWN: Đặc trưng cấu trúc
 * **Tiêu đề:** 8. Mạng lưới cửa hàng & Phân nhóm UNKNOWN: Đặc trưng cấu trúc
 * **Thời lượng:** 60 giây
-* **Biểu đồ:** 2 panel: Panel trái thể hiện xác suất $P(Y=1)$ theo tỷ trọng chi tiêu tại cửa hàng chính (Primary Store Share 90d); Panel phải thể hiện xác suất theo quy mô hộ gia đình và nhóm `UNKNOWN`.
+* **Biểu đồ:** 2 panel: Panel trái thể hiện xác suất theo tỷ trọng chi tiêu tại cửa hàng chính (Primary Store Share 90d); Panel phải thể hiện xác suất theo quy mô hộ và nhóm `UNKNOWN`.
 
 **Lời thoại trình bày:**
-> *"Slide 9 phân tích hai đặc trưng cấu trúc về mạng lưới bán lẻ và nhân khẩu học:
-> - **Ở Panel bên trái (Mức độ tập trung cửa hàng - Store Loyalty):** Một hiện tượng thú vị là mối quan hệ mang chiều **nghịch (-)**: Nhóm dồn $\ge 80\%$ ngân sách vào 1 cửa hàng đạt xác suất mua **70.4%**. Trong khi đó, nhóm khách hàng phân tán ghé nhiều siêu thị (<50% tiền, $n = 196$ hộ) lại có xác suất mua cao hơn, đạt **82.8%** (chênh lệch +12.4 pp). Khách hàng ghé nhiều chi nhánh là những khách hàng có tần suất đi chợ cao và mức độ năng động sinh hoạt lớn.
-> - **Ở Panel bên phải (Nhân khẩu học & Nhóm `UNKNOWN`):** Trong nhóm 801 hộ có khai báo, xác suất mua tăng dần theo quy mô hộ (từ 75.4% ở hộ 1–2 người lên 80.2% ở hộ 5+ người). Đặc biệt, nhóm 1,699 hộ khuyết thiếu (`UNKNOWN`, chiếm 68% panel) đạt xác suất mua ổn định **64.5%**. Việc giữ nguyên nhóm `UNKNOWN` độc lập giúp mô hình học máy tận dụng tín hiệu mà không tạo ra bất kỳ thiên lệch chọn mẫu nào."*
+> *"Slide 9 phân tích hai đặc trưng cấu trúc về mạng lưới bán lẻ và hộ gia đình:
+> - **Ở Panel bên trái (Xu hướng ghé nhiều siêu thị):** Quan hệ mang chiều **nghịch (-)**: Hộ phân tán chi tiêu ghé nhiều chi nhánh (<50% tiền) có xác suất mua trong 14 ngày tới đạt **82.8%**, cao hơn so với hộ dồn $\ge 80\%$ ngân sách vào một cửa hàng duy nhất (**70.4%**, chênh lệch +12.4 pp). Nhóm xin lưu ý: Hiện tượng này phản ánh khách hàng có hành vi mua sắm tại nhiều địa điểm thường có tần suất sinh hoạt và đi lại dày đặc trong ngắn hạn, làm tăng xác suất xuất hiện giỏ hàng trong 14 ngày; chúng em không suy diễn rằng họ kém trung thành thương hiệu trong dài hạn. Tương tự, nhóm 0 giỏ trong 90 ngày có xác suất mua thấp (12.3%) phản ánh trạng thái ngừng hoạt động tạm thời trong cửa sổ quan sát, không quy kết đã rời bỏ vĩnh viễn.
+> - **Ở Panel bên phải (Nhân khẩu học & Nhóm `UNKNOWN`):** Nhóm 1,699 hộ khuyết thiếu (`UNKNOWN`, chiếm 68% panel) đạt xác suất mua ổn định **64.5%**. Việc giữ nguyên phân nhóm `UNKNOWN` độc lập giúp mô hình học máy tận dụng trọn vẹn thông tin mà không tạo ra bất kỳ thiên lệch chọn mẫu nào."*
 
 ---
 
-### Slide 10: 9. Ma trận chuyển giao 28 đặc trưng Point-in-Time sang mô hình hóa
-* **Tiêu đề:** 9. Ma trận chuyển giao 28 đặc trưng Point-in-Time sang mô hình hóa
+### Slide 10: 9. Đề xuất 28 đặc trưng Point-in-Time từ EDA sang Feature Engineering
+* **Tiêu đề:** 9. Đề xuất 28 đặc trưng Point-in-Time từ EDA sang Feature Engineering
 * **Thời lượng:** 60 giây
-* **Bảng:** Ma trận tổng hợp 9 nhóm đặc trưng, cửa sổ thời gian, tên biến đại diện trong pipeline `feature_builder.py`, chiều quan hệ thực nghiệm với $Y$, và bằng chứng thực nghiệm.
+* **Bảng:** Ma trận tổng hợp 9 nhóm đặc trưng, cửa sổ thời gian, biến đại diện đề xuất, chiều quan hệ thực nghiệm với $Y$, và bằng chứng thực nghiệm.
 
 **Lời thoại trình bày:**
-> *"Từ toàn bộ các kết quả khám phá thực nghiệm, nhóm đúc kết thành **Ma trận chuyển giao 28 đặc trưng thuộc 9 nhóm cốt lõi** cho pipeline mô hình hóa:
-> 1. **Recency ($\le t_0$, Nghịch -):** Lực phân tách mạnh nhất, delta 64.4 pp (88.5% vs 24.1%). Biến: `days_since_last_basket`, `urgency_ratio`.
-> 2. **Frequency (90d, Đồng +):** Phân tách 80.1 pp (92.5% vs 12.4%). Biến: `baskets_count_90d`, `freq_momentum`.
-> 3. **Spend (90d, Đồng +):** Giữ độ dốc dương khi cố định frequency (+37.6 pp). Biến: `spend_90d`, `spend_trend`.
-> 4. **Breadth (90d, Đồng +):** Tín hiệu độc lập ngoài frequency (+19.7 pp). Biến: `department_breadth_90d`.
-> 5. **Perishables ($\le t_0$, Nghịch -):** Đo chu kỳ cạn thực phẩm tươi (89.7% vs 35.0%). Biến: `days_since_last_perishable`.
-> 6. **Campaigns (Tại $t_0$, Đồng +):** Hộ có chiến dịch active đạt 86.7%–90.7%. Biến: `is_targeted_type_A`, `type_B`, `type_C`.
-> 7. **Coupons (180d, Đồng +):** Đổi coupon là chỉ báo gắn kết (92.5% vs 67.4%). Biến: `coupon_redemptions_180d`.
-> 8. **Store Loyalty (90d, Nghịch -):** Hộ ghé nhiều siêu thị năng động hơn (82.8% vs 70.4%). Biến: `primary_store_spend_share`.
-> 9. **Demographics (Cố định, Phân nhóm):** Phân loại cấu trúc hộ và bảo toàn 1,699 hộ UNKNOWN. Biến: `household_size`, `is_unknown`.
->
-> 100% các biến đều tuân thủ nghiêm ngặt nguyên tắc Point-in-Time, sẵn sàng đưa vào huấn luyện mô hình LightGBM, XGBoost và CatBoost."*
+> *"Từ toàn bộ các phát hiện thực nghiệm trong giai đoạn EDA, nhóm đúc kết thành **Danh mục đề xuất 28 đặc trưng Point-in-Time thuộc 9 nhóm cốt lõi** để chuyển giao sang pipeline Feature Engineering:
+> - Danh mục bao gồm các biến quan sát trực tiếp đã kiểm chứng trong EDA (như `days_since_last_basket`, `baskets_count_90d`, `spend_90d`, `department_breadth_90d`, cờ chiến dịch `is_targeted_type_A/B/C`, số lần đổi coupon, tỷ trọng cửa hàng chính) kết hợp với các biến dẫn xuất logic (như tỷ lệ trễ chu kỳ `urgency_ratio`, xung lượng tần suất 30d/90d `freq_momentum`, và xu hướng dòng tiền `spend_trend`).
+> - **Kỷ luật Point-in-Time:** 100% các biến đều được trích xuất nghiêm ngặt tại $DAY \le t_0$, hoàn toàn sẵn sàng đưa vào huấn luyện các thuật toán Gradient Boosting như LightGBM, XGBoost và CatBoost."*
 
 ---
 
@@ -176,23 +168,26 @@ Bài thuyết trình kéo dài **15 phút** (gồm 12 phút trình bày mạch c
 
 ---
 
-### Slide 12: Phụ lục 2 — Phân phối giá trị giỏ hàng thực nghiệm
-* **Tiêu đề:** Phụ lục 2: Phân phối giá trị giỏ hàng thực nghiệm
+### Slide 12: Phụ lục 2 — Phân phối giá trị giỏ hàng thực nghiệm (AOV)
+* **Tiêu đề:** Phụ lục 2: Phân phối giá trị giỏ hàng thực nghiệm (AOV)
 * **Thời lượng:** 20 giây (dùng khi phản biện AOV và phân phối chi tiêu)
 * **Biểu đồ:** Biểu đồ histogram kết hợp KDE thể hiện phân phối giá trị giỏ hàng thực nghiệm trên 275,542 giỏ hàng sạch.
 
 **Lời thoại trình bày:**
-> *"Phụ lục 2 khảo sát phân phối giá trị giỏ hàng sạch (`basket_spend`): Phân phối có dạng lệch phải điển hình (right-skewed) với trung vị đạt 17.03 USD, trung bình đạt 29.24 USD, và phân vị 95 đạt 92.56 USD. Đây là cơ sở để nhóm áp dụng biến đổi logarit cho các biến chi tiêu trong quá trình tiền xử lý mô hình hóa."*
+> *"Phụ lục 2 khảo sát phân phối giá trị giỏ hàng sạch (`basket_spend`): Phân phối có dạng lệch phải điển hình của ngành bán lẻ với trung vị đạt **17.18 USD**, trung bình đạt **29.24 USD**, phân vị 75 đạt **36.39 USD**, phân vị 90 đạt **70.79 USD**, và khoảng liên phân vị IQR là **29.40 USD**. Đây là cơ sở thực nghiệm để nhóm áp dụng biến đổi logarit cho các biến chi tiêu trong quá trình tiền xử lý mô hình hóa."*
 
 ---
 
 ### Slide 13: Phụ lục 3 — Mức độ tập trung doanh thu theo hộ gia đình (Pareto & Gini)
-* **Tiêu đề:** Phụ lục 3: Mức độ tập trung doanh thu theo hộ gia đình
+* **Tiêu đề:** Phụ lục 3: Mức độ tập trung doanh thu theo hộ gia đình (Pareto & Gini)
 * **Thời lượng:** 20 giây (dùng khi phản biện chiến lược kinh doanh và CLV)
 * **Biểu đồ:** Đường cong Lorenz biểu diễn mức độ tập trung doanh thu tích lũy của 2,500 hộ gia đình so với đường phân bổ bình đẳng.
 
 **Lời thoại trình bày:**
-> *"Phụ lục 3 chứng minh mức độ tập trung doanh thu bán lẻ: Top 20% hộ gia đình chi tiêu nhiều nhất (500 hộ) đóng góp tới 73.1% tổng doanh thu của toàn bộ chuỗi siêu thị. Hệ số Gini được tính toán chuẩn xác theo công thức hình thang giải tích đạt **0.5028**, phản ánh mức độ tập trung doanh thu ở mức trung bình cao trong phân tích bán lẻ."*
+> *"Phụ lục 3 định lượng mức độ tập trung doanh thu bán lẻ:
+> - **Thực tế so với lý thuyết:** Trong ngành hàng tiêu dùng nhanh (FMCG), quy luật Pareto 80/20 lý thuyết không diễn ra cực đoan: Top **20% hộ gia đình chi tiêu nhiều nhất** (500 hộ) đóng góp **53.0% tổng doanh thu** của toàn bộ chuỗi siêu thị (tương đương 4.27 triệu USD trên tổng số 8.06 triệu USD).
+> - **Độ phân tán nhu yếu phẩm:** Để đạt được 80% doanh thu tích lũy, siêu thị cần tới **44.0% số hộ khách hàng** (1,100 hộ); và Top 50% số hộ tạo ra **84.3%** tổng doanh thu.
+> - **Hệ số Gini:** Được tính toán chuẩn xác theo công thức hình thang giải tích đạt **0.5028**, phản ánh mức độ tập trung doanh thu vừa phải, đặc trưng của ngành hàng bán lẻ thiết yếu."*
 
 ---
 
@@ -243,13 +238,13 @@ Bài thuyết trình kéo dài **15 phút** (gồm 12 phút trình bày mạch c
 ### Câu hỏi 3: Tại sao biến Mức độ tập trung cửa hàng chính (Store Loyalty) lại có quan hệ nghịch (-) với xác suất mua hàng?
 > **Trả lời:**  
 > *"Thưa thầy cô, trên biểu đồ đơn biến, nhóm hộ phân tán chi tiêu ghé nhiều cửa hàng (<50% tiền) có xác suất mua là 82.8%, cao hơn so với nhóm dồn $\ge 80\%$ ngân sách vào 1 cửa hàng (70.4%).  
-> Để kiểm chứng hiện tượng này, nhóm đã thực hiện phân tích phân tầng (stratified analysis) kiểm soát theo Tần suất (Frequency). Kết quả cho thấy trong cùng tầng Frequency, các hộ ghé nhiều cửa hàng vẫn có xác suất mua cao hơn hoặc tương đương. Lý do là trong mạng lưới bán lẻ Dunnhumby, những khách hàng ghé nhiều chi nhánh thường là những người có mức độ năng động sinh hoạt cao, di chuyển nhiều giữa nơi làm việc và nơi cư trú, và có nhu cầu mua sắm liên tục. Do đó, tỷ trọng dồn vào cửa hàng chính càng thấp thì xác suất có ít nhất một chuyến mua sắm trong 14 ngày tới càng cao."*
+> Để kiểm chứng hiện tượng này, nhóm đã thực hiện phân tích phân tầng (stratified analysis) kiểm soát theo Tần suất (Frequency). Kết quả cho thấy trong cùng tầng Frequency, các hộ ghé nhiều cửa hàng vẫn có xác suất mua cao hơn hoặc tương đương. Lý do là trong mạng lưới bán lẻ Dunnhumby, những khách hàng ghé nhiều chi nhánh thường là những người có mức độ năng động sinh hoạt cao, di chuyển nhiều giữa nơi làm việc và nơi cư trú, và có nhu cầu mua sắm liên tục. Do đó, tỷ trọng dồn vào cửa hàng chính càng thấp thì xác suất có ít nhất một chuyến mua sắm trong 14 ngày tới càng cao. Điều này thuần túy phản ánh nhịp điệu mua sắm ngắn hạn trong 14 ngày, chúng em không suy diễn về độ trung thành thương hiệu dài hạn."*
 
 ### Câu hỏi 4: Việc loại bỏ 942 giỏ hàng chi tiêu $\le \$0$ có làm thiên lệch hoặc rò rỉ nhãn mục tiêu không?
 > **Trả lời:**  
-> *"Thưa thầy cô, hoàn toàn không làm thiên lệch nhãn. Chúng em đã thực hiện kiểm toán định lượng nghiêm ngặt trên toàn bộ 12,500 cặp (hộ, cutoff) trải qua 5 mốc chốt sổ quan sát:  
+> *"Thưa thầy cô, hoàn toàn không làm thiên lệch nhãn. Chúng em đã thực hiện kiểm toán định lượng nghiêm ngặt trên toàn bộ 12,500 lượt đánh giá trải qua 5 mốc chốt sổ quan sát:  
 > Khi so sánh nhãn $Y$ tính trên dữ liệu thô và nhãn $Y$ tính trên 275,542 giỏ hàng sạch, chỉ có đúng **2 nhãn bị chuyển từ 1 sang 0** tại duy nhất mốc $t_0 = 550$ (tỷ lệ thay đổi chỉ 0.016%), và 0 nhãn bị thay đổi tại 4 mốc còn lại.  
-> Việc loại bỏ 942 giỏ hàng này loại bỏ các giao dịch quẹt thẻ kỹ thuật, sửa lỗi thu ngân và quà tặng \$0, bảo đảm nhãn $Y$ phản ánh đúng bản chất giao dịch thương mại sạch mà không làm méo mó phân phối nhãn."*
+> Việc loại bỏ 942 giỏ hàng này loại bỏ các giao dịch quẹt thẻ kỹ thuật, sửa lỗi thu ngân và quà tặng \$0 (tương ứng 1,054 dòng giao dịch), bảo đảm nhãn $Y$ phản ánh đúng bản chất giao dịch thương mại sạch mà không làm méo mó phân phối nhãn."*
 
 ### Câu hỏi 5: Tại sao nhóm không điền khuyết (impute) cho 68% số hộ thiếu thông tin nhân khẩu học?
 > **Trả lời:**  

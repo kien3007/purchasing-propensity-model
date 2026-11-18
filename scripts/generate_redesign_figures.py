@@ -175,7 +175,7 @@ def generate_heatmap_rf():
                 vmin=10, vmax=100, linewidths=1.2, linecolor='white', ax=ax,
                 annot_kws={'fontsize': 10.5, 'fontweight': 'bold'})
 
-    ax.set_title("Ma trận kết hợp Recency × Frequency phân tách xác suất mua 14 ngày", fontsize=12.5, fontweight='bold', pad=12)
+    ax.set_title("Ma trận kết hợp Recency × Frequency phân tách xác suất mua 14 ngày\n(Số liệu trung bình qua 5 mốc cutoff; tổng n = 2,500 hộ panel)", fontsize=11.5, fontweight='bold', pad=10)
     ax.set_xlabel("Tần suất mua sắm trong 90 ngày (Frequency)", fontsize=11, fontweight='bold', labelpad=8)
     ax.set_ylabel("Khoảng cách lần mua cuối (Recency)", fontsize=11, fontweight='bold', labelpad=8)
     ax.tick_params(axis='both', labelsize=10.5)
@@ -191,10 +191,8 @@ def generate_stratified_spend_breadth():
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(11.5, 4.8), constrained_layout=True)
 
     # Data for Spend controlling for Frequency (from empirical query across 5 cutoffs)
-    # Low Freq: <$100 (38.4%), $100-$300 (48.0%), $300-$700 (76.0%)
-    # Med Freq: <$100 (70.1%), $100-$300 (67.8%), $300-$700 (79.4%), >=$700 (82.4%)
-    # High Freq: $100-$300 (83.5%), $300-$700 (93.9%), >=$700 (96.6%)
-
+    # Active cohort (baskets_90d > 0): n = 2,301 households, active base rate = 73.2%
+    # Overall panel (n = 2,500): overall base rate = 68.3%
     x_labels_spend = ['< $100', '$100 - $300', '$300 - $700', '≥ $700']
     low_freq_spend = [38.4, 48.0, 76.0, np.nan]
     med_freq_spend = [70.1, 67.8, 79.4, 82.4]
@@ -203,14 +201,15 @@ def generate_stratified_spend_breadth():
     ax1.plot(x_labels_spend, low_freq_spend, marker='o', linewidth=2.2, color='#e6550d', label='Tần suất Thấp (1-5 giỏ)', markersize=7)
     ax1.plot(x_labels_spend, med_freq_spend, marker='s', linewidth=2.2, color='#3182bd', label='Tần suất Vừa (6-15 giỏ)', markersize=7)
     ax1.plot(x_labels_spend, high_freq_spend, marker='^', linewidth=2.2, color='#31a354', label='Tần suất Cao (≥16 giỏ)', markersize=7)
-    ax1.axhline(68.3, color='#888888', linestyle='--', linewidth=1.2, label='Base rate (68.3%)')
+    ax1.axhline(73.2, color='#d95f02', linestyle='--', linewidth=1.4, label='Base rate tập active (73.2%)')
+    ax1.axhline(68.3, color='#888888', linestyle=':', linewidth=1.1, label='Base rate toàn mẫu (68.3%)')
 
     ax1.set_title("A. Chi tiêu theo tầng Tần suất (Spend | Freq)", fontsize=11.5, fontweight='bold', pad=10)
     ax1.set_xlabel("Mức chi tiêu trong 90 ngày ($ USD)", fontsize=10.5, fontweight='bold')
     ax1.set_ylabel("Xác suất mua hàng P(Y=1) (%)", fontsize=10.5, fontweight='bold')
     ax1.set_ylim(25, 105)
     ax1.grid(True, linestyle='--', alpha=0.6)
-    ax1.legend(loc='lower right', fontsize=9.5, frameon=True, facecolor='white')
+    ax1.legend(loc='lower right', fontsize=8.5, frameon=True, facecolor='white')
 
     # Data for Category Breadth controlling for Frequency
     x_labels_breadth = ['Hẹp (1-4 ngành)', 'Vừa (5-10 ngành)', 'Rộng (≥11 ngành)']
@@ -221,14 +220,15 @@ def generate_stratified_spend_breadth():
     ax2.plot(x_labels_breadth, low_freq_breadth, marker='o', linewidth=2.2, color='#e6550d', label='Tần suất Thấp (1-5 giỏ)', markersize=7)
     ax2.plot(x_labels_breadth, med_freq_breadth, marker='s', linewidth=2.2, color='#3182bd', label='Tần suất Vừa (6-15 giỏ)', markersize=7)
     ax2.plot(x_labels_breadth, high_freq_breadth, marker='^', linewidth=2.2, color='#31a354', label='Tần suất Cao (≥16 giỏ)', markersize=7)
-    ax2.axhline(68.3, color='#888888', linestyle='--', linewidth=1.2, label='Base rate (68.3%)')
+    ax2.axhline(73.2, color='#d95f02', linestyle='--', linewidth=1.4, label='Base rate tập active (73.2%)')
+    ax2.axhline(68.3, color='#888888', linestyle=':', linewidth=1.1, label='Base rate toàn mẫu (68.3%)')
 
     ax2.set_title("B. Độ phủ ngành theo tầng Tần suất (Breadth | Freq)", fontsize=11.5, fontweight='bold', pad=10)
     ax2.set_xlabel("Độ rộng danh mục ngành hàng đã mua", fontsize=10.5, fontweight='bold')
     ax2.set_ylabel("Xác suất mua hàng P(Y=1) (%)", fontsize=10.5, fontweight='bold')
     ax2.set_ylim(25, 105)
     ax2.grid(True, linestyle='--', alpha=0.6)
-    ax2.legend(loc='lower right', fontsize=9.5, frameon=True, facecolor='white')
+    ax2.legend(loc='lower right', fontsize=8.5, frameon=True, facecolor='white')
 
     plt.savefig(FIG_DIR / '11_stratified_spend_breadth.png', dpi=160)
     plt.close()

@@ -100,38 +100,35 @@
 % ==============================================================================
 \begin{frame}{2. Kiểm toán 8 bảng: Loại bỏ nhiễu, chuẩn hóa khóa nối và bảo toàn mẫu}
   \begin{columns}[T]
-    \begin{column}{0.49\textwidth}
-      \textbf{\footnotesize Bảng kiểm toán làm sạch cốt lõi:}
-      \vspace{0.1cm}
+    \begin{column}{0.53\textwidth}
+      \textbf{\footnotesize Bảng kiểm toán làm sạch cốt lõi theo đơn vị:}
+      \vspace{0.05cm}
       
       \scriptsize
-      \begin{tabularx}{\linewidth}{l r r Y}
+      \renewcommand{\arraystretch}{0.85}
+      \begin{tabularx}{\linewidth}{l c r r Y}
         \toprule
-        \textbf{Bảng} & \textbf{Dòng thô} & \textbf{Dòng sạch} & \textbf{Xử lý làm sạch} \\
+        \textbf{Bảng} & \textbf{Đơn vị} & \textbf{Thô} & \textbf{Sạch} & \textbf{Xử lý làm sạch} \\
         \midrule
-        \texttt{trans} & 2,595,732 & 2,594,678 & Loại 942 giỏ $\le \$0$; giữ 275,542 giỏ sạch \\
-        \addlinespace[1pt]
-        \texttt{coupon} & 124,548 & 119,384 & Khử trùng 5,164 dòng trùng 100\% \\
-        \addlinespace[1pt]
-        \texttt{demo} & 801 & 2,500 & Mã hóa 1,699 hộ khuyết thiếu thành \texttt{UNKNOWN} \\
-        \addlinespace[1pt]
-        \texttt{camp} & 7,208 & 7,208 & Ánh xạ 1,584 hộ nhận chiến dịch Type A/B/C \\
-        \addlinespace[1pt]
-        \texttt{redempt} & 2,318 & 2,318 & 2,318 lượt đổi thực tế của 434 hộ \\
-        \addlinespace[1pt]
-        \texttt{causal} & 36.8M & Loại bỏ & Dữ liệu store-week thưa, bỏ khỏi baseline \\
+        \texttt{trans} & Dòng & 2,595,732 & 2,594,678 & Loại 1,054 dòng thuộc 942 giỏ $\le \$0$ \\
+        \texttt{trans} & Giỏ & 276,484 & 275,542 & Giữ 275,542 giỏ thương mại sạch \\
+        \texttt{coupon} & Dòng & 124,548 & 119,384 & Khử trùng 5,164 dòng trùng 100\% \\
+        \texttt{demo} & Hộ & 801 & 2,500 & Mã hóa 1,699 hộ khuyết thành \texttt{UNKNOWN} \\
+        \texttt{camp} & Cặp & 7,208 & 7,208 & Ánh xạ 1,584 hộ nhận c/dịch Type A/B/C \\
+        \texttt{redempt} & Lượt & 2,318 & 2,318 & 2,318 lượt đổi thực tế của 434 hộ \\
+        \texttt{causal} & Store-Wk & 36.8M & Loại bỏ & Dữ liệu store-week thưa, bỏ khỏi baseline \\
         \bottomrule
       \end{tabularx}
     \end{column}
     
-    \begin{column}{0.48\textwidth}
+    \begin{column}{0.44\textwidth}
       \textbf{\footnotesize Kết quả kiểm chứng toàn vẹn \& nhãn:}
-      \vspace{0.1cm}
+      \vspace{0.05cm}
       
-      \begin{itemize}\setlength{\itemsep}{4pt}
+      \begin{itemize}\setlength{\itemsep}{2.5pt}
         \footnotesize
         \item \textbf{JOIN Audit đạt toàn vẹn 100\%:} Khớp nối 2.59M dòng giao dịch sang bảng sản phẩm đạt 100\% (0 SKU lệch, 0 nhân đôi dòng).
-        \item \textbf{Kiểm định tác động nhãn của việc loại 942 giỏ hàng:} So sánh trên toàn bộ 12,500 cặp (hộ, cutoff) chỉ làm đổi đúng \textbf{2 nhãn} từ 1 sang 0 tại $t_0=550$ (tỷ lệ \textbf{0.016\%}), chứng minh việc làm sạch không gây sai lệch nhãn mục tiêu.
+        \item \textbf{Kiểm định tác động nhãn của 942 giỏ $\le \$0$:} So sánh trên toàn bộ 12,500 lượt đánh giá (5 cutoff) chỉ làm đổi đúng \textbf{2 nhãn} từ 1 sang 0 tại $t_0=550$ (tỷ lệ \textbf{0.016\%}), chứng minh việc làm sạch không gây sai lệch nhãn mục tiêu.
         \item \textbf{Bảo toàn 100\% cỡ mẫu:} Không drop 68\% hộ thiếu nhân khẩu học để tránh sai lệch chọn mẫu (selection bias).
       \end{itemize}
     \end{column}
@@ -172,31 +169,31 @@
 % ==============================================================================
 \begin{frame}{4. Recency và Frequency: Cặp bài trùng phân tách quán tính mua sắm}
   \begin{columns}[c]
-    \begin{column}{0.62\textwidth}
+    \begin{column}{0.65\textwidth}
       \centering
       \includegraphics[width=\linewidth,height=0.74\textheight,keepaspectratio]{../reports/figures/10_recency_frequency_heatmap.png}
     \end{column}
-    \begin{column}{0.37\textwidth}
+    \begin{column}{0.34\textwidth}
       \footnotesize
-      \textbf{Bằng chứng thực nghiệm từ ma trận 2D:}
+      \textbf{Quy luật tương tác 2 chiều:}
       \begin{itemize}\setlength{\itemsep}{3pt}
-        \item \textbf{Vùng quán tính cao:} Vừa mua (0--3 ngày) + Tần suất cao ($\ge 16$ giỏ) đạt xác suất mua \textbf{95.6\%} ($n = 794$ hộ).
-        \item \textbf{Vùng suy kiệt:} Lâu không mua (>30 ngày) + 0 giỏ trong 90d chỉ đạt \textbf{12.4\%} ($n = 199$ hộ).
-        \item \textbf{Độ phân tách cực đại:} Chênh lệch xác suất giữa 2 cực lên tới \textbf{83.2 điểm phần trăm}.
+        \item \textbf{Hiệu ứng hiệp đồng:} Vừa mua gần ($\le 3$ ngày) kết hợp tần suất cao ($\ge 16$ giỏ) đạt đỉnh xác suất mua ($97.4\%$).
+        \item \textbf{Suy kiệt quán tính:} Vắng bóng $>30$ ngày và không có giao dịch trong 90d rơi về đáy xác suất ($12.4\%$).
+        \item \textbf{Biên độ phân tách:} Chênh lệch cực đại giữa hai vùng đạt tới \textbf{85.0 điểm phần trăm}.
       \end{itemize}
       \vspace{0.1cm}
-      \textbf{Ý nghĩa mô hình:} Recency phản ánh độ trễ ngắn hạn, Frequency phản ánh quán tính dài hạn; kết hợp 2 biến tạo bộ lọc phân loại cơ sở mạnh nhất.
+      \textbf{Hàm ý mô hình hóa:} Recency đo độ trễ ngắn hạn, Frequency đo quán tính nền tảng; kết hợp 2D tạo bộ lọc phân loại cơ sở mạnh nhất cho mô hình.
     \end{column}
   \end{columns}
   
   \vfill
-  {\tiny\textcolor{gray}{Ma trận trung bình qua 5 mốc cutoff $t_0 \in [250, 650]$ $\mid$ Tổng $n = 2,500$ hộ panel $\mid$ Base rate toàn mẫu: 68.3\%}}
+  {\tiny\textcolor{gray}{* n trong mỗi ô là số hộ trung bình qua 5 mốc cutoff $t_0 \in [250, 650]$ (tổng panel = 2,500 hộ) $\mid$ Base rate toàn mẫu: 68.3\%}}
 \end{frame}
 
 % ==============================================================================
 % SLIDE 6: STRATIFIED SPEND & BREADTH
 % ==============================================================================
-\begin{frame}{5. Spend và Breadth: Tín hiệu gia tăng độc lập ngoài Tần suất}
+\begin{frame}{5. Spend và Breadth: Tín hiệu bổ trợ trong các phân tầng Tần suất}
   \begin{columns}[c]
     \begin{column}{0.65\textwidth}
       \centering
@@ -206,16 +203,16 @@
       \footnotesize
       \textbf{Bằng chứng phân tầng kiểm soát:}
       \begin{itemize}\setlength{\itemsep}{3pt}
-        \item \textbf{Spend mang tín hiệu độc lập:} Trong cùng tầng Tần suất thấp (1--5 giỏ), hộ chi tiêu cao (\$300--\$700) đạt xác suất mua \textbf{76.0\%}, cao hơn \textbf{+37.6 pp} so với hộ chi tiêu thấp (<\$100, 38.4\%).
-        \item \textbf{Breadth đo độ gắn kết trọn gói:} Trong cùng tầng Tần suất vừa (6--15 giỏ), hộ mua danh mục rộng ($\ge 11$ ngành) đạt \textbf{83.7\%}, vượt trội \textbf{+19.7 pp} so với mua hẹp (1--4 ngành, 64.0\%).
+        \item \textbf{Tín hiệu dòng tiền (Spend):} Trong cùng tầng Tần suất thấp (1--5 giỏ), hộ chi tiêu cao (\$300--\$700) đạt xác suất mua \textbf{76.0\%}, vượt trội \textbf{+37.6 pp} so với hộ chi tiêu thấp (<\$100, 38.4\%).
+        \item \textbf{Độ rộng danh mục (Breadth):} Trong cùng tầng Tần suất vừa (6--15 giỏ), hộ mua đa ngành ($\ge 11$ ngành) đạt \textbf{83.7\%}, cao hơn \textbf{+19.7 pp} so với mua hẹp (1--4 ngành, 64.0\%).
       \end{itemize}
       \vspace{0.1cm}
-      \textbf{Kết luận:} Độ dốc dương được bảo toàn khi cố định tần suất, chứng minh Spend và Breadth không bị triệt tiêu bởi số chuyến đi chợ.
+      \textbf{Lưu ý phương pháp:} Trong các tầng khảo sát, độ dốc dương được duy trì; đây là phân tích có điều kiện, cần mô hình hóa đa biến để bóc tách trọng số thực tế.
     \end{column}
   \end{columns}
   
   \vfill
-  {\tiny\textcolor{gray}{Kiểm soát phân tầng trên 2,301 hộ có giao dịch 90d $\mid$ Trung bình 5 mốc cutoff $t_0 \in [250, 650]$ $\mid$ Base rate: 68.3\%}}
+  {\tiny\textcolor{gray}{* Phân tích trên 2,301 hộ active 90d (Base rate tập active: 73.2\% $\mid$ Base rate toàn mẫu 2,500 hộ: 68.3\%) $\mid$ Trung bình 5 mốc cutoff}}
 \end{frame}
 
 % ==============================================================================
@@ -223,23 +220,19 @@
 % ==============================================================================
 \begin{frame}{6. Hàng tươi sống: Chỉ báo chu kỳ tiêu dùng thực phẩm ngắn hạn}
   \begin{columns}[c]
-    \begin{column}{0.60\textwidth}
+    \begin{column}{0.62\textwidth}
       \centering
       \includegraphics[width=\linewidth,height=0.74\textheight,keepaspectratio]{../reports/figures/05_p_y1_perishable_recency.png}
     \end{column}
-    \begin{column}{0.38\textwidth}
+    \begin{column}{0.37\textwidth}
       \footnotesize
-      \textbf{Bằng chứng thực nghiệm:}
+      \textbf{Quan sát thực nghiệm đơn biến:}
       \begin{itemize}\setlength{\itemsep}{3pt}
-        \item \textbf{Vừa mua đồ tươi (0--3 ngày):} Đạt xác suất mua \textbf{89.7\%} ($n = 658$ hộ), phản ánh nhóm khách hàng có thói quen đi chợ nấu ăn đều đặn.
-        \item \textbf{Vắng bóng đồ tươi (>30 ngày):} Xác suất rơi về \textbf{35.0\%} ($n = 712$ hộ), giảm \textbf{54.7 điểm phần trăm}.
+        \item \textbf{Chu kỳ bổ sung thực phẩm:} Khoảng cách mua hàng tươi sống có tương quan mạnh với xác suất mua 14 ngày (giảm từ \textbf{89.7\%} ở nhóm 0--3 ngày xuống \textbf{35.0\%} ở nhóm >30 ngày, giảm 54.7 pp).
+        \item \textbf{Danh mục chuẩn hóa:} Bao gồm Produce, Meat, Dairy, Deli, Pastry, Seafood; loại trừ hoàn toàn \texttt{GROCERY} khô.
       \end{itemize}
       \vspace{0.1cm}
-      \textbf{Lưu ý phương pháp:}
-      \begin{itemize}\setlength{\itemsep}{2pt}
-        \item Đã chuẩn hóa danh mục tươi sống (Produce, Meat, Dairy, Deli, Pastry, Seafood; loại trừ \texttt{GROCERY} khô).
-        \item Đây là chỉ báo chu kỳ tiêu dùng tự nhiên; không diễn giải thành quan hệ nhân quả.
-      \end{itemize}
+      \textbf{Lưu ý mô hình hóa:} Đây là quan hệ đơn biến; khi đưa vào mô hình cần kiểm soát tương quan chặt chẽ với Recency chung (\texttt{days\_since\_last\_basket}) để tránh đa cộng tuyến.
     \end{column}
   \end{columns}
   
@@ -258,13 +251,13 @@
     \end{column}
     \begin{column}{0.34\textwidth}
       \footnotesize
-      \textbf{Bằng chứng thực nghiệm:}
+      \textbf{Tín hiệu tương quan quan sát:}
       \begin{itemize}\setlength{\itemsep}{3pt}
         \item \textbf{Chiến dịch kích hoạt tại $t_0$:} Hộ có chiến dịch active đạt xác suất mua \textbf{86.7\%--90.7\%}, vượt \textbf{+27 đến +30 pp} so với nhóm không có chiến dịch (59.9\%).
-        \item \textbf{Lịch sử đổi coupon 180d:} Hộ có đổi coupon đạt xác suất \textbf{92.5\%--94.7\%}, cao hơn nhóm chưa đổi (67.4\%).
+        \item \textbf{Lịch sử đổi coupon 180d:} Hộ từng đổi coupon đạt \textbf{92.5\%--94.7\%}, cao hơn nhóm chưa đổi (67.4\%).
       \end{itemize}
       \vspace{0.1cm}
-      \textbf{Ranh giới phương pháp:} Đây là tương quan quan sát dự báo (marketing chủ động nhắm hộ tích cực); không diễn giải thành tác động nhân quả (uplift).
+      \textbf{Ranh giới phương pháp:} Đây là tương quan quan sát dự báo (marketing chủ động nhắm hộ tích cực); tuyệt đối không suy diễn thành tác động nhân quả (uplift).
     \end{column}
   \end{columns}
   
@@ -283,10 +276,10 @@
     \end{column}
     \begin{column}{0.34\textwidth}
       \footnotesize
-      \textbf{Bằng chứng thực nghiệm:}
+      \textbf{Đặc trưng cấu trúc mạng lưới \& hộ:}
       \begin{itemize}\setlength{\itemsep}{3pt}
-        \item \textbf{Tương quan nghịch (-) của Loyalty:} Hộ phân tán ghé nhiều siêu thị (<50\% tiền) đạt xác suất mua \textbf{82.8\%}, cao hơn hộ dồn $\ge 80\%$ vào 1 nơi (70.4\%). Khách ghé nhiều nơi có tính năng động tiêu dùng cao hơn.
-        \item \textbf{Giá trị của nhóm UNKNOWN:} Chiếm 68\% số hộ ($n = 1,699$) với xác suất mua \textbf{64.5\%}. Giữ nguyên mã hóa \texttt{UNKNOWN} giúp mô hình tận dụng tín hiệu mà không tạo thiên lệch.
+        \item \textbf{Xu hướng ghé nhiều cửa hàng:} Hộ phân tán chi tiêu ghé nhiều chi nhánh có xác suất mua 14 ngày tới cao hơn (\textbf{82.8\%}) so với hộ dồn $\ge 80\%$ vào 1 cửa hàng (\textbf{70.4\%}); phản ánh nhịp điệu mua sắm dày trong 14 ngày, không suy diễn độ gắn kết thương hiệu dài hạn.
+        \item \textbf{Giá trị của nhóm UNKNOWN:} Chiếm 68\% số hộ ($n = 1,699$) với xác suất mua \textbf{64.5\%}. Giữ nguyên mã hóa \texttt{UNKNOWN} giúp bảo toàn 100\% mẫu mà không tạo thiên lệch chọn mẫu.
       \end{itemize}
     \end{column}
   \end{columns}
@@ -298,29 +291,29 @@
 % ==============================================================================
 % SLIDE 10: MA TRẬN CHUYỂN GIAO ĐẶC TRƯNG
 % ==============================================================================
-\begin{frame}{9. Ma trận chuyển giao 28 đặc trưng Point-in-Time sang mô hình hóa}
+\begin{frame}{9. Đề xuất 28 đặc trưng Point-in-Time từ EDA sang Feature Engineering}
   \centering
-  \renewcommand{\arraystretch}{0.9}
-  \scriptsize
+  \renewcommand{\arraystretch}{0.82}
+  \fontsize{6.2pt}{7.5pt}\selectfont
   \begin{tabularx}{\linewidth}{l c l c Y}
     \toprule
-    \textbf{Nhóm đặc trưng} & \textbf{Cửa sổ} & \textbf{Tên biến đại diện} & \textbf{Quan hệ $Y$} & \textbf{Bằng chứng thực nghiệm \& Lưu ý kỹ thuật} \\
+    \textbf{Nhóm đặc trưng} & \textbf{Cửa sổ} & \textbf{Biến đại diện đề xuất} & \textbf{Quan hệ $Y$} & \textbf{Bằng chứng thực nghiệm \& Lưu ý kỹ thuật} \\
     \midrule
-    1. Recency & $\le t_0$ & \texttt{days\_since\_last\_basket}, \texttt{urgency\_ratio} & Nghịch (-) & Lực phân tách mạnh nhất (88.5\% vs 24.1\%, delta 64.4 pp). \\
-    2. Frequency & 90d & \texttt{baskets\_count\_90d}, \texttt{freq\_momentum} & Đồng (+) & Phân tách 80.1 pp (92.5\% vs 12.4\% ở nhóm 0 giỏ). \\
-    3. Spend & 90d & \texttt{spend\_90d}, \texttt{spend\_trend} & Đồng (+) & Giữ độ dốc dương khi cố định frequency (+37.6 pp ở tầng thấp). \\
-    4. Breadth & 90d & \texttt{department\_breadth\_90d} & Đồng (+) & Đo độ gắn kết trọn gói; giữ tín hiệu độc lập ngoài frequency. \\
-    5. Perishables & $\le t_0$ & \texttt{days\_since\_last\_perishable} & Nghịch (-) & Đo chu kỳ cạn thực phẩm tươi (89.7\% vs 35.0\%, loại trừ Grocery). \\
-    6. Campaigns & Tại $t_0$ & \texttt{is\_targeted\_type\_A}, \texttt{type\_B}, \texttt{type\_C} & Đồng (+) & Tương quan dự báo: hộ có chiến dịch active đạt 86.7\%--90.7\%. \\
-    7. Coupons & 180d & \texttt{coupon\_redemptions\_180d} & Đồng (+) & Đổi coupon là chỉ báo chủ động gắn kết (92.5\% vs 67.4\%). \\
-    8. Store Loyalty & 90d & \texttt{primary\_store\_spend\_share} & Nghịch (-) & Quan hệ nghịch: hộ ghé nhiều siêu thị năng động hơn (82.8\% vs 70.4\%). \\
-    9. Demographics & Cố định & \texttt{household\_size}, \texttt{is\_unknown} & Phân nhóm & Phân loại cấu trúc gia đình và bảo toàn nhóm 1,699 hộ UNKNOWN. \\
+    1. Recency & $\le t_0$ & \texttt{days\_since\_last\_basket}, \texttt{urgency\_ratio} & Nghịch (-) & Phân tách mạnh nhất (88.5\% vs 24.0\%, delta 64.5 pp); dẫn xuất tỷ lệ trễ. \\
+    2. Frequency & 90d & \texttt{baskets\_count\_90d}, \texttt{freq\_momentum} & Đồng (+) & Phân tách 83.2 pp (95.5\% vs 12.3\%); dẫn xuất xung lượng 30d/90d. \\
+    3. Spend & 90d & \texttt{spend\_90d}, \texttt{spend\_trend} & Đồng (+) & Giữ độ dốc dương trong các tầng frequency (+37.6 pp ở tầng thấp). \\
+    4. Breadth & 90d & \texttt{department\_breadth\_90d} & Đồng (+) & Đo độ rộng giỏ hàng; giữ tín hiệu gia tăng trong tầng frequency vừa (+19.7 pp). \\
+    5. Perishables & $\le t_0$ & \texttt{days\_since\_last\_perishable} & Nghịch (-) & Tương quan đơn biến mạnh (89.7\% vs 35.0\%); cần kiểm soát đa cộng tuyến. \\
+    6. Campaigns & Tại $t_0$ & \texttt{is\_targeted\_type\_A}, \texttt{type\_B}, \texttt{type\_C} & Đồng (+) & Tương quan dự báo: hộ có chiến dịch active đạt 86.7\%--90.7\% (không suy diễn uplift). \\
+    7. Coupons & 180d & \texttt{coupon\_redemptions\_180d} & Đồng (+) & Lịch sử đổi coupon gắn liền với xác suất tái mua (92.5\% vs 67.4\%). \\
+    8. Store Loyalty & 90d & \texttt{primary\_store\_spend\_share} & Nghịch (-) & Hộ ghé nhiều chi nhánh có xác suất mua 14 ngày cao hơn (82.8\% vs 70.4\%). \\
+    9. Demographics & Cố định & \texttt{household\_size}, \texttt{is\_unknown} & Phân nhóm & Phân loại quy mô hộ và mã hóa riêng biệt nhóm 1,699 hộ UNKNOWN. \\
     \bottomrule
   \end{tabularx}
   
-  \vspace{0.1cm}
-  \begin{beamercolorbox}[sep=3pt,center,rounded=true]{block body example}
-    \footnotesize\textbf{Kỷ luật Point-in-Time:} 100\% biến trích xuất tại $DAY \le t_0$, sẵn sàng đưa vào pipeline huấn luyện LightGBM / XGBoost / CatBoost.
+  \vspace{0.08cm}
+  \begin{beamercolorbox}[sep=2.5pt,center,rounded=true]{block body example}
+    \scriptsize\textbf{Kỷ luật Point-in-Time:} 100\% biến trích xuất tại $DAY \le t_0$, bao gồm các tín hiệu trực tiếp từ EDA và biến dẫn xuất chuẩn bị cho Feature Engineering.
   \end{beamercolorbox}
 \end{frame}
 
@@ -349,13 +342,13 @@
       \footnotesize
       \textbf{Thống kê giá trị giỏ hàng ($n = 275,542$ giỏ):}
       \begin{itemize}\setlength{\itemsep}{3pt}
-        \item \textbf{Trung vị (P50):} \textbf{\$17.03 USD} (phản ánh chuyến mua nhỏ tiện lợi).
-        \item \textbf{Trung bình (Mean):} \textbf{\$29.24 USD} (lệch phải do giỏ hàng lớn).
-        \item \textbf{Phân vị 75\% (P75):} \$38.65 USD; \textbf{Phân vị 90\% (P90):} \$71.06 USD.
-        \item \textbf{Khoảng liên phân vị (IQR):} \$30.64 USD.
+        \item \textbf{Trung vị (P50):} \textbf{\$17.18 USD} (chuyến mua nhỏ tiện lợi).
+        \item \textbf{Trung bình (Mean):} \textbf{\$29.24 USD} (lệch phải do giỏ lớn).
+        \item \textbf{Phân vị 75\% (P75):} \$36.39 USD; \textbf{P90:} \$70.79 USD.
+        \item \textbf{Khoảng liên phân vị (IQR):} \$29.40 USD; \textbf{P95:} \$101.80 USD.
       \end{itemize}
       \vspace{0.1cm}
-      \textbf{Ý nghĩa:} Phân phối lệch phải điển hình của bán lẻ; phần lớn giao dịch là giỏ hàng vừa và nhỏ.
+      \textbf{Ý nghĩa:} Phân phối lệch phải điển hình của bán lẻ; cơ sở áp dụng log-transform cho các biến chi tiêu trong mô hình hóa.
     \end{column}
   \end{columns}
 \end{frame}
@@ -371,11 +364,12 @@
       \footnotesize
       \textbf{Định lượng mức độ tập trung doanh thu:}
       \begin{itemize}\setlength{\itemsep}{3pt}
-        \item \textbf{Quy luật Pareto (80/20):} Top \textbf{20\% hộ gia đình chi tiêu nhiều nhất} (500 hộ) đóng góp \textbf{73.1\% tổng doanh thu} (\$5.89M / \$8.06M USD).
-        \item \textbf{Hệ số Gini:} Đạt \textbf{0.5028} (tính chuẩn xác theo diện tích hình thang giải tích), phản ánh mức tập trung doanh thu bán lẻ ở mức trung bình cao.
+        \item \textbf{Thực tế bán lẻ FMCG:} Top \textbf{20\% hộ chi tiêu nhiều nhất} (500 hộ) đóng góp \textbf{53.0\% tổng doanh thu} (\$4.27M / \$8.06M USD), không đạt mức 80\% lý thuyết.
+        \item \textbf{Phân tán nhu yếu phẩm:} Cần tới \textbf{44.0\% số hộ} (1,100 hộ) để đạt 80\% doanh thu; Top 50\% hộ tạo \textbf{84.3\%} doanh thu.
+        \item \textbf{Hệ số Gini:} Đạt \textbf{0.5028} (tính chuẩn xác theo diện tích hình thang giải tích).
       \end{itemize}
-      \vspace{0.1cm}
-      \textbf{Ứng dụng kinh doanh:} Căn cứ chiến lược cho CRM bán lẻ: ưu tiên chương trình khách hàng thân thiết cho nhóm 20\% khách cốt lõi.
+      \vspace{0.08cm}
+      \textbf{Ứng dụng kinh doanh:} FMCG có độ phân tán chi tiêu rộng hơn quy luật 80/20 thuần túy; CRM cần chiến lược giữ chân theo phân tầng đa lớp.
     \end{column}
   \end{columns}
 \end{frame}
