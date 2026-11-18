@@ -312,7 +312,7 @@ for t0 in cutoffs:
     SELECT 
         CASE 
             WHEN l.last_p_day IS NULL OR ({t0} - l.last_p_day) > 30 THEN '> 30 ngày / Chưa mua'
-            WHEN ({t0} - l.last_p_day) <= 3 THEN '1 - 3 ngày'
+            WHEN ({t0} - l.last_p_day) <= 3 THEN '0 - 3 ngày'
             WHEN ({t0} - l.last_p_day) <= 7 THEN '4 - 7 ngày'
             WHEN ({t0} - l.last_p_day) <= 14 THEN '8 - 14 ngày'
             ELSE '15 - 30 ngày'
@@ -327,14 +327,14 @@ for t0 in cutoffs:
     per_res.append(con.execute(q).df())
 
 df_per = pd.concat(per_res).groupby('per_tier').agg(n=('n_hh', 'mean'), p=('p_y1', 'mean')).reindex([
-    '1 - 3 ngày', '4 - 7 ngày', '8 - 14 ngày', '15 - 30 ngày', '> 30 ngày / Chưa mua'
+    '0 - 3 ngày', '4 - 7 ngày', '8 - 14 ngày', '15 - 30 ngày', '> 30 ngày / Chưa mua'
 ]).reset_index()
 
 plot_gold_standard_bar(df_per, 'per_tier', 'p', 'n',
-                       title='Khoảng cách từ lần mua đồ tươi gần nhất và xác suất mua 14 ngày tới\n(Biến: days_since_last_perishable | n = 2,500 hộ)',
+                       title='Khoảng cách từ lần mua đồ tươi gần nhất và xác suất mua 14 ngày tới\\n(Biến: days_since_last_perishable | n = 2,500 hộ)',
                        xlabel='Số ngày kể từ lần gần nhất mua thực phẩm tươi sống',
                        fig_name='05_p_y1_perishable_recency.png',
-                       delta_idx=(4, 0), delta_label='Chênh lệch (1-3 ngày vs >30 ngày)',
+                       delta_idx=(4, 0), delta_label='Chênh lệch (0-3 ngày vs >30 ngày)',
                        bar_color='#238b45')
 
 

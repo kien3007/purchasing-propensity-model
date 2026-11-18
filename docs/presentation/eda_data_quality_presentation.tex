@@ -281,7 +281,7 @@
       \footnotesize
       \textbf{Cơ chế hồi tiếp của hàng tươi sống:}
       \begin{itemize}\setlength{\itemsep}{2pt}
-        \item \textbf{Vừa mua (1--3 ngày):} Đạt xác suất mua \textbf{89.7\%} ($n = 658$ hộ), phản ánh nhóm khách hàng duy trì đi chợ đều đặn.
+        \item \textbf{Vừa mua (0--3 ngày):} Đạt xác suất mua \textbf{89.7\%} ($n = 658$ hộ), phản ánh nhóm khách hàng duy trì đi chợ đều đặn.
         \item \textbf{Ngưỡng quá hạn (>30 ngày/Chưa mua):} Xác suất rơi về \textbf{35.0\%} ($n = 712$ hộ), giảm \textbf{54.7 điểm phần trăm}.
         \item \textbf{Làm rõ bản chất thực nghiệm:} Giỏ có đồ tươi thường là giỏ mua thực phẩm định kỳ; việc hết đồ tươi kích thích chuyến mua sắm mới.
       \end{itemize}
@@ -419,7 +419,7 @@
     \toprule
     \textbf{Nhóm đặc trưng} & \textbf{Cửa sổ} & \textbf{Tên biến đại diện} & \textbf{Quan hệ $Y$} & \textbf{Ý nghĩa vật lý / Vai trò trong mô hình} \\
     \midrule
-    1. Recency & 711d & \texttt{days\_since\_last\_basket}, \texttt{urgency\_ratio} & Nghịch (-) & Đo lường khoảng cách từ lần mua cuối và độ trễ so với chu kỳ cá nhân. \\
+    1. Recency & $\le t_0$ & \texttt{days\_since\_last\_basket}, \texttt{urgency\_ratio} & Nghịch (-) & Đo lường khoảng cách từ lần mua cuối và độ trễ so với chu kỳ cá nhân. \\
     \addlinespace[1pt]
     2. Frequency & 90d & \texttt{baskets\_count\_90d}, \texttt{freq\_momentum} & Đồng (+) & Tần suất mua sắm gần và gia tốc mua (30 ngày vs 90 ngày). \\
     \addlinespace[1pt]
@@ -433,7 +433,7 @@
     \addlinespace[1pt]
     7. Coupons & 180d & \texttt{coupon\_redemptions\_180d} & Đồng (+) & Mức độ nhạy cảm khuyến mãi và lịch sử đổi phiếu giảm giá. \\
     \addlinespace[1pt]
-    8. Store Loyalty & 90d & \texttt{primary\_store\_spend\_share}, \texttt{store\_id} & Đồng (+) & Tỷ trọng chi tiêu đổ về cửa hàng chính của hộ gia đình. \\
+    8. Store Loyalty & 90d & \texttt{primary\_store\_spend\_share}, \texttt{store\_id} & Nghịch (-) & Hộ ghé nhiều siêu thị (share thấp) có độ năng động và xác suất mua cao hơn. \\
     \addlinespace[1pt]
     9. Demographics & Cố định & \texttt{household\_size}, \texttt{income}, \texttt{UNKNOWN} & Phân nhóm & Phân loại cấu trúc gia đình và nhóm không khai báo thông tin. \\
     \bottomrule
