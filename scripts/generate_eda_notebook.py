@@ -246,8 +246,7 @@ Tất cả các đặc trưng đều được đánh giá trực tiếp qua xác
     cells.append(nbf.v4.new_code_cell("""BASE_RATE = 68.34
 
 def plot_gold_standard(df_agg, col_cohort, col_p, col_n, title, xlabel, fig_name,
-                        delta_idx=(0, -1), delta_label="Chênh lệch", bar_color='#2b5c8f',
-                        ylim=(0, 115)):
+                        bar_color='#2b5c8f', ylim=(0, 112), **kwargs):
     fig, ax = plt.subplots(figsize=(8.5, 4.8))
     x = np.arange(len(df_agg))
     bars = ax.bar(x, df_agg[col_p], width=0.55, color=bar_color, edgecolor='none', alpha=0.88)
@@ -264,24 +263,16 @@ def plot_gold_standard(df_agg, col_cohort, col_p, col_n, title, xlabel, fig_name
                 f"{h:.1f}%\\n(n={n:,})",
                 ha='center', va='bottom', fontsize=9.5, fontweight='bold', color='#1a1a1a')
 
-    # Tính độ chênh lệch theo điểm phần trăm
-    p_start = df_agg[col_p].iloc[delta_idx[0]]
-    p_end = df_agg[col_p].iloc[delta_idx[1]]
-    diff = p_end - p_start
-    sign = "+" if diff > 0 else ""
-
-    x_mid = (delta_idx[0] + delta_idx[1]) / 2.0
-    y_badge = max(df_agg[col_p].max() + 10, 102)
-    ax.text(x_mid, y_badge, f"{delta_label}: {sign}{diff:.1f} điểm phần trăm",
-            ha='center', va='center', fontsize=10, fontweight='bold', color='#b2182b',
-            bbox=dict(boxstyle='round,pad=0.4', facecolor='#fee8c8', edgecolor='#e08214', lw=1.2))
+    # Bỏ phần trong ngoặc của tên biểu đồ
+    clean_title = title.split('\\n(')[0].split(' (')[0].strip()
 
     ax.set_xticks(x, df_agg[col_cohort], fontweight='medium', fontsize=10)
     ax.set_ylim(ylim[0], ylim[1])
-    ax.set_title(title, pad=14, fontsize=12.5)
+    ax.set_title(clean_title, pad=14, fontsize=12.5)
     ax.set_xlabel(xlabel, labelpad=8)
     ax.set_ylabel("Xác suất mua hàng P(Y=1) (%)", labelpad=8)
-    ax.legend(frameon=True, facecolor='white', loc='upper right', fontsize=9.5)
+    leg_loc = 'upper right' if df_agg[col_p].iloc[0] > df_agg[col_p].iloc[-1] else 'upper left'
+    ax.legend(frameon=True, facecolor='white', loc=leg_loc, fontsize=9.5)
     plt.tight_layout()
     plt.savefig(FIG_DIR / fig_name, dpi=150)
     plt.show()

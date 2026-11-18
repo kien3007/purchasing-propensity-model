@@ -56,10 +56,9 @@ cutoffs = [250, 350, 450, 550, 650]
 BASE_RATE = 68.34
 
 def plot_gold_standard_bar(df_agg, col_cohort, col_p, col_n, title, xlabel, fig_name,
-                           delta_idx=(0, -1), delta_label="Chênh lệch", bar_color='#2b5c8f',
-                           ylim=(0, 115), is_horizontal=False):
-    """Draws a standardized P(Y=1) bar chart with n, base rate, and percentage point delta."""
-    fig, ax = plt.subplots(figsize=(9.5, 5.2), constrained_layout=True)
+                           bar_color='#2b5c8f', ylim=(0, 112), is_horizontal=False, **kwargs):
+    """Draws a standardized P(Y=1) bar chart with cohort size n and base rate line."""
+    fig, ax = plt.subplots(figsize=(9.5, 5.0), constrained_layout=True)
     x = np.arange(len(df_agg))
     width = 0.52
 
@@ -75,28 +74,17 @@ def plot_gold_standard_bar(df_agg, col_cohort, col_p, col_n, title, xlabel, fig_
                     xytext=(0, 5), textcoords="offset points",
                     ha='center', va='bottom', fontsize=10.5, fontweight='bold', color='#1b3c5f')
 
-    # Delta annotation
-    i_start, i_end = delta_idx
-    p_start = df_agg.loc[i_start, col_p]
-    p_end = df_agg.loc[i_end, col_p]
-    delta_pts = p_end - p_start
-    sign = '+' if delta_pts >= 0 else ''
-    
-    # Annotate delta box
-    mid_x = (i_start + i_end) / 2.0
-    ax.annotate(f'{delta_label}: {sign}{delta_pts:.1f} điểm phần trăm',
-                xy=(i_end, p_end), xytext=(mid_x, min(max(p_end + 12, 45), 102)),
-                arrowprops=dict(arrowstyle="->", color="#b2182b", lw=1.8, connectionstyle="arc3,rad=-0.15"),
-                fontsize=10.5, fontweight='bold', color='#b2182b',
-                bbox=dict(boxstyle="round,pad=0.35", facecolor="#fee8c8", edgecolor="#b2182b", lw=1.2))
+    # Bỏ phần trong ngoặc của tên biểu đồ
+    clean_title = title.split('\n(')[0].split(' (')[0].strip()
 
     ax.set_ylabel('Xác suất mua hàng trong 14 ngày: P(Y=1) (%)', fontsize=11, fontweight='bold')
     ax.set_xlabel(xlabel, fontsize=11, fontweight='bold', labelpad=8)
     ax.set_xticks(x)
     ax.set_xticklabels([str(t).replace(' (', '\n(') for t in df_agg[col_cohort]], fontsize=10.5, fontweight='bold')
     ax.set_ylim(ylim)
-    ax.set_title(title, fontsize=12.5, fontweight='bold', pad=12)
-    ax.legend(loc='upper left', frameon=True, facecolor='white', framealpha=0.9, fontsize=10.5)
+    ax.set_title(clean_title, fontsize=13, fontweight='bold', pad=12)
+    leg_loc = 'upper right' if df_agg[col_p].iloc[0] > df_agg[col_p].iloc[-1] else 'upper left'
+    ax.legend(loc=leg_loc, frameon=True, facecolor='white', framealpha=0.9, fontsize=10.5)
 
     plt.savefig(FIG_DIR / fig_name, dpi=150)
     plt.close()
@@ -552,7 +540,7 @@ ax.annotate(f'Top 50% hộ tạo {top50_spend_pct:.1f}% doanh thu\n(50% hộ cò
 
 ax.set_xlabel('Tỷ lệ tích lũy hộ gia đình (Sắp xếp từ chi tiêu cao nhất đến thấp nhất) (%)', fontweight='bold')
 ax.set_ylabel('Tỷ lệ tích lũy doanh thu thực tế (%)', fontweight='bold')
-ax.set_title(f'Mức độ tập trung doanh thu theo hộ gia đình (Tổng 2 năm: ${total_spend:,.2f} | n = 2,500 hộ)\n(Cần 44.0% số hộ để đạt 80% doanh thu - Mức tập trung thấp hơn quy tắc 80/20)', pad=12)
+ax.set_title('Mức độ tập trung doanh thu theo hộ gia đình', pad=12, fontsize=12.5, fontweight='bold')
 ax.set_xlim(0, 100)
 ax.set_ylim(0, 100)
 ax.legend(loc='lower right', frameon=True, facecolor='white', framealpha=0.9)
@@ -634,7 +622,7 @@ ax.set_xlabel('Tỷ trọng đóng góp (%)', fontweight='bold', fontsize=11)
 ax.set_yticks(y)
 ax.set_yticklabels(categories, fontweight='bold', fontsize=11)
 ax.set_xlim(0, 100)
-ax.set_title('Tỷ trọng đóng góp của nhãn hàng riêng vs thương hiệu quốc gia\n(Chỉ số doanh thu/SKU của Private Label đạt 1.86x, cao gấp 2.18 lần so với National Brand 0.85x)', fontsize=12, fontweight='bold', pad=12)
+ax.set_title('Tỷ trọng đóng góp của nhãn hàng riêng vs thương hiệu quốc gia', fontsize=12, fontweight='bold', pad=12)
 # Put legend outside top right to avoid covering the 85.0% bar label
 ax.legend(bbox_to_anchor=(0.5, 1.15), loc='upper center', ncol=2, frameon=True, facecolor='white', fontsize=10)
 
@@ -665,7 +653,7 @@ bars1 = ax1.bar(days_labels, days_pcts, color='#3182bd', edgecolor='black', widt
 ax1.axhline(100.0/7, color='gray', linestyle='--', label=f'Phân bổ đều ({100/7:.1f}%)')
 ax1.set_ylabel('Tỷ lệ giỏ hàng (%)', fontweight='bold')
 ax1.set_xlabel('Chỉ số chu kỳ ngày (DAY mod 7)', fontweight='bold')
-ax1.set_title('Phân phối giỏ hàng theo chu kỳ 7 ngày\n(Đỉnh rơi vào Ngày 4 và Ngày 5: ~16% mỗi ngày)', fontweight='bold', fontsize=11.5)
+ax1.set_title('Phân phối giỏ hàng theo chu kỳ 7 ngày', fontweight='bold', fontsize=11.5)
 ax1.set_ylim(0, 22)
 ax1.legend(loc='upper left', frameon=True, facecolor='white')
 
@@ -680,7 +668,7 @@ colors_h = ['#fdae6b' if 11 <= h <= 18 else '#9ecae1' for h in h_x]
 bars2 = ax2.bar(h_x, h_y, color=colors_h, edgecolor='black', width=0.7)
 ax2.set_xlabel('Khung giờ trong ngày (0h - 23h)', fontweight='bold')
 ax2.set_ylabel('Tỷ lệ giỏ hàng (%)', fontweight='bold')
-ax2.set_title(f'Phân phối giỏ hàng theo khung giờ\n(Khung 11h - 18h chiếm {hours_11_18/len(baskets)*100:.1f}% tổng số giỏ)', fontweight='bold', fontsize=11.5)
+ax2.set_title('Phân phối giỏ hàng theo khung giờ', fontweight='bold', fontsize=11.5)
 ax2.set_xticks(range(0, 24, 2))
 ax2.set_ylim(0, 13)
 
