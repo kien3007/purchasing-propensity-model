@@ -92,8 +92,8 @@
         Lọc 942 giỏ dị biệt, khử trùng 5,164 dòng coupon, xử lý khuyết thiếu nhân khẩu, bảo toàn 100\% tập mẫu.
       \end{alertblock}
       \vspace{0.2cm}
-      \begin{exampleblock}{Mục Tiêu Khám Phá Hành Vi}
-        Chiết xuất \textbf{10 quy luật thực nghiệm cốt lõi} nhằm xác định cửa sổ dự báo tối ưu ($\Delta t$) và thiết kế hệ thống đặc trưng chống rò rỉ dữ liệu.
+      \begin{exampleblock}{Mục Tiêu Khám Phá Nghiệp Vụ \& Hành Vi}
+        Chiết xuất \textbf{15 phát hiện thực nghiệm cốt lõi} (10 quy luật hành vi ML + 5 góc nhìn chiến lược bán lẻ \& CRM) nhằm xác định cửa sổ dự báo tối ưu ($\Delta t$) và định hình chiến lược tăng trưởng doanh thu.
       \end{exampleblock}
     \end{column}
   \end{columns}
@@ -384,47 +384,150 @@
 \end{frame}
 
 % ==============================================================================
-% SLIDE 13: MA TRẬN ÁNH XẠ EDA SANG HỆ THỐNG ĐẶC TRƯNG HỌC MÁY
+% SLIDE 14: CÂU CHUYỆN 13 - PHÂN HÓA CLV & PARETO
 % ==============================================================================
-\begin{frame}{13. Chuyển Hóa Phát Hiện EDA Sang Hệ Thống Đặc Trưng ML}
-  \centering
-  \scriptsize
-  \renewcommand{\arraystretch}{1.08}
-  \begin{tabularx}{\textwidth}{p{3.8cm}Y>{\raggedright\arraybackslash}p{4.2cm}}
-    \toprule
-    \textbf{Nhóm Hành Vi Tiêu Dùng} & \textbf{Quy Luật Thực Nghiệm Từ 2.6M Giao Dịch} & \textbf{Đặc Trưng Mô Hình Hóa Đại Diện} \\
-    \midrule
-    \textbf{1. Nhịp sinh học \& Đồ tươi} & 82\% mua lại trong 7 ngày (P50 = 2 ngày); cạn đồ tươi kích thích đi chợ & \texttt{days\_since\_last\_basket}, \texttt{urgency\_ratio}, \texttt{days\_since\_perishable} \\
-    \addlinespace
-    \textbf{2. Sức mua \& Độ rộng giỏ} & Phân phối AOV \$29.24; độ phủ $\ge 12$ ngành neo giữ 96.5\% xác suất mua & \texttt{spend\_30d/90d}, \texttt{aov\_90d}, \texttt{department\_breadth\_90d} \\
-    \addlinespace
-    \textbf{3. Tần suất \& Động lượng} & Phân hóa nhịp giao dịch; trôi dạt chu kỳ báo hiệu nguy cơ đóng băng & \texttt{frequency\_momentum\_30\_vs\_90}, \texttt{baskets\_count\_14d/30d} \\
-    \addlinespace
-    \textbf{4. Nhân khẩu \& Quy mô hộ} & Gia đình đông con chi tiêu cao hơn +39.4\%; gán UNKNOWN cho 68\% hộ & \texttt{household\_size\_desc}, \texttt{kid\_category\_desc}, \texttt{income\_desc} \\
-    \addlinespace
-    \textbf{5. Hiệu ứng mồi câu \& Phễu tiếp thị} & Dùng coupon chi tiêu gấp 2.53 lần (\$67.60); Chiến dịch Loại A chuyển đổi 45\% & \texttt{coupon\_redempt\_count\_180d}, \texttt{is\_targeted\_by\_active\_campaign} \\
-    \addlinespace
-    \textbf{6. Địa bàn \& Trung thành} & 66.4\% đi đa shop (73.4\% tiền ở shop ruột); phân hóa cửa hàng cốt lõi & \texttt{store\_loyalty\_index}, \texttt{primary\_store\_id} \\
-    \bottomrule
-  \end{tabularx}
-  \vspace{0.15cm}
-  \begin{alertblock}{Kỷ Luật Thời Gian (Chống Rò Rỉ Dữ Liệu)}
-    \centering \footnotesize
-    100\% đặc trưng được tính toán tại ranh giới $DAY \le t_0$, triệt tiêu hoàn toàn rủi ro rò rỉ dữ liệu tương lai.
-  \end{alertblock}
+\begin{frame}{13. Phân Hóa Giá Trị Trọn Đời (CLV) \& Kiểm Định Pareto 80/20}
+  \begin{columns}[c]
+    \begin{column}{0.60\textwidth}
+      \centering
+      \includegraphics[width=\linewidth,height=0.65\textheight,keepaspectratio]{../reports/figures/19_clv_pareto_distribution.png}
+    \end{column}
+    \begin{column}{0.38\textwidth}
+      \small
+      \textbf{Kiểm Định Tập Trung Doanh Số:}
+      \begin{itemize}\setlength{\itemsep}{2pt}
+        \item \textbf{Độ dốc Lorenz:} Top 10\% hộ gánh 34.3\% doanh thu (\$2.76M); Top 20\% gánh 53.0\% (\$4.27M).
+        \item \textbf{Bác bỏ Pareto 80/20 cực đoan:} Cần 44\% hộ để đạt 80\% doanh số; tiêu dùng thực phẩm thiết yếu phân bổ đều hơn hàng xa xỉ.
+      \end{itemize}
+      \vspace{0.08cm}
+      \begin{alertblock}{Ứng Dụng CRM \& Handoff ML}
+        \footnotesize
+        Thiết lập phân khúc VIP bảo vệ dòng tiền; đặc trưng ML sử dụng \texttt{spend\_180d} quá khứ làm proxy an toàn, triệt tiêu rò rỉ CLV tương lai.
+      \end{alertblock}
+    \end{column}
+  \end{columns}
 \end{frame}
 
 % ==============================================================================
-% SLIDE 14: TỔNG KẾT GIAI ĐOẠN EDA
+% SLIDE 15: CÂU CHUYỆN 14 - CẤU TRÚC CHIẾT KHẤU 2 TẦNG
 % ==============================================================================
-\begin{frame}{14. Tổng Kết Giá Trị Nền Tảng Của Giai Đoạn EDA}
+\begin{frame}{14. Cấu Trúc Khuyến Mãi 2 Tầng: Niêm Yết vs Phiếu Giảm Giá}
+  \begin{columns}[c]
+    \begin{column}{0.60\textwidth}
+      \centering
+      \includegraphics[width=\linewidth,height=0.65\textheight,keepaspectratio]{../reports/figures/20_markdown_vs_coupon_spend.png}
+    \end{column}
+    \begin{column}{0.38\textwidth}
+      \small
+      \textbf{Bóc Tách Dòng Tiền Chiết Khấu:}
+      \begin{itemize}\setlength{\itemsep}{2pt}
+        \item \textbf{Đòn bẩy 32.8 lần:} Giảm giá tại quầy (\texttt{RETAIL\_DISC} \$1.40M) lớn gấp 32.8 lần coupon (\texttt{COUPON\_DISC} \$42.6k).
+        \item \textbf{Độ phủ bất cân xứng:} Giảm giá quầy xuất hiện ở 48.7\% giỏ hàng; trong khi coupon chỉ bao phủ 6.2\% giỏ săn deal.
+      \end{itemize}
+      \vspace{0.08cm}
+      \begin{exampleblock}{Chiến Lược Biên Lợi Nhuận}
+        \footnotesize
+        Siêu thị chủ động hy sinh biên lợi nhuận đại trà trên kệ; coupon chỉ là công cụ nhắm trúng đích cho nhóm khách hàng chuyên biệt.
+      \end{exampleblock}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ==============================================================================
+% SLIDE 16: CÂU CHUYỆN 15 - SỨC THÂM NHẬP NHÃN HÀNG RIÊNG
+% ==============================================================================
+\begin{frame}{15. Sức Thâm Nhập Vượt Trội Của Nhãn Hàng Riêng Siêu Thị}
+  \begin{columns}[c]
+    \begin{column}{0.60\textwidth}
+      \centering
+      \includegraphics[width=\linewidth,height=0.65\textheight,keepaspectratio]{../reports/figures/21_private_label_penetration.png}
+    \end{column}
+    \begin{column}{0.38\textwidth}
+      \small
+      \textbf{Hiệu Quả Mặt Hàng (Private Label):}
+      \begin{itemize}\setlength{\itemsep}{2pt}
+        \item \textbf{Hiệu suất sinh lời 1.86x:} Chỉ chiếm 15.0\% danh mục SKU nhưng tạo ra 27.8\% doanh thu và 28.8\% sản lượng tiêu thụ.
+        \item \textbf{Vượt trội thương hiệu quốc gia:} Hiệu suất trên mỗi SKU cao gấp 2.18 lần so với National Brand (0.85x).
+      \end{itemize}
+      \vspace{0.08cm}
+      \begin{alertblock}{Chiến Lược Danh Mục Mặt Hàng}
+        \footnotesize
+        Nhãn riêng là lựa chọn ``chất lượng tốt - giá hợp lý'' của người tiêu dùng; vũ khí chiến lược giữ chân khách và tối ưu biên lãi gộp.
+      \end{alertblock}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ==============================================================================
+% SLIDE 17: CÂU CHUYỆN 16 - NHỊP ĐIỆU THỜI GIAN VI MÔ
+% ==============================================================================
+\begin{frame}{16. Nhịp Điệu Thời Gian Vi Mô: Ngày Trong Tuần \& Khung Giờ Vàng}
+  \begin{columns}[c]
+    \begin{column}{0.60\textwidth}
+      \centering
+      \includegraphics[width=0.48\linewidth,height=0.62\textheight,keepaspectratio]{../reports/figures/03_day_of_week_distribution.png}
+      \hfill
+      \includegraphics[width=0.48\linewidth,height=0.62\textheight,keepaspectratio]{../reports/figures/04_hourly_shopping_rhythm.png}
+    \end{column}
+    \begin{column}{0.38\textwidth}
+      \small
+      \textbf{Quy Luật Nhịp Điệu Mua Sắm:}
+      \begin{itemize}\setlength{\itemsep}{2pt}
+        \item \textbf{Cuối tuần tập trung (+32\%):} Thứ Bảy và Chủ Nhật chiếm gần 1/3 tổng lượng giao dịch cả tuần.
+        \item \textbf{Khung giờ vàng (11h--18h):} Chiếm 65\% lưu lượng trong ngày; đạt đỉnh 14h--17h khi các hộ gia đình chuẩn bị bữa tối.
+      \end{itemize}
+      \vspace{0.08cm}
+      \begin{exampleblock}{Vận Hành \& Lịch Trình Tiếp Thị}
+        \footnotesize
+        Điều phối ca trực quầy thu ngân \& nhân viên đồ tươi vào giờ cao điểm; cài đặt trigger notification CRM tự động sáng thứ Sáu.
+      \end{exampleblock}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ==============================================================================
+% SLIDE 18: MA TRẬN ÁNH XẠ EDA SANG HỆ THỐNG ĐẶC TRƯNG HỌC MÁY & VẬN HÀNH
+% ==============================================================================
+\begin{frame}{17. Chuyển Hóa Phát Hiện EDA Sang Đặc Trưng ML \& Vận Hành CRM}
+  \centering
+  \fontsize{7pt}{8.2pt}\selectfont
+  \renewcommand{\arraystretch}{0.88}
+  \begin{tabularx}{\textwidth}{p{3.2cm}Y>{\raggedright\arraybackslash}p{4.6cm}}
+    \toprule
+    \textbf{Trụ Cột Phát Hiện} & \textbf{Căn Cứ Định Lượng (2.6M Giao Dịch)} & \textbf{Ứng Dụng Chuyển Giao: ML vs Vận Hành} \\
+    \midrule
+    \textbf{1. Nhịp mua \& Đồ tươi} & 92.4\% mua lại trong $\le 14$ ngày; đồ tươi kéo chu kỳ ngắn hơn 1.8 ngày & \textbf{Đặc trưng ML:} \texttt{days\_since\_last\_basket}, \texttt{urgency\_ratio}, \texttt{days\_since\_perishable} \\
+    \addlinespace[1pt]
+    \textbf{2. Giỏ hàng \& Mỏ neo đa ngành} & AOV P50 = \$18.1, P90 = \$63.4; mua $\ge 12$ ngành đạt 96.5\% (+64.7\%) & \textbf{Đặc trưng ML:} \texttt{spend\_30d/90d}, \texttt{aov\_90d}, \texttt{department\_breadth\_90d} \\
+    \addlinespace[1pt]
+    \textbf{3. Tiếp thị \& Lòng trung thành} & Dùng coupon chi tiêu gấp 2.5x; 73.4\% tiền ở shop ruột; Loại A đổi 45\% & \textbf{Đặc trưng ML:} \texttt{coupon\_redempt\_count\_180d}, \texttt{store\_loyalty\_index}, \texttt{is\_targeted\_campaign} \\
+    \addlinespace[1pt]
+    \textbf{4. Nhân khẩu \& Quy mô hộ} & Nhà đông con chi tiêu cao hơn +39.4\%; gán UNKNOWN cho 68\% hộ & \textbf{Đặc trưng ML:} \texttt{household\_size}, \texttt{kid\_category}, \texttt{income\_group} \\
+    \addlinespace[1pt]
+    \textbf{5. Phân hóa CLV \& Pareto} & Top 20\% hộ gánh 53\% tiền (Gini = 0.50); cần 44\% hộ cho 80\% tiền & \textbf{CRM VIP:} Ưu đãi giữ chân khách VIP; \textbf{ML:} Dùng \texttt{spend\_180d} chống rò rỉ \\
+    \addlinespace[1pt]
+    \textbf{6. Chiết khấu \& Coupon} & Markdown kệ gấp 32.8x coupon (\$1.4M vs \$42.6k); phủ 48.7\% giỏ & \textbf{Chiến Lược Giá:} Tối ưu chiết khấu niêm yết bảo toàn biên lợi nhuận ròng \\
+    \addlinespace[1pt]
+    \textbf{7. Nhãn riêng \& Khung giờ vàng} & Private Label tạo 27.8\% tiền (1.86x); 65\% giao dịch rơi vào 11h--18h & \textbf{Vận Hành:} Mở rộng SKU nhãn riêng; điều phối ca trực \& tin nhắn T6 \\
+    \bottomrule
+  \end{tabularx}
+  \vspace{0.06cm}
+  \centering
+  \footnotesize
+  \textcolor{accentOrange}{\textbf{Kỷ Luật Thời Gian:}} 100\% đặc trưng ML tính tại $DAY \le t_0$, triệt tiêu rò rỉ dữ liệu song hành cùng khuyến nghị vận hành thực chiến.
+\end{frame}
+
+% ==============================================================================
+% SLIDE 19: TỔNG KẾT GIAI ĐOẠN EDA
+% ==============================================================================
+\begin{frame}{18. Tổng Kết Giá Trị Nền Tảng Của Giai Đoạn EDA}
   \begin{columns}[T]
     \begin{column}{0.48\textwidth}
       \textbf{4 Đóng Góp Nền Tảng Cho Dự Án:}
       \begin{enumerate}\setlength{\itemsep}{4pt}
         \item \textbf{Khung Dự Báo Khoa Học:} Dựa trên 92.4\% chu kỳ hồi tiếp thực nghiệm, xác lập cửa sổ dự báo tối ưu $\Delta t = 14$ ngày.
         \item \textbf{Chuẩn Hóa Dữ Liệu Sạch:} Loại 942 giỏ hủy/tặng 0đ, khử trùng 5,164 bản ghi coupon, bảo toàn trọn vẹn 100\% tập 2,500 hộ.
-        \item \textbf{Cơ Sở Thiết Kế Đặc Trưng:} Chuyển hóa \textbf{10 phát hiện định lượng cốt lõi} thành hệ thống biến phái sinh phản ánh trọn vẹn hành vi.
+        \item \textbf{Cơ Sở Thiết Kế Đặc Trưng:} Chuyển hóa \textbf{15 phát hiện định lượng cốt lõi} thành 28 đặc trưng ML chất lượng cao cùng chiến lược vận hành.
         \item \textbf{Kiểm Định Vững Chắc:} Xác nhận tỷ lệ mục tiêu ổn định ở mức 68.25\%, không có hiện tượng trôi dạt dữ liệu theo thời gian.
       \end{enumerate}
     \end{column}

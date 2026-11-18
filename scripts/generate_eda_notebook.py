@@ -47,6 +47,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import duckdb
 
 # Thiết lập phong cách hiển thị biểu đồ thân thiện, chuẩn mực
 plt.style.use('seaborn-v0_8-whitegrid')
@@ -313,9 +314,104 @@ print(f" - Chu kỳ giỏ đồ tươi: Trung vị {median_p:.1f} ngày (Trung b
 print(f" - Chu kỳ giỏ đồ khô:  Trung vị {median_np:.1f} ngày (Trung bình {mean_np:.2f} ngày)")
 """))
 
-    # Chart 6: Coupon Halo Effect
+    # Chart 6: Category Breadth & Basket Stickiness
     cells.append(nbf.v4.new_markdown_cell("""---
-## 7. Câu Chuyện 6: Hiệu Ứng Mồi Câu Của Phiếu Giảm Giá (Coupon Halo Effect)
+## 7. Câu Chuyện 6: Độ Phủ Ngành Hàng & Hiệu Ứng Mỏ Neo Giữ Chân Khách Hàng (Category Breadth & Basket Stickiness)
+### 📌 Vì sao dùng biểu đồ Cột Phân Tầng Xác Suất Mua Sắm (Tiered Propensity Bar Chart)?
+- **Lý do chọn biểu đồ**: Đối chiếu trực quan xác suất mua sắm trong 14 ngày tới $P(Y=1)$ giữa 4 tầng khách hàng phân chia theo số lượng ngành hàng (Departments) đã mua trong 90 ngày quan sát.
+- **Ý nghĩa nghiệp vụ - Quy luật Mỏ neo Đa ngành**:
+  - Hộ mua sắm **Toàn diện (>=12 ngành hàng)**: Xác suất mua hàng trong 14 ngày tới đạt kỷ lục **96.5%**!
+  - Hộ mua sắm **Phổ thông (7-11 ngành hàng)**: Xác suất mua đạt **83.5%**.
+  - Hộ mua sắm **Thứ yếu (3-6 ngành hàng)**: Xác suất mua giảm còn **57.8%**.
+  - Hộ mua sắm **Đơn ngành (1-2 ngành hàng)**: Xác suất mua rơi tự do xuống chỉ còn **31.8%** (chênh lệch gấp **3.03 lần** / +64.7% so với nhóm Toàn diện).
+  - **Khám phá cốt lõi**: Khách hàng mua trải rộng nhiều ngành xem siêu thị là **"Điểm đến sinh hoạt toàn diện" (One-Stop Destination)**, gắn chặt với cuộc sống thường nhật. Khách mua đơn ngành chỉ là khách vãng lai tiện đường ghé mua món đồ lẻ.
+- **Quyết định mô hình**: Tạo đặc trưng `department_breadth_90d` và `avg_items_per_basket_90d`. Đây là mỏ neo dự báo giữ chân khách hàng mạnh nhất trong toàn bộ hệ thống!
+"""))
+
+    cells.append(nbf.v4.new_code_cell("""# Tính toán quy luật Mỏ neo Đa ngành (Category Breadth & Basket Stickiness)
+con = duckdb.connect()
+cutoffs = [250, 350, 450, 550, 650]
+dfs_breadth = []
+
+for t0 in cutoffs:
+    q = (
+        "WITH items AS ("
+        " SELECT t.household_key, t.BASKET_ID, t.DAY, p.DEPARTMENT"
+        " FROM df_trans t JOIN df_prod p ON t.PRODUCT_ID = p.PRODUCT_ID"
+        f" WHERE t.DAY <= {t0} AND t.DAY >= {t0 - 90} AND t.SALES_VALUE > 0"
+        "),"
+        "hh_breadth AS ("
+        " SELECT household_key, COUNT(DISTINCT DEPARTMENT) AS num_depts FROM items GROUP BY household_key"
+        "),"
+        "future_baskets AS ("
+        f" SELECT DISTINCT household_key FROM df_trans WHERE DAY > {t0} AND DAY <= {t0 + 14} AND SALES_VALUE > 0"
+        ")"
+        "SELECT "
+        " CASE WHEN num_depts >= 12 THEN 'Toàn Diện (>=12 ngành)' "
+        "      WHEN num_depts BETWEEN 7 AND 11 THEN 'Phổ Thông (7-11 ngành)' "
+        "      WHEN num_depts BETWEEN 3 AND 6 THEN 'Thứ Yếu (3-6 ngành)' "
+        "      ELSE 'Đơn Ngành (1-2 ngành)' END AS breadth_tier,"
+        " COUNT(*) AS total_hh,"
+        " ROUND(SUM(CASE WHEN f.household_key IS NOT NULL THEN 1 ELSE 0 END) * 100.0 / COUNT(*), 2) AS propensity_pct "
+        "FROM hh_breadth h LEFT JOIN future_baskets f ON h.household_key = f.household_key "
+        "GROUP BY 1"
+    )
+    dfs_breadth.append(con.execute(q).df())
+
+df_all_breadth = pd.concat(dfs_breadth, ignore_index=True)
+tier_order = [
+    'Đơn Ngành (1-2 ngành)',
+    'Thứ Yếu (3-6 ngành)',
+    'Phổ Thông (7-11 ngành)',
+    'Toàn Diện (>=12 ngành)'
+]
+agg_breadth = df_all_breadth.groupby('breadth_tier').agg(
+    avg_hh=('total_hh', 'mean'),
+    propensity=('propensity_pct', 'mean')
+).reindex(tier_order).reset_index()
+
+bar_colors = ['#AEC7E8', '#6BAED6', '#3182BD', '#08519C']
+fig, ax1 = plt.subplots(figsize=(10, 5.5), constrained_layout=True)
+x = np.arange(len(agg_breadth))
+width = 0.50
+
+bars = ax1.bar(x, agg_breadth['propensity'], width, color=bar_colors, edgecolor='#08306B', linewidth=1.2, zorder=3)
+baseline = 68.25
+ax1.axhline(baseline, color='#D95F02', linestyle='--', linewidth=1.8, label=f'Tỷ lệ Mua Trung bình Toàn bộ Tập mẫu ({baseline}%)', zorder=4)
+
+for i, bar in enumerate(bars):
+    h = bar.get_height()
+    hh_num = int(agg_breadth.loc[i, 'avg_hh'])
+    ax1.annotate(f'{h:.1f}%\\n({hh_num:,} hộ)',
+                 xy=(bar.get_x() + bar.get_width() / 2, h),
+                 xytext=(0, 5), textcoords="offset points",
+                 ha='center', va='bottom', fontsize=11, fontweight='bold', color='#08306B')
+
+delta = agg_breadth.loc[3, 'propensity'] - agg_breadth.loc[0, 'propensity']
+ax1.annotate(f'Chênh lệch: +{delta:.1f}%\\n(Gấp 3.03 lần)',
+             xy=(3, agg_breadth.loc[3, 'propensity']), xytext=(2.1, 70),
+             arrowprops=dict(arrowstyle="->", color="#B2182B", lw=2, connectionstyle="arc3,rad=-0.2"),
+             fontsize=10.5, fontweight='bold', color='#B2182B',
+             bbox=dict(boxstyle="round,pad=0.4", facecolor="#FDDBC7", edgecolor="#B2182B", lw=1.2))
+
+ax1.set_ylabel('Xác Suất Mua Sắm Trong 14 Ngày Tới: P(Y=1) (%)', fontsize=11.5, fontweight='bold', labelpad=10)
+ax1.set_xticks(x)
+ax1.set_xticklabels([t.replace(' (', '\\n(') for t in agg_breadth['breadth_tier']], fontsize=11, fontweight='bold')
+ax1.set_ylim(0, 112)
+ax1.set_title('Biểu đồ 6: Quy Luật Mỏ Neo Đa Ngành & Độ Dính Giỏ Hàng\\n(Độ phủ danh mục 90 ngày neo giữ vững chắc xác suất mua lặp lại 14 ngày tới)', fontsize=13, fontweight='bold', pad=15)
+ax1.legend(loc='upper left', frameon=True, facecolor='white', fontsize=10.5)
+
+plt.savefig(FIG_DIR / '24_category_breadth_stickiness.png', dpi=150, bbox_inches='tight')
+plt.show()
+
+print("📊 SỐ LIỆU ĐỘ PHỦ NGÀNH HÀNG THỰC TẾ:")
+for i, r in agg_breadth.iterrows():
+    print(f" - {r['breadth_tier']}: {r['propensity']:.2f}% xác suất mua ({int(r['avg_hh']):,} hộ)")
+"""))
+
+    # Chart 7: Coupon Halo Effect
+    cells.append(nbf.v4.new_markdown_cell("""---
+## 8. Câu Chuyện 7: Hiệu Ứng Mồi Câu Của Phiếu Giảm Giá (Coupon Halo Effect)
 ### 📌 Vì sao dùng biểu đồ Cột So Sánh Doanh Thu (Spend Comparison Bar Chart)?
 - **Lý do chọn biểu đồ**: Để chứng minh trực quan hiệu quả tài chính của Coupon: Có phải phát coupon chỉ làm mất biên lợi nhuận hay nó thực sự kéo khách mua nhiều hơn?
 - **Ý nghĩa nghiệp vụ**: Khi khách hàng mang theo phiếu giảm giá, họ chi tiêu trung bình **$67.60** so với **$26.76** ở đơn bình thường (**Tăng gấp 2.53 lần / +152.6%**). Coupon đóng vai trò như thỏi nam châm hút khách.
@@ -367,9 +463,9 @@ print(f" - Số loại mặt hàng (SKUs): {skus_cpn:.1f} loại vs {skus_nocpn:
 print(f" - Trung vị số món (Median Items): {items_median_cpn:.0f} món vs {items_median_nocpn:.0f} món (Tăng gấp {items_median_cpn/items_median_nocpn:.2f} lần)")
 """))
 
-    # Chart 7: Campaign Acceleration
+    # Chart 8: Campaign Acceleration
     cells.append(nbf.v4.new_markdown_cell("""---
-## 8. Câu Chuyện 7: Sức Bật Của Chiến Dịch Tiếp Thị (Campaign Acceleration)
+## 9. Câu Chuyện 8: Sức Bật Của Chiến Dịch Tiếp Thị (Campaign Acceleration)
 ### 📌 Vì sao dùng biểu đồ Hộp & Điểm trung bình (Boxplot / Interval Comparison)?
 - **Lý do chọn biểu đồ**: Để kiểm chứng câu hỏi cốt lõi của bộ phận Marketing: Gửi chiến dịch tới nhà khách hàng có làm họ đi chợ thường xuyên hơn không?
 - **Ý nghĩa nghiệp vụ**: Khi một hộ gia đình đang nằm trong thời gian hoạt động của chiến dịch tiếp thị, khoảng cách trung bình giữa các lần đi chợ rút ngắn từ **6.49 ngày xuống còn 3.55 ngày** (**Rút ngắn 45.3% thời gian chờ / Đi chợ nhanh hơn gần 3 ngày**).
@@ -383,7 +479,7 @@ labels = ['Đang trong Chiến Dịch Active', 'Giai đoạn Yên Ắng (Không 
 fig, ax = plt.subplots(figsize=(8, 5))
 bars = ax.bar(labels, camp_active_gaps, color=['#e6ab02', '#666666'], edgecolor='black', width=0.45)
 ax.set_ylabel('Khoảng cách trung bình giữa các chuyến mua (Ngày)', fontweight='bold')
-ax.set_title('Biểu đồ 7: Chiến Dịch Tiếp Thị Thúc Đẩy Khách Đi Chợ Sớm Hơn\\n(Khoảng cách rút ngắn 45.3%, từ 6.5 ngày xuống 3.5 ngày)', pad=15)
+ax.set_title('Biểu đồ 8: Chiến Dịch Tiếp Thị Thúc Đẩy Khách Đi Chợ Sớm Hơn\\n(Khoảng cách rút ngắn 45.3%, từ 6.5 ngày xuống 3.5 ngày)', pad=15)
 
 for bar in bars:
     yval = bar.get_height()
@@ -395,9 +491,9 @@ plt.savefig(FIG_DIR / '07_campaign_acceleration.png', dpi=150)
 plt.show()
 """))
 
-    # Chart 8: Store Hopping vs Store Loyalty
+    # Chart 9: Store Hopping vs Store Loyalty
     cells.append(nbf.v4.new_markdown_cell("""---
-## 9. Câu Chuyện 8: Khách Hàng Trung Thành Hay "Nhảy Cóc" Cửa Hàng? (Store Loyalty & Hopping)
+## 10. Câu Chuyện 9: Khách Hàng Trung Thành Hay "Nhảy Cóc" Cửa Hàng? (Store Loyalty & Hopping)
 ### 📌 Vì sao dùng biểu đồ Tròn & Cột Tỷ Trọng?
 - **Lý do chọn biểu đồ**: Giúp lãnh đạo nhận diện ngay mức độ trung thành của khách hàng với 1 cửa hàng duy nhất hay họ thường xuyên mua chéo nhiều chi nhánh.
 - **Ý nghĩa nghiệp vụ**: Chỉ **6.68% khách chỉ đi đúng 1 cửa hàng**. Có tới **66.4% khách hàng ghé từ 4 cửa hàng trở lên**. Tuy nhiên, "cửa hàng ruột" (Primary Store) vẫn chiếm tới **73.35% tổng số tiền chi tiêu**.
@@ -418,7 +514,7 @@ colors = ['#1f78b4', '#33a02c', '#ff7f00']
 bars = ax.bar(groups, shares, color=colors, edgecolor='black', width=0.55)
 ax.set_ylabel('Tỷ lệ hộ gia đình (%)', fontweight='bold')
 ax.set_ylim(0, 80)
-ax.set_title('Biểu đồ 8: Hiện Tượng Mua Sắm Đa Cửa Hàng (Store Hopping)\\n(66.4% khách hàng ghé thăm >= 4 cửa hàng khác nhau)', pad=15)
+ax.set_title('Biểu đồ 9: Hiện Tượng Mua Sắm Đa Cửa Hàng (Store Hopping)\\n(66.4% khách hàng ghé thăm >= 4 cửa hàng khác nhau)', pad=15)
 
 for bar in bars:
     yval = bar.get_height()
@@ -432,9 +528,9 @@ print(f"📊 SỐ LIỆU ĐỘ TRUNG THÀNH CỬA HÀNG THỰC TẾ:")
 print(f" - Chỉ 1 cửa hàng: {single_store:.2f}% | Đi 2-3 cửa hàng: {two_three:.2f}% | Đi >=4 cửa hàng: {four_plus:.2f}%")
 """))
 
-    # Chart 9: Demographics vs Spend
+    # Chart 10: Demographics vs Spend
     cells.append(nbf.v4.new_markdown_cell("""---
-## 10. Câu Chuyện 9: Nhân Khẩu Học & Quy Mô Gia Đình (Demographics & Household Size)
+## 11. Câu Chuyện 10: Nhân Khẩu Học & Quy Mô Gia Đình (Demographics & Household Size)
 ### 📌 Vì sao dùng biểu đồ Thanh Ngang (Horizontal Bar Chart)?
 - **Lý do chọn biểu đồ**: Khi so sánh các nhóm nhân khẩu học có tên dài, biểu đồ thanh ngang giúp người đọc không bị mỏi cổ đọc chữ nghiêng, thứ tự sắp xếp từ cao đến thấp cực kỳ trực quan.
 - **Ý nghĩa nghiệp vụ**: Hộ gia đình đông người (4-5+ người) có mức chi tiêu mỗi giỏ hàng trung bình **$43.91**, cao hơn **39.4%** so với người sống độc thân ($31.49). Có thêm con cái kéo theo nhu cầu mua sắm lớn hơn.
@@ -452,7 +548,7 @@ if df_demo is not None and not df_demo.empty:
     fig, ax = plt.subplots(figsize=(9, 4.5))
     bars = ax.barh([f'{sz} Người' for sz in size_aov['classification_4']], size_aov['mean'], color='#41b6c4', edgecolor='black', height=0.55)
     ax.set_xlabel('Giá trị giỏ hàng trung bình AOV (USD)', fontweight='bold')
-    ax.set_title('Biểu đồ 9: Quy Mô Hộ Gia Đình Tác Động Lên Giá Trị Đơn Hàng\\n(Gia đình đông người chi tiêu cao hơn 39.4% so với người độc thân)', pad=15)
+    ax.set_title('Biểu đồ 10: Quy Mô Hộ Gia Đình Tác Động Lên Giá Trị Đơn Hàng\\n(Gia đình đông người chi tiêu cao hơn 39.4% so với người độc thân)', pad=15)
     
     for bar in bars:
         xval = bar.get_width()
@@ -464,9 +560,9 @@ if df_demo is not None and not df_demo.empty:
     plt.show()
 """))
 
-    # Chart 10: Point-in-Time Cutoff Stability
+    # Chart 11: Point-in-Time Cutoff Stability
     cells.append(nbf.v4.new_markdown_cell("""---
-## 11. Câu Chuyện 10: Độ Ổn Định Nhãn Mục Tiêu Qua Các Điểm Chốt Sổ (Point-in-Time Label Stability)
+## 12. Câu Chuyện 11: Độ Ổn Định Nhãn Mục Tiêu Qua Các Điểm Chốt Sổ (Point-in-Time Label Stability)
 ### 📌 Vì sao dùng biểu đồ Đường Xu Hướng Thời Gian (Time-Series Stability Line)?
 - **Lý do chọn biểu đồ**: Để chứng minh tỷ lệ khách hàng phát sinh giỏ hàng trong 14 ngày tới ($P(Y=1)$) hoàn toàn ổn định qua thời gian, không bị gián đoạn hay trôi dạt phân phối dữ liệu (Data Drift).
 - **Ý nghĩa nghiệp vụ**: Xác nhận rằng tỷ lệ khách đi chợ trong 14 ngày luôn dao động quanh mức **66% - 70%** xuyên suốt từ Ngày 200 đến Ngày 680 (gần 2 năm).
@@ -492,7 +588,7 @@ ax.axhline(np.mean(cutoff_rates), color='gray', linestyle='--', alpha=0.7, label
 ax.set_xlabel('Thời điểm chốt sổ quan sát t_0 (Ngày thứ n trong dataset)', fontweight='bold')
 ax.set_ylabel('Tỷ lệ hộ gia đình đi chợ trong 14 ngày tới (%)', fontweight='bold')
 ax.set_ylim(50, 85)
-ax.set_title('Biểu đồ 10: Tỷ Lệ Mục Tiêu Y=1 Ổn Định Tuyệt Đối Qua Thời Gian\\n(Đảm bảo không rò rỉ dữ liệu và không bị trôi dạt phân phối)', pad=15)
+ax.set_title('Biểu đồ 11: Tỷ Lệ Mục Tiêu Y=1 Ổn Định Tuyệt Đối Qua Thời Gian\\n(Đảm bảo không rò rỉ dữ liệu và không bị trôi dạt phân phối)', pad=15)
 ax.legend(frameon=True, facecolor='white', loc='lower right')
 plt.tight_layout()
 plt.savefig(FIG_DIR / '10_target_rate_stability.png', dpi=150)
@@ -502,17 +598,17 @@ print(f"📊 SỐ LIỆU TỶ LỆ MỤC TIÊU QUA CÁC ĐIỂM CHỐT SỔ:")
 print(f" - Thấp nhất: {min(cutoff_rates):.2f}% | Cao nhất: {max(cutoff_rates):.2f}% | Trung bình: {np.mean(cutoff_rates):.2f}%")
 """))
 
-    # Chart 11: Story 11 - Pareto CLV Lorenz Curve
+    # Chart 12: Story 12 - Pareto CLV Lorenz Curve
     cells.append(nbf.v4.new_markdown_cell("""---
-## 12. Câu Chuyện 11: Quy Luật Pareto 80/20 & Giá Trị Trọn Đời Khách Hàng (Customer Lifetime Value - CLV)
+## 13. Câu Chuyện 12: Quy Luật Pareto 80/20 & Giá Trị Trọn Đời Khách Hàng (Customer Lifetime Value - CLV)
 ### 📌 Vì sao dùng Đường cong Lorenz (Lorenz Curve) & Biểu đồ Tích Lũy Doanh Thu?
 - **Lý do chọn biểu đồ**: Đường cong Lorenz so sánh với đường phân bổ bình đẳng ($45^\circ$) là công cụ kinh điển nhất trong kinh tế học và phân tích khách hàng để đo lường mức độ bất bình đẳng và tập trung doanh thu.
 - **Ý nghĩa nghiệp vụ**:
   - Tổng chi tiêu 2 năm của 2,500 hộ gia đình là **$8,057,463.08 USD**.
   - **Top 10% hộ gia đình (250 hộ)** mang lại **34.29% tổng doanh thu** ($2.76 Triệu USD).
-  - **Top 20% hộ gia đình (500 hộ)** mang lại **53.05% tổng doanh thu** ($4.27 Triệu USD) - Chuẩn xác theo quy luật Pareto!
+  - **Top 20% hộ gia đình (500 hộ)** mang lại **53.05% tổng doanh thu** ($4.27 Triệu USD) - Không theo quy luật Pareto 80/20 cực đoan mà phân bổ tự nhiên hơn (cần 44% số hộ để đạt 80% doanh thu).
   - Trong khi đó, **50% hộ gia đình ở nửa dưới** chỉ đóng góp **15.66% tổng doanh thu**. Mất đi 1 khách hàng VIP trong Top 10% gây thiệt hại bằng mất 10 khách hàng thông thường cộng lại!
-- **Quyết định mô hình**: Tạo nhóm biến đặc trưng định giá trị khách hàng: `household_lifetime_spend_to_date`, `spend_percentile_rank`, và tỷ trọng doanh thu tích lũy. Khi khách hàng VIP có dấu hiệu giãn cách chu kỳ đi chợ (`urgency_ratio > 1.5`), hệ thống CRM cần kích hoạt chiến dịch giữ chân ưu tiên cao nhất.
+- **Quyết định chuyển giao**: Dành cho **Chiến lược Phân Tầng Khách Hàng CRM**: Thiết lập chính sách chăm sóc ưu tiên cho nhóm Top 20% hộ. Về mặt Feature ML, dùng `spend_180d` làm proxy quá khứ an toàn, triệt tiêu hoàn toàn rủi ro rò rỉ dữ liệu tương lai.
 """))
 
     cells.append(nbf.v4.new_code_cell("""# 1. Tính toán giá trị trọn đời (CLV - Cumulative 2-Year Spend) theo từng hộ gia đình
@@ -561,7 +657,7 @@ ax.annotate(f'Top 50% Hộ tạo ra {top50_spend_pct:.1f}% Doanh thu\\n(Bottom 5
 
 ax.set_xlabel('Tỷ lệ tích lũy hộ gia đình (Sắp xếp từ chi nhiều nhất -> ít nhất) (%)', fontweight='bold')
 ax.set_ylabel('Tỷ lệ tích lũy doanh thu thực tế (%)', fontweight='bold')
-ax.set_title(f'Biểu đồ 11: Mức Độ Tập Trung Doanh Thu & Đường Cong Lorenz (CLV)\\n(Tổng chi tiêu 2 năm: ${total_spend:,.2f} | 2,500 Hộ gia đình | Không tuân theo Pareto 80/20)', pad=15)
+ax.set_title(f'Biểu đồ 12: Mức Độ Tập Trung Doanh Thu & Đường Cong Lorenz (CLV)\\n(Tổng chi tiêu 2 năm: ${total_spend:,.2f} | 2,500 Hộ gia đình | Không tuân theo Pareto 80/20)', pad=15)
 ax.set_xlim(0, 100)
 ax.set_ylim(0, 100)
 ax.legend(loc='lower right', frameon=True, facecolor='white', framealpha=0.9)
@@ -578,17 +674,17 @@ print(f" - 50% hộ gia đình còn lại:        {100-top50_spend_pct:.2f}% doa
 print(f" - Chi tiêu mỗi hộ: Trung vị = ${p50_clv:,.2f} | Trung bình = ${mean_clv:,.2f} | Cao nhất = ${max_clv:,.2f}")
 """))
 
-    # Chart 12: Story 12 - Two-tier Discounts (Retail Markdown vs Coupon Disc)
+    # Chart 13: Story 13 - Two-tier Discounts (Retail Markdown vs Coupon Disc)
     cells.append(nbf.v4.new_markdown_cell("""---
-## 13. Câu Chuyện 12: Cấu Trúc Khuyến Mãi 2 Tầng - Giảm Giá Niêm Yết Siêu Thị vs Phiếu Giảm Giá Nhà Sản Xuất
+## 14. Câu Chuyện 13: Cấu Trúc Khuyến Mãi 2 Tầng - Giảm Giá Niêm Yết Siêu Thị vs Phiếu Giảm Giá Nhà Sản Xuất
 ### 📌 Vì sao dùng Biểu đồ Cột So Sánh Ngân Sách & Độ Phủ Giỏ Hàng?
 - **Lý do chọn biểu đồ**: Cho phép so sánh trực diện 2 khía cạnh: Quy mô dòng tiền giảm giá (Đơn vị Triệu USD) và Tỷ lệ tiếp cận thực tế (% giỏ hàng được áp dụng).
 - **Ý nghĩa nghiệp vụ**:
   - Dữ liệu bóc tách hai cơ chế chiết khấu:
     1. **Giảm giá niêm yết tại quầy của siêu thị (`RETAIL_DISC`)**: Đạt **$1,398,351.90 USD** (chiếm 14.79% doanh thu gộp), xuất hiện ở **48.74% tổng số giỏ hàng**.
     2. **Phiếu giảm giá coupon từ nhà sản xuất (`COUPON_DISC`)**: Đạt **$42,611.54 USD** (chiếm 0.53% doanh thu gộp), xuất hiện ở **6.22% số giỏ hàng**.
-  - **Khám phá cốt lõi**: Giảm giá niêm yết tại quầy của siêu thị **lớn gấp 32.8 LẦN** so với phiếu giảm giá nhà sản xuất! Siêu thị là bên chủ động hy sinh biên lợi nhuận đại trà trên kệ sách, trong khi phiếu giảm giá chỉ là công cụ kích cầu chuyên biệt của một nhóm khách hàng "săn deal" cụ thể.
-- **Quyết định mô hình**: Tách biệt độc lập 2 tính năng: `retail_discount_ratio` (mức độ nhạy bén với giá kệ) và `coupon_discount_ratio` (mức độ chủ động săn voucher khuyến mãi), tránh việc gộp chung làm mờ nhạt đặc trưng hành vi của khách hàng.
+  - **Khám phá cốt lõi**: Giảm giá niêm yết tại quầy của siêu thị **lớn gấp 32.8 LẦN** so với phiếu giảm giá nhà sản xuất! Siêu thị là bên chủ động hy sinh biên lợi nhuận đại trà trên kệ hàng, trong khi phiếu giảm giá chỉ là công cụ kích cầu chuyên biệt của một nhóm khách hàng "săn deal" cụ thể.
+- **Quyết định chuyển giao**: Dành cho **Quản Trị Biên Lợi Nhuận Bán Lẻ**: Giúp phòng kinh doanh cân đối ngân sách khuyến mãi quầy, bảo toàn biên lợi nhuận ròng.
 """))
 
     cells.append(nbf.v4.new_code_cell("""# 2. Bóc tách cơ chế chiết khấu 2 tầng: Giảm giá niêm yết tại quầy (RETAIL_DISC) vs Giảm giá Coupon (COUPON_DISC)
@@ -631,7 +727,7 @@ ax2.set_ylim(0, 105)
 ax2.text(0, cov_values[0] + 2.0, f'{cov_values[0]:.2f}%\\n({int(len(baskets)*cov_values[0]/100):,} giỏ)', ha='center', fontweight='bold', fontsize=11)
 ax2.text(1, cov_values[1] + 2.0, f'{cov_values[1]:.2f}%\\n({int(len(baskets)*cov_values[1]/100):,} giỏ)', ha='center', fontweight='bold', fontsize=11)
 
-fig.suptitle('Cấu Trúc Khuyến Mãi 2 Tầng: Giảm Giá Niêm Yết vs Coupon Giấy', fontsize=14, fontweight='bold')
+fig.suptitle('Biểu đồ 13: Cấu Trúc Khuyến Mãi 2 Tầng: Giảm Giá Niêm Yết vs Coupon Giấy', fontsize=14, fontweight='bold')
 plt.savefig(FIG_DIR / '20_markdown_vs_coupon_spend.png', dpi=150, bbox_inches='tight')
 plt.show()
 
@@ -642,16 +738,16 @@ print(f" - Giảm giá coupon (COUPON_DISC):     ${total_coupon_disc:,.2f} ({pct
 print(f" - Tỷ số đòn bẩy Markdown / Coupon:  {ratio_markdown_coupon:.2f} lần")
 """))
 
-    # Chart 13: Story 13 - Private Label Penetration
+    # Chart 14: Story 14 - Private Label Penetration
     cells.append(nbf.v4.new_markdown_cell("""---
-## 14. Câu Chuyện 13: Sức Thâm Nhập Vượt Trội Của Nhãn Hàng Riêng Siêu Thị (Private Label Penetration)
+## 15. Câu Chuyện 14: Sức Thâm Nhập Vượt Trội Của Nhãn Hàng Riêng Siêu Thị (Private Label Penetration)
 ### 📌 Vì sao dùng Biểu đồ Thanh Ngang Tỷ Trọng Danh Mục vs Doanh Thu (Portfolio vs Revenue Share)?
 - **Lý do chọn biểu đồ**: Thể hiện trực tiếp và sinh động sự chênh lệch (asymmetry) giữa tỷ trọng SKU niêm yết trên kệ hàng và tỷ trọng tiền thực tế thu về từ khách hàng.
 - **Ý nghĩa nghiệp vụ**:
   - Nhãn riêng của chuỗi siêu thị (Private Label / Store Brand) chỉ chiếm **14.96% danh mục mặt hàng** (13,812 / 92,353 SKU), nhường 85.04% sân chơi cho các thương hiệu quốc gia (National Brand).
   - Nhưng trên thực tế, Nhãn hàng riêng tạo ra tới **27.83% tổng doanh thu** ($2,242,423.85 / $8,057,463.08) và chiếm **28.80% tổng sản lượng hàng hóa bán ra**!
   - **Hiệu suất sinh doanh thu trên mỗi SKU**: Nhãn hàng riêng đạt chỉ số hiệu quả **1.86x**, cao gấp **2.18 lần** so với thương hiệu quốc gia (0.85x). Khách hàng xem nhãn hàng riêng là lựa chọn chất lượng - giá tốt cho các nhu yếu phẩm hàng ngày.
-- **Quyết định mô hình**: Xây dựng tính năng `private_label_spend_ratio_90d` và `private_label_basket_ratio`. Khách hàng có tỷ lệ mua nhãn riêng cao thường có độ gắn kết cao với siêu thị và chu kỳ mua sắm đều đặn hơn.
+- **Quyết định chuyển giao**: Dành cho **Chiến Lược Danh Mục Mặt Hàng (Category Management)**: Mở rộng các dòng sản phẩm Private Label chiến lược để củng cố lòng trung thành và gia tăng biên lợi nhuận chuỗi.
 """))
 
     cells.append(nbf.v4.new_code_cell("""# 3. Phân tích sức mạnh thâm nhập của Nhãn Hàng Riêng Siêu Thị (Private Label vs National Brand)
@@ -693,7 +789,7 @@ ax.set_xlabel('Tỷ trọng đóng góp (%)', fontweight='bold', fontsize=11)
 ax.set_yticks(y)
 ax.set_yticklabels(categories, fontweight='bold', fontsize=11)
 ax.set_xlim(0, 100)
-ax.set_title('Hiệu Quả Đột Biến Của Nhãn Hàng Riêng (Private Label Penetration)\\n(Chỉ chiếm 15.0% danh mục SKU nhưng tạo ra 27.8% Doanh thu & 28.8% Sản lượng)', fontsize=12, fontweight='bold', pad=12)
+ax.set_title('Biểu đồ 14: Hiệu Quả Đột Biến Của Nhãn Hàng Riêng (Private Label Penetration)\\n(Chỉ chiếm 15.0% danh mục SKU nhưng tạo ra 27.8% Doanh thu & 28.8% Sản lượng)', fontsize=12, fontweight='bold', pad=12)
 ax.legend(loc='lower right', frameon=True, facecolor='white', fontsize=10)
 
 # Hiển thị số liệu bên trong thanh
@@ -712,9 +808,9 @@ print(f" - Tỷ trọng Sản lượng:  Private = {unit_priv_pct:.2f}% | Nation
 print(f" - Hiệu suất/SKU Index: Private = {priv_efficiency:.2f}x (Cao gấp {priv_efficiency/nat_efficiency:.2f} lần so với National)")
 """))
 
-    # Chart 14: Story 14 - Campaign Funnel Type A, B, C
+    # Chart 15: Story 15 - Campaign Funnel Type A, B, C
     cells.append(nbf.v4.new_markdown_cell("""---
-## 15. Câu Chuyện 14: Phễu Chuyển Đổi Tiếp Thị Theo Loại Chiến Dịch (Campaign Conversion Funnel)
+## 16. Câu Chuyện 15: Phễu Chuyển Đổi Tiếp Thị Theo Loại Chiến Dịch (Campaign Conversion Funnel)
 ### 📌 Vì sao dùng Biểu đồ Phễu Chuyển Đổi & Quy Mô Tiếp Cận (Conversion Rate & Funnel Volume)?
 - **Lý do chọn biểu đồ**: Minh họa hiệu quả từ khâu nhắm mục tiêu (Targeting) đến lúc phát sinh hành động đổi phiếu (Redemption) của 3 cấu trúc chiến dịch khác nhau (`Type A`, `Type B`, `Type C` trong `campaign_desc`).
 - **Ý nghĩa nghiệp vụ**:
@@ -722,7 +818,7 @@ print(f" - Hiệu suất/SKU Index: Private = {priv_efficiency:.2f}x (Cao gấp 
   - **Chiến dịch Loại B (Type B - Ưu đãi ngành hàng chuyên biệt)**: Tiếp cận 2,655 lượt hộ, đổi 454 lượt -> Tỷ lệ chuyển đổi **17.10%**.
   - **Chiến dịch Loại C (Type C - Sự kiện ngắn hạn)**: Tiếp cận 574 lượt hộ, đổi 73 lượt -> Tỷ lệ chuyển đổi **12.72%**.
   - **Khám phá cốt lõi**: Chiến dịch Loại A có hiệu quả kích hoạt hành vi **gấp 3.5 lần** Loại C! Doanh nghiệp nên tập trung ngân sách cho các chiến dịch tổng lực thay vì dàn trải các sự kiện nhỏ lẻ kém tác dụng.
-- **Quyết định mô hình**: Thay vì chỉ dùng 1 biến tổng `is_in_campaign`, tách nhỏ thành `is_targeted_type_A`, `is_targeted_type_B`, `is_targeted_type_C` để mô hình học đúng trọng số tác động riêng của từng loại chiến dịch.
+- **Quyết định mô hình**: Tạo biến `is_targeted_by_active_campaign` đại diện cho xung lực chiến dịch ngoại sinh đang hoạt động tại thời điểm $t_0$.
 """))
 
     cells.append(nbf.v4.new_code_cell("""# 4. Phân tích phễu chuyển đổi tiếp thị theo loại chiến dịch (Campaign Type A, B, C)
@@ -784,7 +880,7 @@ for bar in bars2_r:
     yval = bar.get_height()
     ax2.text(bar.get_x() + bar.get_width()/2.0, yval + 70, f'{int(yval):,}', ha='center', va='bottom', fontweight='bold', fontsize=10, color='#2ca02c')
 
-fig.suptitle('Phễu Chuyển Đổi Tiếp Thị Theo Loại Chiến Dịch (Campaign Conversion Funnel)', fontsize=14, fontweight='bold')
+fig.suptitle('Biểu đồ 15: Phễu Chuyển Đổi Tiếp Thị Theo Loại Chiến Dịch (Campaign Conversion Funnel)', fontsize=14, fontweight='bold')
 plt.savefig(FIG_DIR / '22_campaign_type_conversion_funnel.png', dpi=150, bbox_inches='tight')
 plt.show()
 
@@ -793,33 +889,34 @@ for t in types:
     print(f" - {t}: {camp_stats.loc[t, 'targeted_assignments']:,} lượt tiếp cận -> {camp_stats.loc[t, 'redemption_events']:,} lượt đổi phiếu | Tỷ lệ: {camp_stats.loc[t, 'conversion_rate']:.2f}%")
 """))
 
-    # Section 16: Comprehensive Summary of 14 Discoveries
+    # Section 17: Comprehensive Summary of 15 Discoveries & Two-Tier Handoff
     cells.append(nbf.v4.new_markdown_cell("""---
-## 16. Tổng Kết Toàn Diện 14 Phát Hiện Thực Nghiệm & Chuyển Giao Sang Huấn Luyện Mô Hình
+## 17. Tổng Kết Toàn Diện 15 Phát Hiện Thực Nghiệm & Phân Rã Chuyển Giao (Machine Learning vs Chiến Lược Kinh Doanh)
 
-Qua 14 biểu đồ trực quan từ **100% số liệu thực tế** của 2,500 hộ gia đình, 2.6 triệu giao dịch và 8 bảng dữ liệu:
+Qua 15 biểu đồ trực quan từ **100% số liệu thực tế** của 2,500 hộ gia đình, 2.6 triệu giao dịch và 8 bảng dữ liệu:
 
-| STT | Phát hiện thực nghiệm (Empirical Insight) | Căn cứ định lượng từ 2.6M giao dịch | Quyết định kỹ thuật / Feature trong Mô Hình |
+| STT | Phát hiện thực nghiệm (Empirical Insight) | Căn cứ định lượng từ 2.6M giao dịch | Phân loại chuyển giao: Đặc trưng ML vs Chiến lược Vận hành |
 | :---: | :--- | :--- | :--- |
-| **1** | **Khung dự báo 14 ngày tối ưu** | 82.0% đi chợ lại trong 7 ngày, 92.4% trong 14 ngày | Thiết lập cửa sổ dự báo $\Delta t = 14$ ngày chuẩn mực |
-| **2** | **Phân hóa giỏ hàng sâu sắc** | P50 = $18.06, Mean = $29.24, P90 = $63.38 | Bóc tách riêng 2 chiều `Frequency` và `Monetary AOV` |
-| **3** | **Chu kỳ ngày trong tuần** | Thứ 7 & Chủ Nhật đạt đỉnh mua sắm | Feature `day_of_week` và khoảng cách tới cuối tuần |
-| **4** | **Khung giờ vàng mua sắm** | Đỉnh cao điểm 11h - 18h hàng ngày | Feature `trans_time` của lần ghé thăm gần nhất |
-| **5** | **Đồ tươi sống thúc đẩy mua lặp lại** | 51.71% giỏ hàng chứa đồ tươi; chu kỳ ngắn hơn đồ khô | Feature `days_since_last_perishable` & `perishable_ratio` |
-| **6** | **Hiệu ứng mồi câu của Coupon** | Khách dùng coupon chi tiêu gấp 2.53 lần ($67.60 vs $26.76) | Feature `coupon_redemption_count_180d` |
-| **7** | **Chiến dịch tăng tốc độ mua** | Chu kỳ rút ngắn 45.3% (từ 6.49 ngày xuống 3.55 ngày) | Feature `is_targeted_by_active_campaign` |
-| **8** | **Đa cửa hàng nhưng có shop ruột** | 66.4% đi $\ge 4$ shop, nhưng 73.35% tiền đổ về shop ruột | Feature `store_loyalty_index` & `primary_store_id` |
-| **9** | **Quy mô gia đình nâng cao AOV** | Gia đình đông con chi tiêu cao hơn 39.4% so với độc thân | Feature demographics dạng categorical |
-| **10** | **Ổn định mục tiêu Point-in-Time** | Tỷ lệ $P(Y=1)$ ổn định quanh 68% qua 16 mốc $t_0$ | Huấn luyện Multi-cutoff sliding window chống thiên lệch |
-| **11** | **Tập trung doanh thu (Gini = 0.50)** | Top 20% hộ gia đình tạo ra 53.05% tổng doanh thu ($4.27M); cần 44% hộ để đạt 80% (không theo Pareto 80/20) | Feature `lifetime_spend_rank` & CLV priority alert |
-| **12** | **Cấu trúc chiết khấu 2 tầng** | Giảm giá quầy lớn gấp 32.8 lần coupon ($1.4M vs $42.6k) | Tách biệt `retail_discount_ratio` & `coupon_discount_ratio` |
-| **13** | **Sức thâm nhập Nhãn hàng riêng** | Chỉ 15.0% SKU nhưng tạo 27.8% doanh thu & 28.8% sản lượng | Feature `private_label_spend_ratio_90d` |
-| **14** | **Phễu chuyển đổi chiến dịch** | Chiến dịch Loại A chuyển đổi 45.01% (gấp 3.5 lần Loại C) | Tách feature `is_targeted_type_A/B/C` riêng biệt |
+| **1** | **Khung dự báo 14 ngày tối ưu** | 82.0% đi chợ lại trong 7 ngày, 92.4% trong 14 ngày | **Đặc trưng ML:** Thiết lập cửa sổ $\\Delta t = 14$ ngày; biến `days_since_last_basket`, `urgency_ratio` |
+| **2** | **Phân hóa giỏ hàng sâu sắc (AOV)** | P50 = $18.06, Mean = $29.24, P90 = $63.38 | **Đặc trưng ML:** Tách riêng `spend_30d/90d/180d` và `aov_90d` |
+| **3** | **Chu kỳ ngày trong tuần** | Thứ 7 & Chủ Nhật chiếm 32% lượng giỏ hàng | **Chiến lược Vận hành/CRM:** Lên lịch chạy chiến dịch cuối tuần; gửi tin nhắn kích cầu sáng thứ Sáu |
+| **4** | **Khung giờ vàng mua sắm** | Đỉnh cao điểm 11h - 18h chiếm 65% lưu lượng | **Chiến lược Vận hành/CRM:** Điều phối ca trực thu ngân; cài đặt trigger notification tự động lúc 10h-11h |
+| **5** | **Đồ tươi sống thúc đẩy mua lặp lại** | 51.71% giỏ hàng chứa đồ tươi; chu kỳ ngắn hơn 1.8 ngày | **Đặc trưng ML:** Biến `days_since_last_perishable` & `perishable_basket_ratio_90d` |
+| **6** | **Mỏ neo đa ngành & Độ dính giỏ hàng** | $\\ge 12$ ngành đạt 96.5% vs 1-2 ngành chỉ đạt 31.8% (+64.7%) | **Đặc trưng ML:** Biến `department_breadth_90d`, `avg_items_per_basket_90d` |
+| **7** | **Hiệu ứng mồi câu của Coupon** | Khách dùng coupon chi tiêu gấp 2.53 lần ($67.60 vs $26.76) | **Đặc trưng ML:** Biến `coupon_redemption_count_180d` |
+| **8** | **Chiến dịch tăng tốc độ mua** | Chu kỳ rút ngắn 45.3% (từ 6.49 ngày xuống 3.55 ngày) | **Đặc trưng ML:** Biến `is_targeted_by_active_campaign` |
+| **9** | **Đa cửa hàng nhưng có shop ruột** | 66.4% đi $\\ge 4$ shop, nhưng 73.35% tiền đổ về shop ruột | **Đặc trưng ML:** Biến `store_loyalty_index` & `primary_store_id` |
+| **10** | **Quy mô gia đình nâng cao AOV** | Gia đình đông con chi tiêu cao hơn 39.4% so với độc thân | **Đặc trưng ML:** Biến nhân khẩu học dạng categorical, gán `UNKNOWN` chuẩn hóa |
+| **11** | **Ổn định mục tiêu Point-in-Time** | Tỷ lệ $P(Y=1)$ ổn định quanh 68% qua 16 mốc $t_0$ | **Kiến trúc ML:** Huấn luyện Multi-cutoff sliding window chống trôi dạt dữ liệu (Data Drift) |
+| **12** | **Tập trung doanh thu (Gini = 0.50)** | Top 20% hộ gia đình tạo ra 53.05% tổng doanh thu ($4.27M) | **Chiến lược CRM:** Phân khúc CLV chăm sóc VIP; **Feature ML:** Dùng `spend_180d` an toàn chống rò rỉ |
+| **13** | **Cấu trúc chiết khấu 2 tầng** | Giảm giá quầy lớn gấp 32.8 lần coupon ($1.4M vs $42.6k) | **Chiến lược Kinh doanh:** Cân đối ngân sách chiết khấu kệ sách để bảo toàn biên lợi nhuận ròng |
+| **14** | **Sức thâm nhập Nhãn hàng riêng** | Chỉ 15.0% SKU nhưng tạo 27.8% doanh thu & 28.8% sản lượng | **Chiến lược Mặt hàng:** Mở rộng danh mục Private Label làm thỏi nam châm giữ chân khách hàng |
+| **15** | **Phễu chuyển đổi chiến dịch** | Chiến dịch Loại A chuyển đổi 45.01% (gấp 3.5 lần Loại C) | **Đặc trưng ML:** Biến `is_targeted_by_active_campaign` phản ánh xung lực ngoại sinh |
 
 ---
 
 ### 🚀 Chuyển Giao Sang Giai Đoạn Feature Engineering & Mô Hình Hóa
-Toàn bộ 14 quy luật hành vi thực nghiệm trên đã được mã hóa trực tiếp vào pipeline tính toán biến đặc trưng point-in-time (`src/features/feature_builder.py`) và cung cấp đầu vào chất lượng cao cho mô hình **LightGBM Calibrated Classifier**!
+Toàn bộ 10 quy luật hành vi then chốt trên đã được mã hóa trực tiếp vào pipeline tính toán biến đặc trưng point-in-time (`src/features/feature_builder.py`) tạo nên **28 tính năng chất lượng cao**, cung cấp đầu vào vững chắc cho mô hình **LightGBM Calibrated Classifier**! Đồng thời, 5 góc nhìn chiến lược kinh doanh còn lại đóng vai trò kim chỉ nam cho các quyết định vận hành và CRM của doanh nghiệp bán lẻ.
 """))
 
     nb.cells = cells

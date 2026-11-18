@@ -2,7 +2,7 @@
 
 **Dự án:** Dự Đoán Xác Suất Mua Hàng Của Hộ Gia Đình (Purchasing Propensity Model)  
 **Tập dữ liệu:** Dunnhumby - The Complete Journey (2.6M giao dịch, 2,500 hộ, 711 ngày)  
-**Thời lượng dự kiến:** 10 – 12 phút thuyết trình + 5 phút Q&A  
+**Thời lượng dự kiến:** 12 – 14 phút thuyết trình + 5 phút Q&A  
 
 ---
 
@@ -11,16 +11,24 @@
 ```
 [Mở Đầu] Thách thức dữ liệu thực tế & Sứ mệnh của EDA (Slide 1-2)
    │
-   ├──> [Phần 1: Kiểm Toán & Làm Sạch Dữ Liệu] Kiến trúc 8 bảng & Tiêu chuẩn sạch (Slide 3)
+   ├──> [Nền Tảng Dữ Liệu] Kiến trúc 8 bảng & Tiêu chuẩn làm sạch (Slide 3)
    │
-   ├──> [Phần 2: 10 Quy Luật Thực Nghiệm Cốt Lõi] Nhịp sinh học & Bản chất mua sắm (Slide 4-13)
-   │      • Nhịp đi chợ & Giá trị giỏ hàng (Slide 4-5)
-   │      • Đồ tươi sống & Mỏ neo đa ngành (Slide 6-7)
-   │      • Hiệu ứng mồi câu & Gia tốc tiếp thị (Slide 8-9)
-   │      • Địa bàn đa cửa hàng & Quy mô nhân khẩu (Slide 10-11)
-   │      • Ổn định nhãn mục tiêu & Phễu chuyển đổi tiếp thị (Slide 12-13)
+   ├──> [Phần I: 10 Quy Luật Hành Vi Cốt Lõi - Nền Tảng Học Máy] (Slide 4-13)
+   │      • Nhịp đi chợ (Chu kỳ 14 ngày) & Phân hóa AOV (Slide 4-5)
+   │      • Thực phẩm tươi sống & Mỏ neo đa ngành (Slide 6-7)
+   │      • Hiệu ứng mồi câu coupon & Gia tốc tiếp thị (Slide 8-9)
+   │      • Mua sắm đa cửa hàng & Nhân khẩu quy mô hộ (Slide 10-11)
+   │      • Độ ổn định nhãn mục tiêu & Phễu chuyển đổi chiến dịch (Slide 12-13)
    │
-   └──> [Phần 3: Chuyển Giao Sang Học Máy] Ma trận đặc trưng & Tổng kết (Slide 14-15)
+   ├──> [Phần II: Thấu Cảm Chiến Lược Bán Lẻ & Vận Hành Doanh Nghiệp] (Slide 14-17)
+   │      • Phân hóa CLV & Bác bỏ quy luật Pareto 80/20 cực đoan (Slide 14)
+   │      • Cấu trúc chiết khấu 2 tầng: Giảm giá quầy vs Coupon (Slide 15)
+   │      • Sức thâm nhập vượt trội của Nhãn hàng riêng - Private Label (Slide 16)
+   │      • Nhịp điệu thời gian vi mô: Ngày trong tuần & Giờ cao điểm (Slide 17)
+   │
+   └──> [Phần III: Chuyển Giao Sang Học Máy & Tổng Kết] (Slide 18-19)
+          • Ma trận chuyển hóa phát hiện EDA sang Đặc trưng ML & CRM (Slide 18)
+          • 4 đóng góp nền tảng & Chuyển giao sang giai đoạn Mô hình hóa (Slide 19)
 ```
 
 ---
@@ -38,7 +46,7 @@
 **Lời thoại trình bày:**
 > *"Kính chào quý thầy cô, các anh chị đồng nghiệp và các bạn. Hôm nay, tôi xin đại diện nhóm trình bày báo cáo về giai đoạn **Khám phá Dữ liệu (EDA) và Kiểm toán Chất lượng Dữ liệu** cho bài toán Dự đoán xác suất mua hàng của hộ gia đình.*
 >
-> *Trong các dự án máy học thực tế, EDA không đơn thuần chỉ là vẽ các biểu đồ mô tả thống kê, mà chính là **la bàn định hướng toàn bộ bài toán**: từ việc phát hiện và làm sạch nhiễu nghiệp vụ, xác lập cửa sổ dự báo khoa học, cho đến việc thiết kế hệ thống đặc trưng chống rò rỉ dữ liệu trước khi đưa vào mô hình học máy."*
+> *Trong các dự án máy học thực tế, EDA không đơn thuần chỉ là vẽ các biểu đồ mô tả thống kê, mà chính là **la bàn định hướng toàn bộ bài toán**: từ việc phát hiện và làm sạch nhiễu nghiệp vụ, xác lập cửa sổ dự báo khoa học, cho đến việc thiết kế hệ thống đặc trưng chống rò rỉ dữ liệu và cung cấp góc nhìn chiến lược kinh doanh cho doanh nghiệp bán lẻ."*
 
 ---
 
@@ -52,7 +60,7 @@
 >
 > *Thách thức lớn nhất ở đây là dữ liệu thực tế luôn chứa đầy **nhiễu nghiệp vụ**: từ các thao tác hủy quẹt thẻ tại quầy POS, các giỏ hàng quà tặng 0 đồng, cho đến độ khuyết thiếu lớn về nhân khẩu học. Đặc biệt, để xây dựng mô hình dự báo hành vi trong tương lai, chúng ta phải tuân thủ nghiêm ngặt **kỷ luật thời gian**, phân định rạch ròi giữa quá khứ quan sát và tương lai dự báo.*
 >
-> *Từ thách thức đó, giai đoạn EDA của chúng tôi tập trung vào 2 mục tiêu cốt lõi: Thứ nhất, kiểm toán và bảo toàn 100% tập mẫu dữ liệu sạch; Thứ hai, bóc tách **10 quy luật thực nghiệm cốt lõi** để làm cơ sở toán học xác định cửa sổ dự báo và sinh đặc trưng cho mô hình."*
+> *Từ thách thức đó, giai đoạn EDA của chúng tôi tập trung vào 2 mục tiêu cốt lõi: Thứ nhất, kiểm toán và bảo toàn 100% tập mẫu dữ liệu sạch; Thứ hai, bóc tách **15 phát hiện thực nghiệm cốt lõi** – trong đó gồm 10 quy luật hành vi làm nền tảng cho hệ thống đặc trưng Machine Learning, và 5 góc nhìn chiến lược bán lẻ định hình chính sách vận hành và CRM của doanh nghiệp."*
 
 ---
 
@@ -68,7 +76,7 @@
 > 2. *Tại bảng `coupons`: Chúng tôi khử trùng **5,164 bản ghi trùng lặp 100%**, triệt tiêu nguy cơ nổ dòng (cartesian explosion) khi kết nối sang bảng giao dịch.*
 > 3. *Tại bảng `demographics`: Dữ liệu nhân khẩu học khuyết thiếu ở 68% số hộ gia đình. Thay vì xóa bỏ gây mất mát mẫu, chúng tôi chuẩn hóa gán nhãn `UNKNOWN` để đưa vào mô hình dưới dạng một nhóm danh mục độc lập, bảo toàn trọn vẹn 100% tập 2,500 hộ gia đình.*
 >
-> *Sau khi nền tảng dữ liệu đã đạt chuẩn sạch, chúng ta cùng bước vào 10 quy luật hành vi thực nghiệm cốt lõi."*
+> *Sau khi nền tảng dữ liệu đã đạt chuẩn sạch, chúng ta cùng bước vào Phần I: 10 quy luật hành vi tiêu dùng cốt lõi phục vụ xây dựng mô hình học máy."*
 
 ---
 
@@ -91,10 +99,10 @@
 * **Tiêu đề:** 4. Cấu Trúc Giá Trị Giỏ Hàng Thực Nghiệm (AOV)
 * **Biểu đồ:** Phân phối giá trị giỏ hàng (Basket Spend) với đường trung bình và các mức phân vị.
 * **Thời lượng:** 45 giây
-* **Điểm nhấn trực quan:** Khoảng cách giữa P50 (\$17.20) và Giá trị trung bình (\$29.24).
+* **Điểm nhấn trực quan:** Khoảng cách giữa P50 (\$18.06) và Giá trị trung bình (\$29.24).
 
 **Lời thoại trình bày:**
-> *"Khi phân tích giá trị chi tiêu mỗi giỏ hàng, ta nhận thấy hiện tượng phân hóa mạnh mẽ: Trung vị một giỏ hàng chỉ là **\$17.20**, nhưng giá trị trung bình (AOV) lại lên tới **\$29.24** – chênh lệch tới 70%.*
+> *"Khi phân tích giá trị chi tiêu mỗi giỏ hàng, ta nhận thấy hiện tượng phân hóa mạnh mẽ: Trung vị một giỏ hàng là **\$18.06**, nhưng giá trị trung bình (AOV) lại lên tới **\$29.24** – chênh lệch hơn 60%, trong khi nhóm P90 đạt \$63.38.*
 >
 > *Điều này phản ánh đúng thực tế bán lẻ: Phần lớn các chuyến đi chợ là mua lẻ bổ sung hàng ngày, nhưng dòng tiền thực sự lại được gánh vác bởi các giỏ hàng lớn cuối tuần hoặc mua sắm tiệc tùng.*
 >
@@ -140,10 +148,10 @@
 * **Tiêu đề:** 7. Hiệu Ứng Mồi Câu & Độ Lan Tỏa Của Phiếu Giảm Giá
 * **Biểu đồ:** Cấu trúc chi tiêu của giỏ hàng có dùng Coupon (Spend with vs. without Coupon).
 * **Thời lượng:** 45 giây
-* **Điểm nhấn trực quan:** Cột giá trị giỏ hàng có coupon cao gấp 2.5 lần (\$67.60 vs \$26.70).
+* **Điểm nhấn trực quan:** Cột giá trị giỏ hàng có coupon cao gấp 2.53 lần (\$67.60 vs \$26.76).
 
 **Lời thoại trình bày:**
-> *"Slide 8 minh họa **Hiệu ứng Mồi câu (Halo Effect)** của các phiếu giảm giá. Khách hàng sử dụng coupon có giá trị giỏ hàng trung bình lên tới **\$67.60**, cao gấp **2.53 lần** so với giỏ hàng thông thường (\$26.70).*
+> *"Slide 8 minh họa **Hiệu ứng Mồi câu (Halo Effect)** của các phiếu giảm giá. Khách hàng sử dụng coupon có giá trị giỏ hàng trung bình lên tới **\$67.60**, cao gấp **2.53 lần** so với giỏ hàng thông thường (\$26.76).*
 >
 > *Mặc dù phiếu ưu đãi chỉ giảm cho một vài món cụ thể, nhưng khi đã cầm coupon đến siêu thị, khách hàng dạo qua các quầy hàng khác và mua sắm chéo rất nhiều. Hơn **80%** giá trị giỏ hàng có coupon đến từ các sản phẩm nguyên giá đi kèm.*
 >
@@ -155,12 +163,12 @@
 * **Tiêu đề:** 8. Sức Bật Chu Kỳ Từ Các Chiến Dịch Tiếp Thị
 * **Biểu đồ:** So sánh chu kỳ tái mua trong đợt chiến dịch (Active Campaign) vs. ngoài chiến dịch.
 * **Thời lượng:** 45 giây
-* **Điểm nhấn trực quan:** Chu kỳ tái mua bị rút ngắn gần 3 ngày khi chiến dịch được kích hoạt.
+* **Điểm nhấn trực quan:** Chu kỳ tái mua bị rút ngắn từ 6.49 ngày xuống 3.55 ngày (rút ngắn gần 45%) khi chiến dịch được kích hoạt.
 
 **Lời thoại trình bày:**
 > *"Bên cạnh động lực tự nhiên, các chiến dịch gửi thư tiếp thị trực tiếp (Direct Mail) đóng vai trò là **chất xúc tác ngoại sinh phá vỡ độ ì mua sắm**.*
 >
-> *Trong các giai đoạn chiến dịch hoạt động, thời gian chờ mua hàng của hộ gia đình được rút ngắn gần **3 ngày** so với giai đoạn thông thường, đồng thời tần suất mua sắm tăng gần gấp đôi.*
+> *Trong các giai đoạn chiến dịch hoạt động, thời gian chờ mua hàng của hộ gia đình được rút ngắn từ **6.49 ngày xuống chỉ còn 3.55 ngày**, đồng thời tần suất mua sắm tăng gần gấp đôi.*
 >
 > *Do đó, biến cờ `is_targeted_by_active_campaign` tại thời điểm quan sát là một đặc trưng ngoại sinh quan trọng giúp mô hình bắt được sự gia tốc hành vi."*
 
@@ -168,14 +176,14 @@
 
 ### SLIDE 10: CÂU CHUYỆN 7 - HÀNH VI MUA SẮM ĐA CỬA HÀNG & LÒNG TRUNG THÀNH
 * **Tiêu đề:** 9. Hành Vi Mua Sắm Đa Cửa Hàng & Lòng Trung Thành
-* **Biểu đồ:** Tỷ lệ phân bổ chi tiêu giữa Cửa hàng chính (Primary Store) và các cửa hàng phụ.
+* **Biểu đồ:** Hiện tượng mua sắm đa cửa hàng (Store Hopping) và tỷ lệ chi tiêu cho cửa hàng ruột.
 * **Thời lượng:** 45 giây
-* **Điểm nhấn trực quan:** Miếng bánh 73.4% ngân sách tập trung vào 1 cửa hàng duy nhất.
+* **Điểm nhấn trực quan:** 66.4% hộ đi từ 4 cửa hàng trở lên, nhưng gần 3/4 ngân sách (73.4%) tập trung vào đúng 1 cửa hàng ruột.
 
 **Lời thoại trình bày:**
-> *"Khám phá về mặt địa lý cho thấy hơn **66.4%** hộ gia đình có ghé mua sắm ở nhiều hơn một chi nhánh (tiện đường đi làm, đón con hoặc du lịch).*
+> *"Khám phá về mặt địa lý cho thấy hơn **66.4%** hộ gia đình có ghé mua sắm ở từ 4 chi nhánh khác nhau trở lên (tiện đường đi làm, đón con hoặc du lịch).*
 >
-> *Tuy nhiên, họ không phân bổ tiền đồng đều: Gần **3/4 ngân sách (73.4%)** vẫn dồn trọn vẹn vào một 'cửa hàng ruột' duy nhất. Các chi nhánh còn lại chỉ đóng vai trò mua sắm phát sinh lẻ.*
+> *Tuy nhiên, họ không phân bổ tiền đồng đều: Gần **3/4 ngân sách (73.35%)** vẫn dồn trọn vẹn vào một 'cửa hàng ruột' duy nhất. Các chi nhánh còn lại chỉ đóng vai trò mua sắm phát sinh lẻ.*
 >
 > *Từ phát hiện này, mô hình được bổ sung chỉ số trung thành `store_loyalty_index` và `primary_store_id`, giúp phân biệt rõ đâu là địa bàn tiêu dùng cốt lõi của khách hàng."*
 
@@ -183,12 +191,12 @@
 
 ### SLIDE 11: CÂU CHUYỆN 8 - QUY MÔ HỘ GIA ĐÌNH & GIÁ TRỊ GIỎ HÀNG
 * **Tiêu đề:** 10. Quy Mô Hộ Gia Đình & Tác Động Lên Giá Trị Giỏ Hàng
-* **Biểu đồ:** Tương quan giữa Quy mô hộ gia đình (1, 2, 3, 4, 5+ thành viên) và AOV.
+* **Biểu đồ:** Tương quan giữa Quy mô hộ gia đình và AOV.
 * **Thời lượng:** 40 giây
-* **Điểm nhấn trực quan:** Đường bậc thang đi lên vững chắc từ \$22 lên tới \$36/giỏ hàng.
+* **Điểm nhấn trực quan:** AOV tăng từ \$31.49 (độc thân) lên \$43.91 (hộ đông người), chênh lệch +39.4%.
 
 **Lời thoại trình bày:**
-> *"Mối liên hệ giữa nhân khẩu học và quy mô giỏ hàng diễn ra theo quan hệ tuyến tính: Số miệng ăn trong gia đình quy định trực tiếp giá trị hóa đơn. Các hộ gia đình từ 5 người trở lên có AOV cao hơn **+39.4%** so với hộ độc thân.*
+> *"Mối liên hệ giữa nhân khẩu học và quy mô giỏ hàng diễn ra theo quan hệ tuyến tính: Số miệng ăn trong gia đình quy định trực tiếp giá trị hóa đơn. Các hộ gia đình đông người có AOV đạt **\$43.91**, cao hơn **+39.4%** so với hộ độc thân (\$31.49).*
 >
 > *Đặc biệt, sự xuất hiện của trẻ nhỏ kéo theo nhu cầu về các dòng sản phẩm giá trị cao như sữa bột, tã bỉm và đồ ăn dặm. Mặc dù 68% hộ bị thiếu dữ liệu này, việc nhóm chúng vào danh mục `UNKNOWN` vẫn cho phép mô hình khai thác triệt để tín hiệu từ 32% hộ có thông tin mà không làm méo mó phân phối."*
 
@@ -196,14 +204,14 @@
 
 ### SLIDE 12: CÂU CHUYỆN 9 - ĐỘ ỔN ĐỊNH NHÃN MỤC TIÊU THEO THỜI GIAN
 * **Tiêu đề:** 11. Độ Ổn Định Nhãn Mục Tiêu Theo Dòng Thời Gian
-* **Biểu đồ:** Tỷ lệ nhãn mục tiêu ($Y = 1$) qua từng tuần trong suốt 711 ngày.
+* **Biểu đồ:** Tỷ lệ nhãn mục tiêu ($Y = 1$) qua 16 mốc chốt sổ quan sát $t_0$ từ Ngày 200 đến Ngày 680.
 * **Thời lượng:** 50 giây
 * **Điểm nhấn trực quan:** Đường ngang phẳng lì dao động quanh mốc 68.25% (dải biên độ chỉ $\pm 2.2\%$).
 
 **Lời thoại trình bày:**
 > *"Slide 12 là một trong những slide quan trọng nhất về mặt toán học và kiểm định: **Kiểm tra hiện tượng trôi dạt dữ liệu (Data Drift / Concept Drift)** của nhãn mục tiêu.*
 >
-> *Khi chúng tôi tính tỷ lệ hộ gia đình có đi chợ trong 14 ngày tới trên toàn bộ trục thời gian 1.5 năm, kết quả cho thấy đường tỷ lệ duy trì ổn định tuyệt đối quanh mức **68.25%**, với độ lệch chuẩn rất hẹp chỉ $\pm 2.2\%$.*
+> *Khi chúng tôi tính tỷ lệ hộ gia đình có đi chợ trong 14 ngày tới trên 16 mốc chốt sổ trải dài gần 2 năm, kết quả cho thấy đường tỷ lệ duy trì ổn định tuyệt đối quanh mức **68.25%**, với độ lệch chuẩn rất hẹp chỉ $\pm 2.2\%$.*
 >
 > *Sự bất biến theo thời gian này chứng minh tính chất tiêu dùng thiết yếu của ngành bán lẻ, và là bảo chứng khoa học khẳng định chúng ta hoàn toàn có thể áp dụng chiến lược **cắt mẫu trượt thời gian (Multi-cutoff temporal split)** mà không sợ mô hình bị sốc phân phối nhãn."*
 
@@ -211,39 +219,120 @@
 
 ### SLIDE 13: CÂU CHUYỆN 10 - PHỄU CHUYỂN ĐỔI THEO NHÓM CHIẾN DỊCH
 * **Tiêu đề:** 12. Phễu Chuyển Đổi Tiếp Thị Theo Nhóm Chiến Dịch
-* **Biểu đồ:** Tỷ lệ đổi phiếu thành công của Chiến dịch Loại A, B và C.
+* **Biểu đồ:** Tỷ lệ đổi phiếu thành công và quy mô phễu của Chiến dịch Loại A, B và C.
 * **Thời lượng:** 45 giây
-* **Điểm nhấn trực quan:** Cột Chiến dịch Loại A dẫn đầu với tỷ lệ đổi phiếu vượt trội ~45%.
+* **Điểm nhấn trực quan:** Cột Chiến dịch Loại A dẫn đầu với tỷ lệ đổi phiếu vượt trội 45.01% (gấp 3.5 lần Loại C).
 
 **Lời thoại trình bày:**
-> *"Khi phân tích hiệu quả của 30 chiến dịch tiếp thị, ta thấy rõ sự phân hóa chất lượng: **Chiến dịch Loại A đạt tỷ lệ đổi phiếu thành công cao nhất (~45%)**, trong khi Loại B và C có tỷ lệ chuyển đổi khiêm tốn hơn nhiều.*
+> *"Khi phân tích phễu chuyển đổi của các chiến dịch tiếp thị, ta thấy rõ sự phân hóa chất lượng: **Chiến dịch Loại A đạt tỷ lệ đổi phiếu thành công lên tới 45.01%**, trong khi Loại B chỉ đạt 17.1% và Loại C chỉ đạt 12.7%.*
 >
-> *Lý do là Loại A có độ phủ sản phẩm đa ngành rất rộng, giúp mọi hộ gia đình dễ dàng tìm thấy mặt hàng phù hợp với nhu cầu. Việc mô hình hóa tập trung vào biến ngoại sinh `is_targeted_by_active_campaign` để nắm bắt sự thúc đẩy chuyển đổi này."*
+> *Chiến dịch Loại A có hiệu quả kích hoạt hành vi **gấp 3.5 lần** so với Loại C nhờ độ phủ sản phẩm đa ngành rất rộng, giúp mọi hộ gia đình dễ dàng tìm thấy mặt hàng phù hợp với nhu cầu. Vì vậy, đặc trưng ngoại sinh `is_targeted_by_active_campaign` là một biến phân loại mang tính quyết định trong mô hình.*
+>
+> *Bây giờ, chúng ta bước sang Phần II: Những góc nhìn chiến lược bán lẻ và vận hành sâu sắc được khai phá từ dữ liệu."*
 
 ---
 
-### SLIDE 14: CHUYỂN HÓA PHÁT HIỆN EDA SANG HỆ THỐNG ĐẶC TRƯNG HỌC MÁY
-* **Tiêu đề:** 13. Chuyển Hóa Phát Hiện EDA Sang Hệ Thống Đặc Trưng ML
-* **Bảng:** Ma trận ánh xạ 6 nhóm hành vi sang hệ thống biến đặc trưng tương ứng.
+### SLIDE 14: CÂU CHUYỆN 11 - PHÂN HÓA CLV & KIỂM ĐỊNH PARETO 80/20
+* **Tiêu đề:** 13. Phân Hóa Giá Trị Trọn Đời (CLV) & Kiểm Định Pareto 80/20
+* **Biểu đồ:** Đường cong Lorenz thực tế so với đường phân bổ bình đẳng ($45^\circ$) cho 2,500 hộ gia đình.
+* **Thời lượng:** 55 giây
+* **Điểm nhấn trực quan:** Vùng bất bình đẳng màu xanh; mốc Top 20% đạt 53.05% doanh số ($4.27M); mốc 44% hộ để đạt 80% doanh thu.
+
+**Lời thoại trình bày:**
+> *"Trên Slide 14, chúng tôi thực hiện kiểm định giả thuyết kinh điển trong quản trị khách hàng: **Quy luật Pareto 80/20** về giá trị trọn đời (CLV).*
+>
+> *Đường cong Lorenz thực tế từ 2 năm chi tiêu của 2,500 hộ gia đình (tổng doanh thu \$8.06 Triệu USD) cho thấy:*
+> * *Top 10% hộ gia đình tạo ra **34.29% tổng doanh thu** (\$2.76 Triệu USD).*
+> * *Top 20% hộ gia đình tạo ra **53.05% tổng doanh thu** (\$4.27 Triệu USD).*
+> * *Ngược lại, 50% số hộ ở nửa dưới chỉ đóng góp vỏn vẹn **15.66% tổng doanh thu**.*
+>
+> *Tuy nhiên, kiểm định thực nghiệm đã **bác bỏ quy luật Pareto 80/20 cực đoan**: Thực tế cần tới **44% số hộ gia đình** mới đạt được 80% doanh số (chỉ số Gini = 0.50). Trong ngành bán lẻ nhu yếu phẩm, mức độ phân hóa nhẹ nhàng hơn so với các mặt hàng xa xỉ hay phần mềm B2B.*
+>
+> *Góc nhìn này đem lại 2 giá trị: Đối với bộ phận CRM, đây là cơ sở phân khúc khách hàng VIP để có chính sách chăm sóc riêng biệt. Đối với Machine Learning, để tuyệt đối chống rò rỉ dữ liệu tương lai, mô hình chỉ sử dụng biến `spend_180d` quá khứ làm proxy an toàn mà không nhét trực tiếp CLV 2 năm vào đặc trưng."*
+
+---
+
+### SLIDE 15: CÂU CHUYỆN 12 - CẤU TRÚC CHIẾT KHẤU 2 TẦNG
+* **Tiêu đề:** 14. Cấu Trúc Khuyến Mãi 2 Tầng: Giảm Giá Niêm Yết Siêu Thị vs Phiếu Giảm Giá
+* **Biểu đồ:** Đối sánh tổng ngân sách chiết khấu (Triệu USD) và tỷ lệ bao phủ giỏ hàng giữa Giảm giá tại quầy (`RETAIL_DISC`) và Coupon (`COUPON_DISC`).
+* **Thời lượng:** 50 giây
+* **Điểm nhấn trực quan:** Cột màu cam \$1.40M gấp 32.8 lần cột xanh \$42.6k; tỷ lệ phủ 48.7% vs 6.2%.
+
+**Lời thoại trình bày:**
+> *"Slide 15 bóc tách một bí mật thú vị về cấu trúc tài chính trong bán lẻ: **Sự bất cân xứng giữa Giảm giá niêm yết tại quầy và Phiếu giảm giá Coupon**.*
+>
+> *Nhiều người nghĩ rằng coupon là nguồn chiết khấu chủ yếu. Nhưng số liệu thực nghiệm chứng minh điều ngược lại:*
+> * *Giảm giá niêm yết tại quầy của siêu thị (`RETAIL_DISC`) đạt tới **\$1.40 Triệu USD** (chiếm gần 15% tổng doanh thu gộp) và xuất hiện ở **48.74% số giỏ hàng**.*
+> * *Trong khi đó, giảm giá bằng phiếu coupon (`COUPON_DISC`) chỉ đạt **\$42.6k USD** (chiếm 0.53% doanh thu gộp) và chỉ bao phủ **6.22% số giỏ hàng**.*
+>
+> *Giảm giá niêm yết trên kệ lớn **gấp 32.8 LẦN** so với coupon! Điều này cho thấy: Siêu thị là bên chủ động hy sinh biên lợi nhuận đại trà trên kệ hàng để cạnh tranh giá; còn coupon chỉ là vũ khí nhắm trúng đích cho nhóm khách hàng chuyên săn ưu đãi.*
+>
+> *Phát hiện này định hướng cho ban giám đốc cân đối lại ngân sách khuyến mãi đại trà để bảo toàn biên lợi nhuận ròng."*
+
+---
+
+### SLIDE 16: CÂU CHUYỆN 13 - SỨC THÂM NHẬP CỦA NHÃN HÀNG RIÊNG (PRIVATE LABEL)
+* **Tiêu đề:** 15. Sức Thâm Nhập Vượt Trội Của Nhãn Hàng Riêng Siêu Thị
+* **Biểu đồ:** So sánh tỷ trọng danh mục SKU (15.0%) vs Tỷ trọng Doanh thu (27.8%) và Tỷ trọng Sản lượng (28.8%).
+* **Thời lượng:** 50 giây
+* **Điểm nhấn trực quan:** Thanh màu xanh chỉ chiếm 15% SKU nhưng vươn lên chiếm gần 28% doanh thu và 29% sản lượng; chỉ số hiệu suất 1.86x.
+
+**Lời thoại trình bày:**
+> *"Tiếp tục ở Slide 16 là một phát hiện chiến lược về quản trị danh mục mặt hàng: **Sức thâm nhập phi thường của Nhãn hàng riêng (Private Label / Store Brand)**.*
+>
+> *Trong tổng số hơn 92,000 mã hàng hóa, nhãn hàng riêng của siêu thị chỉ chiếm khiêm tốn **14.96% số SKU**, nhường 85% kệ hàng cho các thương hiệu quốc gia (National Brand).*
+>
+> *Thế nhưng, 15% mặt hàng này lại tạo ra tới **27.83% tổng doanh thu** (\$2.24 Triệu USD) và chiếm **28.80% tổng sản lượng hàng hóa bán ra**!*
+>
+> *Chỉ số hiệu suất doanh thu trên mỗi SKU của nhãn riêng đạt **1.86x**, cao gấp **2.18 lần** so với thương hiệu quốc gia (0.85x). Người tiêu dùng tin tưởng nhãn riêng như một giải pháp 'chất lượng tốt - giá hợp lý' cho nhu yếu phẩm hàng ngày.*
+>
+> *Đây là khuyến nghị chiến lược đắt giá để chuỗi siêu thị tiếp tục mở rộng các dòng sản phẩm Private Label nhằm tối ưu hóa biên lợi nhuận gộp."*
+
+---
+
+### SLIDE 17: CÂU CHUYỆN 14 - NHỊP ĐIỆU THỜI GIAN VI MÔ
+* **Tiêu đề:** 16. Nhịp Điệu Thời Gian Vi Mô: Ngày Trong Tuần & Khung Giờ Vàng
+* **Biểu đồ:** Biểu đồ kép: Phân phối lượng giỏ hàng theo Ngày trong tuần (bên trái) và Khung giờ mua sắm trong ngày (bên phải).
+* **Thời lượng:** 50 giây
+* **Điểm nhấn trực quan:** Hai cột cuối tuần Thứ Bảy & Chủ Nhật đạt đỉnh 32%; dải giờ vàng 11h - 18h chiếm 65% giao dịch.
+
+**Lời thoại trình bày:**
+> *"Bên cạnh chu kỳ 14 ngày vĩ mô, dữ liệu còn tiết lộ **nhịp điệu thời gian vi mô cực kỳ rõ nét** trên Slide 17:*
+>
+> 1. *Theo ngày trong tuần: Thứ Bảy và Chủ Nhật chiếm tới **32% tổng lượng giao dịch** cả tuần. Khách hàng dồn sức đi sắm giỏ hàng lớn vào hai ngày nghỉ.*
+> 2. *Theo khung giờ trong ngày: Toàn bộ lưu lượng mua sắm tập trung đậm đặc vào khung **11 giờ trưa đến 18 giờ chiều**, chiếm tới **65% tổng số giao dịch** trong ngày, và đạt đỉnh cao nhất vào khoảng 14h - 17h khi các gia đình mua thực phẩm chuẩn bị bữa tối.*
+>
+> *Phát hiện này cung cấp giải pháp vận hành thực chiến: Ban quản lý siêu thị cần tối ưu hóa ca trực thu ngân và tiếp tế quầy đồ tươi vào khung giờ vàng; đồng thời, các thông báo kích cầu qua ứng dụng CRM nên được tự động gửi vào sáng Thứ Sáu để đón đầu làn sóng mua sắm cuối tuần."*
+
+---
+
+### SLIDE 18: MA TRẬN CHUYỂN HÓA PHÁT HIỆN EDA SANG HỆ THỐNG ĐẶC TRƯNG & VẬN HÀNH
+* **Tiêu đề:** 17. Chuyển Hóa Phát Hiện EDA Sang Đặc Trưng ML & Vận Hành CRM
+* **Bảng:** Ma trận ánh xạ 7 trụ cột phát hiện thực nghiệm sang Đặc trưng ML và Giải pháp vận hành CRM.
 * **Thời lượng:** 60 giây
-* **Điểm nhấn trực quan:** Hàng alertbox dưới cùng nhấn mạnh Kỷ luật thời gian $DAY \le t_0$.
+* **Điểm nhấn trực quan:** Nhấn mạnh dòng Kỷ luật thời gian màu cam ở cuối: 100% biến ML tuân thủ ranh giới $DAY \le t_0$.
 
 **Lời thoại trình bày:**
-> *"Thưa quý vị, toàn bộ 10 câu chuyện thực nghiệm cốt lõi vừa nêu đã được chúng tôi tổng hợp và chuyển hóa thành **Ma trận ánh xạ đặc trưng** trên Slide 13:*
+> *"Thưa quý vị, toàn bộ 15 phát hiện thực nghiệm vừa nêu đã được chúng tôi tổng hợp và chuyển hóa thành **Ma trận chuyển giao 2 tầng** trên Slide 17:*
 >
-> 1. *Nhịp sinh học & Đồ tươi $\rightarrow$ Nhóm biến Recency & Urgency (`days_since_last_basket`, `urgency_ratio`, `days_since_perishable`).*
-> 2. *Sức mua & Độ rộng giỏ hàng $\rightarrow$ Nhóm biến Quy mô & Độ phủ danh mục (`spend_30d/90d`, `aov_90d`, `department_breadth_90d`).*
-> 3. *Tần suất & Động lượng $\rightarrow$ Nhóm biến Gia tốc và Trôi dạt chu kỳ (`frequency_momentum_30_vs_90`, `baskets_count_14d/30d`).*
-> 4. *Nhân khẩu & Quy mô hộ $\rightarrow$ Nhóm biến Quy mô gia đình & Thu nhập (`hh_size`, `kid_category`, `income_desc`).*
-> 5. *Hiệu ứng mồi câu & Phễu tiếp thị $\rightarrow$ Lịch sử đổi phiếu và chiến dịch đang chạy (`coupon_redempt_count_180d`, `is_targeted_by_active_campaign`).*
-> 6. *Địa bàn & Trung thành $\rightarrow$ Chỉ số trung thành cửa hàng ruột (`store_loyalty_index`, `primary_store_id`).*
+> *Ở tầng **Machine Learning**, 10 quy luật hành vi tiêu dùng đã được mã hóa thành **28 đặc trưng point-in-time chất lượng cao**:*
+> * *Nhịp sinh học & Đồ tươi $\rightarrow$ `days_since_last_basket`, `urgency_ratio`, `days_since_perishable`.*
+> * *Sức mua & Độ phủ ngành hàng $\rightarrow$ `spend_30d/90d`, `aov_90d`, `department_breadth_90d`.*
+> * *Tiếp thị & Trung thành $\rightarrow$ `coupon_redempt_count_180d`, `store_loyalty_index`, `is_targeted_by_active_campaign`.*
+> * *Nhân khẩu học $\rightarrow$ Các biến danh mục được gán nhãn `UNKNOWN` chuẩn hóa.*
 >
-> *Đặc biệt, **100% các đặc trưng này đều được tính toán nghiêm ngặt tại thời điểm quan sát $DAY \le t_0$**, tuyệt đối không nhìn trước dữ liệu tương lai, bảo đảm mô hình học máy khi triển khai thực tế sẽ đạt độ tin cậy cao nhất."*
+> *Ở tầng **Chiến Lược Bán Lẻ & CRM**, 5 phát hiện kinh doanh trở thành kim chỉ nam cho vận hành:*
+> * *Phân khúc CLV chăm sóc khách VIP Top 20%.*
+> * *Cân đối ngân sách chiết khấu niêm yết trên kệ.*
+> * *Mở rộng danh mục sản phẩm Nhãn hàng riêng.*
+> * *Tối ưu ca trực thu ngân và lịch gửi thông báo kích cầu cuối tuần.*
+>
+> *Đặc biệt, **100% đặc trưng học máy đều được tính toán nghiêm ngặt tại thời điểm $DAY \le t_0$**, tuyệt đối không nhìn trước tương lai, triệt tiêu hoàn toàn rủi ro rò rỉ dữ liệu."*
 
 ---
 
-### SLIDE 15: TỔNG KẾT GIAI ĐOẠN EDA & KẾ HOẠCH TIẾP THEO
-* **Tiêu đề:** 14. Tổng Kết Giá Trị Nền Tảng Của Giai Đoạn EDA
+### SLIDE 19: TỔNG KẾT GIAI ĐOẠN EDA & KẾ HOẠCH TIẾP THEO
+* **Tiêu đề:** 18. Tổng Kết Giá Trị Nền Tảng Của Giai Đoạn EDA
 * **Thời lượng:** 60 giây
 * **Điểm nhấn trực quan:** 4 đóng góp nền tảng ở cột trái và lời cảm ơn / chuyển sang Q&A ở cột phải.
 
@@ -252,12 +341,12 @@
 >
 > *Một là, xác lập cửa sổ dự báo tối ưu **$\Delta t = 14$ ngày** trên cơ sở 92.4% chu kỳ tự nhiên;*  
 > *Hai là, làm sạch triệt để 942 giỏ hàng $\le \$0$ và khử trùng 5,164 bản ghi coupon, bảo toàn 275,542 giỏ hàng thương mại sạch;*  
-> *Ba là, chuyển hóa **10 quy luật hành vi cốt lõi** thành bộ đặc trưng máy học có tính giải thích cao;*  
-> *Bốn là, chứng minh nhãn mục tiêu ổn định ở mức 68.25%, cho phép triển khai chiến lược huấn luyện trượt thời gian.*
+> *Ba là, chuyển hóa **15 phát hiện định lượng cốt lõi** thành 28 đặc trưng máy học chuẩn mực cùng bộ khuyến nghị chiến lược vận hành thực chiến;*  
+> *Bốn là, chứng minh nhãn mục tiêu ổn định ở mức 68.25%, cho phép triển khai chiến lược huấn luyện trượt thời gian (Multi-cutoff).*
 >
-> *Đây chính là bệ phóng vững chắc nhất để chúng tôi tự tin bước vào giai đoạn tiếp theo: Huấn luyện các mô hình phân loại LightGBM, XGBoost và CatBoost.*
+> *Đây chính là bệ phóng vững chắc nhất để chúng tôi tự tin bước vào giai đoạn tiếp theo: Huấn luyện và hiệu chuẩn mô hình phân loại LightGBM Calibrated Classifier.*
 >
-> *Xin chân thành cảm ơn quý thầy cô và các anh chị đã chú ý lắng nghe. Rất mong nhận được các câu hỏi và ý kiến đóng góp ạ!"*
+> *Xin chân thành cảm ơn quý thầy cô và các anh chị đã chú ý lắng nghe. Nhóm chúng tôi rất mong nhận được các câu hỏi và ý kiến đóng góp ạ!"*
 
 ---
 
@@ -278,6 +367,10 @@
 ### Câu hỏi 4: Nhóm làm thế nào để đảm bảo không xảy ra hiện tượng rò rỉ dữ liệu (Data Leakage) khi tạo đặc trưng?
 * **Trả lời:**
   > *"Chúng tôi thiết lập một 'Bức tường thời gian' nghiêm ngặt tại thời điểm mốc $t_0$. Mọi phép tính toán tổng chi tiêu, tần suất, hay số ngày kể từ lần mua gần nhất chỉ được phép quét các dòng hóa đơn có $DAY \le t_0$. Phần dữ liệu trong tương lai từ $t_0 + 1$ đến $t_0 + 14$ chỉ được dùng duy nhất cho một mục đích là kiểm tra xem có phát sinh giỏ hàng nào không để gán nhãn $Y \in \{0, 1\}$. Không có bất kỳ thông tin nào của giai đoạn sau $t_0$ được rò rỉ vào ma trận đặc trưng."*
+
+### Câu hỏi 5: Tại sao kiểm định Pareto ở Slide 14 lại cho thấy Top 20% chỉ chiếm 53% doanh thu thay vì 80%? Điều đó có ý nghĩa gì đối với bài toán ML?
+* **Trả lời:**
+  > *"Quy luật Pareto 80/20 là một ước lượng kinh nghiệm ban đầu, nhưng trong ngành bán lẻ thực phẩm thiết yếu, mọi hộ gia đình đều phải ăn uống và sinh hoạt hàng ngày. Mức chi tiêu tối thiểu của một hộ gia đình bình thường không thể quá nhỏ so với hộ khá giả, dẫn đến hệ số bất bình đẳng Gini chỉ ở mức 0.50 (thay vì >0.80 ở các ngành xa xỉ). Cần tới 44% số hộ mới đạt được 80% doanh thu. Về mặt ML, điều này chứng minh bài toán dự đoán xác suất mua hàng là bài toán dự đoán hành vi phổ quát của toàn bộ tập khách hàng, không thể chỉ tập trung vào một nhóm thiểu số cực đoan; và chúng ta bắt buộc phải sử dụng các biến lịch sử gần như `spend_30d/90d` để nắm bắt sự biến động chu kỳ thay vì một nhãn tĩnh CLV."*
 
 ---
 *Tài liệu được chuẩn hóa và lưu trữ tại `docs/presentation/eda_presentation_script.md`.*
