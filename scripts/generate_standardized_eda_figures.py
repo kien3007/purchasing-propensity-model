@@ -121,21 +121,25 @@ fig, ax = plt.subplots(figsize=(10, 5.2), constrained_layout=True)
 ax.plot(horizons, h_means, marker='o', color='#1f77b4', linewidth=2.5, label='Tỷ lệ hộ có phát sinh mua sắm (Trung bình 5 điểm chốt sổ)')
 ax.fill_between(horizons, np.array(h_means) - np.array(h_stds), np.array(h_means) + np.array(h_stds), color='#1f77b4', alpha=0.15)
 
-# Highlight H = 7, 14, 28
-for h_target, col in zip([7, 14, 28], ['#2ca02c', '#d95f02', '#7570b3']):
-    idx = horizons.index(h_target)
-    val = h_means[idx]
-    ax.scatter([h_target], [val], color=col, s=90, zorder=5)
-    ax.axvline(h_target, color=col, linestyle=':', alpha=0.7)
-    ax.annotate(f'H = {h_target} ngày: {val:.1f}%\n(std ±{h_stds[idx]:.1f}%)',
-                xy=(h_target, val), xytext=(h_target + 1.2, val - 7 if h_target == 14 else val + 4),
-                fontweight='bold', fontsize=10,
-                bbox=dict(boxstyle='round,pad=0.3', facecolor='#f7f7f7', edgecolor=col))
+# Highlight H = 14 (Cửa sổ tối ưu được chọn)
+idx_14 = horizons.index(14)
+val_14 = h_means[idx_14]
+std_14 = h_stds[idx_14]
 
-ax.axhline(68.34, color='#d95f02', linestyle='--', linewidth=1.2, alpha=0.6)
+ax.scatter([14], [val_14], color='#d95f02', s=100, zorder=5)
+ax.axvline(14, color='#d95f02', linestyle='--', linewidth=1.8, alpha=0.8,
+           label=f'Cửa sổ chuẩn H = 14 ngày ({val_14:.1f}%)')
+ax.axhline(val_14, color='#d95f02', linestyle=':', linewidth=1.2, alpha=0.6)
+
+ax.annotate(f'H = 14 ngày: {val_14:.1f}%\n(std ±{std_14:.1f}%)',
+            xy=(14, val_14), xytext=(17, val_14 - 8),
+            fontweight='bold', fontsize=10.5,
+            bbox=dict(boxstyle='round,pad=0.35', facecolor='#fee8c8', edgecolor='#d95f02', lw=1.2),
+            arrowprops=dict(arrowstyle="->", color="#d95f02", lw=1.5))
+
 ax.set_xlabel('Chân trời dự báo H (Số ngày kể từ mốc chốt sổ t_0)', fontweight='bold')
 ax.set_ylabel('Tỷ lệ hộ gia đình có >= 1 giỏ hàng (%)', fontweight='bold')
-ax.set_title('Đường cong tích lũy hộ gia đình mua sắm theo chân trời dự báo H\n(Trung bình qua 5 mốc quan sát; tập mẫu n = 2,500 hộ)', pad=12)
+ax.set_title('Đường cong tích lũy hộ gia đình mua sắm theo chân trời dự báo H', pad=12)
 ax.set_xlim(0, 58)
 ax.set_ylim(0, 100)
 ax.legend(loc='lower right', frameon=True, facecolor='white', fontsize=10)

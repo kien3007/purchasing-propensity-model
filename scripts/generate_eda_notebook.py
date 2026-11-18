@@ -210,18 +210,15 @@ plt.fill_between(horizons,
                  np.array(mean_rates) + np.array(std_rates),
                  color='#1f77b4', alpha=0.15, label='Dải biến thiên (±1 Std)')
 
-# Điểm nhấn tại H=7, H=14, H=28
+# Điểm nhấn tại H = 14 ngày (Cửa sổ tối ưu được chọn)
 plt.axvline(14, color='#d95f02', linestyle='--', linewidth=2, label=f'Cửa sổ chuẩn Δt = 14 ngày ({h14_rate:.1f}%)')
-plt.scatter([7, 14, 28], [h7_rate, h14_rate, h28_rate], color='#d95f02', s=60, zorder=5)
+plt.scatter([14], [h14_rate], color='#d95f02', s=80, zorder=5)
 
-plt.annotate(f"H=7d: {h7_rate:.1f}%", xy=(7, h7_rate), xytext=(9, h7_rate - 8),
-             arrowprops=dict(arrowstyle="->", color='#333333', lw=1.2), fontweight='bold')
-plt.annotate(f"H=14d: {h14_rate:.1f}%\\n(Điểm tối ưu)", xy=(14, h14_rate), xytext=(17, h14_rate - 10),
-             arrowprops=dict(arrowstyle="->", color='#d95f02', lw=1.5), fontweight='bold', color='#d95f02')
-plt.annotate(f"H=28d: {h28_rate:.1f}%", xy=(28, h28_rate), xytext=(31, h28_rate - 6),
-             arrowprops=dict(arrowstyle="->", color='#333333', lw=1.2), fontweight='bold')
+plt.annotate(f"H = 14 ngày: {h14_rate:.1f}%\\n(std ±{h14_std:.1f}%)", xy=(14, h14_rate), xytext=(17, h14_rate - 10),
+             arrowprops=dict(arrowstyle="->", color='#d95f02', lw=1.5), fontweight='bold', color='#d95f02',
+             bbox=dict(boxstyle='round,pad=0.35', facecolor='#fee8c8', edgecolor='#d95f02', lw=1.2))
 
-plt.title("Đường cong tỷ lệ hộ gia đình phát sinh giao dịch theo Horizon (H = 1..56 ngày)", pad=12)
+plt.title("Đường cong tích lũy hộ gia đình mua sắm theo chân trời dự báo H", pad=12)
 plt.xlabel("Độ dài cửa sổ tương lai H (Ngày)")
 plt.ylabel("Tỷ lệ hộ có ≥ 1 giao dịch (%)")
 plt.ylim(0, 100)
