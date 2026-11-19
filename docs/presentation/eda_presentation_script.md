@@ -21,12 +21,12 @@ Bài thuyết trình kéo dài **15 phút** (gồm 12 phút trình bày mạch c
 
 2. **Phần 2: Khám phá dữ liệu chuyên sâu cho Chiến lược Bán lẻ (Slides 10 – 18 | 6.0 phút):**
    - **Slide 10:** 9. Phân khúc giá trị khách hàng RFM & Ma trận giữ chân (VIP 21.6% tạo 54.3% DT, At-Risk 2.1% tạo 3% DT trễ 83 ngày).
-   - **Slide 11:** 10. Ma trận hiệu quả ngành hàng: Nam châm kéo khách (Grocery 78.1% độ phủ, 50.8% DT) vs Tăng giá trị giỏ hàng (Fresh & Drug GM).
-   - **Slide 12:** 11. Sức mạnh giỏ hàng đa ngành & Cơ hội bán chéo liên ngành (AOV tăng từ $12 lên $84+; 12.7% giỏ đa ngành tạo 38.0% DT).
-   - **Slide 13:** 12. Thâm nhập Nhãn hàng riêng (Private Label) theo ngành hàng (Pastry 51.6% DT, Grocery 27.0% DT; dư địa tăng biên lợi nhuận tại Meat & Drug GM).
-   - **Slide 14:** 13. Hành vi tiêu dùng theo Quy mô gia đình & Trẻ em (Hộ $\ge 5$ người đạt AOV $42.06, chi $6,699/năm).
-   - **Slide 15:** 14. Cấu trúc chiết khấu hai tầng: Markdown tại quầy ($1.40M) vs Coupon ($42.6K) — đòn bẩy gấp 32.8 lần.
-   - **Slide 16:** 15. Mức độ tập trung doanh thu khách hàng: Kiểm định Pareto (Top 20% = 53.0% DT) và Hệ số Gini (0.5028).
+   - **Slide 11:** 10. Mức độ tập trung doanh thu khách hàng: Pareto (Top 20% = 53.0% DT) và Hệ số Gini (0.5028).
+   - **Slide 12:** 11. Hành vi tiêu dùng theo Quy mô gia đình & Trẻ em (Hộ $\ge 5$ người đạt AOV $42.06, chi $6,699/năm).
+   - **Slide 13:** 12. Ma trận hiệu quả ngành hàng: Nam châm kéo khách (Grocery 78.1% độ phủ, 50.8% DT) vs Tăng giá trị giỏ hàng (Fresh & Drug GM).
+   - **Slide 14:** 13. Sức mạnh giỏ hàng đa ngành & Cơ hội bán chéo liên ngành (AOV tăng từ $12 lên $84+; 12.7% giỏ đa ngành tạo 38.0% DT).
+   - **Slide 15:** 14. Thâm nhập Nhãn hàng riêng (Private Label) theo ngành hàng (Pastry 51.6% DT, Grocery 27.0% DT; dư địa tăng biên lợi nhuận tại Meat & Drug GM).
+   - **Slide 16:** 15. Cấu trúc chiết khấu hai tầng: Markdown tại quầy ($1.40M) vs Coupon ($42.6K) — đòn bẩy gấp 32.8 lần.
    - **Slide 17:** 16. Nhịp điệu thời gian vi mô & Tối ưu hóa vận hành (Khung giờ cao điểm 11h–18h chiếm 62.9% giao dịch).
    - **Slide 18:** 17. Tổng kết chiến lược bán lẻ: 5 hành động thương mại trọng tâm cho ban giám đốc chuỗi.
 
@@ -166,7 +166,31 @@ Bài thuyết trình kéo dài **15 phút** (gồm 12 phút trình bày mạch c
 
 ---
 
-### Slide 11: 10. Ma trận ngành hàng: Hút khách vs Tăng giỏ
+### Slide 11: 10. Mức độ tập trung doanh thu khách hàng: Pareto & Gini
+* **Thời lượng:** 45 giây
+* **Trực quan:** Đường cong Lorenz thực tế (Gini = 0.5028) so sánh với đường bình đẳng tuyệt đối 45°, định vị điểm tích lũy Top 20% và mốc 80% doanh thu.
+
+**Lời thoại trình bày:**
+> *"Khảo sát mức độ tập trung doanh thu qua đường cong Lorenz trên tổng chi tiêu $8.06M USD của 2,500 hộ panel:
+> - **Quy luật Pareto trong bán lẻ FMCG:** Top **20% hộ gia đình chi tiêu nhiều nhất** (500 hộ) đóng góp **53.0% tổng doanh thu** (\$4.27M USD).
+> - Để đạt được **80% doanh thu tích lũy**, siêu thị cần tới **44.0% số hộ gia đình** (1,100 hộ). Con số này phản ánh đặc thù thực phẩm thiết yếu có mức độ phân hóa ít cực đoan hơn so với thương mại điện tử hay thời trang xa xỉ, nơi 20% khách thường tạo 80% doanh số.
+> - **Hệ số Gini đạt 0.5028:** Thể hiện mức độ tập trung doanh thu ở mức trung bình cao, củng cố tầm quan trọng của việc bảo vệ diện rộng khách hàng, không chỉ phụ thuộc vào số ít cá nhân."*
+
+---
+
+### Slide 12: 11. Tiêu dùng theo Quy mô gia đình & Trẻ em
+* **Thời lượng:** 45 giây
+* **Trực quan:** Biểu đồ so sánh AOV và mức chi tiêu bình quân hàng năm theo Quy mô hộ gia đình (Panel A) và Số lượng trẻ em (Panel B).
+
+**Lời thoại trình bày:**
+> *"Phân tích 801 hộ gia đình có khai báo nhân khẩu học cho thấy chân dung khách hàng có sức mua lớn nhất:
+> - **Quy mô hộ gia đình:** Hộ độc thân (1 người) chi tiêu \$5,032/năm với AOV \$27.83; trong khi các hộ gia đình lớn ($\ge 5$ người) chi tiêu tới **\$6,699/năm** (tăng +33.1%) và AOV mỗi lần đi chợ đạt **\$42.06** (tăng +51.1%).
+> - **Tác động của trẻ em:** Sự xuất hiện của con cái làm thay đổi hoàn toàn quy mô giỏ hàng. Hộ có 2 con chi tiêu trung bình **\$6,764/năm** (AOV \$36.36); hộ có $\ge 3$ con đạt AOV **\$41.10** và chi tiêu \$6,742/năm.
+> - **Hành động thương mại:** Siêu thị cần thiết kế các gói sản phẩm combo gia đình dung tích lớn (Family pack / Bulk size) nhắm trực tiếp vào phân khúc hộ đông người và có con nhỏ để tối đa hóa chi tiêu mỗi chuyến."*
+
+---
+
+### Slide 13: 12. Ma trận ngành hàng: Hút khách vs Tăng giỏ
 * **Thời lượng:** 45 giây
 * **Trực quan:** Biểu đồ ngang Panel A (Doanh thu vs Độ phủ giỏ của Top 8 ngành) và Panel B (Chi tiêu bình quân mỗi chuyến AOV ngành).
 
@@ -176,11 +200,11 @@ Bài thuyết trình kéo dài **15 phút** (gồm 12 phút trình bày mạch c
 > - **Ngành mở rộng giỏ (Basket Builder) — `DRUG GM`:** Độ phủ **42.8% giỏ hàng**, đóng góp **13.1% doanh thu** (\$1.05M USD).
 > - **Nhóm giữ chân định kỳ — Hàng tươi sống (`FRESH` - Produce + Meat + Packaged Meat):** Đóng góp tổng cộng **18.9% doanh thu**.
 >
-> Chiến lược thương mại ở đây là: Sử dụng `GROCERY` làm mồi kéo lưu lượng khách hàng vào cửa hàng, sau đó tối ưu hóa luồng di chuyển và biển chỉ dẫn để dẫn dắt họ mua chéo sang các quầy Fresh và Drug GM có biên lợi nhuận cao hơn."*
+> Chiến lược thương mại: Sử dụng `GROCERY` làm mồi kéo lưu lượng khách hàng vào cửa hàng, sau đó tối ưu hóa luồng di chuyển và biển chỉ dẫn để dẫn dắt họ mua chéo sang các quầy Fresh và Drug GM có biên lợi nhuận cao hơn."*
 
 ---
 
-### Slide 12: 11. Sức mạnh giỏ hàng đa ngành & Đòn bẩy bán chéo
+### Slide 14: 13. Sức mạnh giỏ hàng đa ngành & Đòn bẩy bán chéo
 * **Thời lượng:** 45 giây
 * **Trực quan:** Đồ thị cột AOV giỏ hàng theo số lượng ngành hàng trong giỏ, kèm đường tỷ trọng doanh thu tích lũy.
 
@@ -195,7 +219,7 @@ Bài thuyết trình kéo dài **15 phút** (gồm 12 phút trình bày mạch c
 
 ---
 
-### Slide 13: 12. Thâm nhập Nhãn riêng (Private Label) theo ngành
+### Slide 15: 14. Thâm nhập Nhãn riêng (Private Label) theo ngành
 * **Thời lượng:** 45 giây
 * **Trực quan:** Biểu đồ tỷ trọng Doanh thu và Sản lượng tiêu thụ của Nhãn hàng riêng (Private Label) trên 7 ngành hàng chủ lực.
 
@@ -204,23 +228,11 @@ Bài thuyết trình kéo dài **15 phút** (gồm 12 phút trình bày mạch c
 > - **Thống trị tuyệt đối tại ngành Bánh nướng (`PASTRY`):** Nhãn riêng chiếm tới **51.6% doanh thu** và 39.7% sản lượng tiêu thụ. Khách hàng hoàn toàn tin tưởng vào chất lượng bánh tự sản xuất của siêu thị.
 > - **Chiếm lĩnh vững chắc tại Tạp hóa (`GROCERY`):** Đạt **27.0% doanh thu** và **36.4% sản lượng tiêu thụ** (hơn 1/3 tổng lượng hàng bán ra).
 > - Các ngành chế biến sẵn như `DELI` và `MEAT-PCKGD` cũng đạt tỷ trọng ấn tượng quanh mức **23%**.
-> - **Dư địa mở rộng:** Nhãn riêng tại quầy Hóa mỹ phẩm (`DRUG GM` - 9.5%) và Quầy thịt tươi sống (`MEAT` - 5.0%) còn rất khiêm tốn. Đây là cơ hội vàng để siêu thị hợp tác gia công nhằm đa dạng hóa dải sản phẩm nhãn riêng có tỷ suất lợi nhuận cao."*
+> - **Dư địa mở rộng:** Nhãn riêng tại quầy Hóa mỹ phẩm (`DRUG GM` - 9.5%) và Quầy thịt tươi sống (`MEAT` - 5.0%) còn rất khiêm tốn. Đẩy mạnh hợp tác gia công để cải thiện biên lợi nhuận gộp từ 5--12\%."*
 
 ---
 
-### Slide 14: 13. Tiêu dùng theo Quy mô gia đình & Trẻ em
-* **Thời lượng:** 45 giây
-* **Trực quan:** Biểu đồ so sánh AOV và mức chi tiêu bình quân hàng năm theo Quy mô hộ gia đình (Panel A) và Số lượng trẻ em (Panel B).
-
-**Lời thoại trình bày:**
-> *"Phân tích 801 hộ gia đình có khai báo nhân khẩu học cho thấy chân dung khách hàng có sức mua lớn nhất:
-> - **Quy mô hộ gia đình:** Hộ độc thân (1 người) chi tiêu \$5,032/năm với AOV \$27.83; trong khi các hộ gia đình lớn ($\ge 5$ người) chi tiêu tới **\$6,699/năm** (tăng +33.1%) và AOV mỗi lần đi chợ đạt **\$42.06** (tăng +51.1%).
-> - **Tác động của trẻ em:** Sự xuất hiện của con cái làm thay đổi hoàn toàn quy mô giỏ hàng. Hộ có 2 con chi tiêu trung bình **\$6,764/năm** (AOV \$36.36); hộ có $\ge 3$ con đạt AOV **\$41.10** và chi tiêu \$6,742/năm.
-> - **Định hướng tiếp thị:** Siêu thị cần thiết kế các gói sản phẩm combo gia đình dung tích lớn (Family pack / Bulk size) nhắm trực tiếp vào phân khúc hộ đông người và có con nhỏ để tối đa hóa chi tiêu mỗi chuyến."*
-
----
-
-### Slide 15: 14. Chiết khấu hai tầng: Markdown tại quầy vs Coupon
+### Slide 16: 15. Chiết khấu hai tầng: Markdown tại quầy vs Coupon
 * **Thời lượng:** 40 giây
 * **Trực quan:** Biểu đồ so sánh Quy mô dòng tiền chiết khấu ($ Triệu USD) và Tỷ lệ giỏ hàng được áp dụng (%) giữa Markdown tại quầy và Phiếu Coupon.
 
@@ -234,18 +246,6 @@ Bài thuyết trình kéo dài **15 phút** (gồm 12 phút trình bày mạch c
 
 ---
 
-### Slide 16: 15. Mức độ tập trung doanh thu khách hàng: Pareto & Gini
-* **Thời lượng:** 45 giây
-* **Trực quan:** Đường cong Lorenz thực tế (Gini = 0.5028) so sánh với đường bình đẳng tuyệt đối 45°, định vị điểm tích lũy Top 20% và mốc 80% doanh thu.
-
-**Lời thoại trình bày:**
-> *"Khảo sát mức độ tập trung doanh thu qua đường cong Lorenz trên tổng chi tiêu $8.06M USD của 2,500 hộ panel:
-> - **Quy luật Pareto trong bán lẻ FMCG:** Top **20% hộ gia đình chi tiêu nhiều nhất** (500 hộ) đóng góp **53.0% tổng doanh thu** (\$4.27M USD).
-> - Để đạt được **80% doanh thu tích lũy**, siêu thị cần tới **44.0% số hộ gia đình** (1,100 hộ). Con số này phản ánh đặc thù thực phẩm thiết yếu có mức độ phân hóa ít cực đoan hơn so với thương mại điện tử hay thời trang xa xỉ, nơi 20% khách thường tạo 80% doanh số.
-> - **Hệ số Gini đạt 0.5028:** Thể hiện mức độ tập trung doanh thu ở mức trung bình cao, củng cố tầm quan trọng của việc cá nhân hóa chính sách CRM để chăm sóc chặt chẽ nhóm 20% khách hàng đóng góp hơn một nửa doanh số."*
-
----
-
 ### Slide 17: 16. Nhịp điệu thời gian vi mô & Tối ưu hóa vận hành
 * **Thời lượng:** 40 giây
 * **Trực quan:** Biểu đồ phân phối ngày trong tuần (`DAY mod 7`) và biểu đồ đường phân bố khung giờ mua sắm trong ngày (`TRANS_TIME`).
@@ -254,10 +254,7 @@ Bài thuyết trình kéo dài **15 phút** (gồm 12 phút trình bày mạch c
 > *"Phân tích nhịp điệu vi mô cung cấp căn cứ trực tiếp để tối ưu hóa vận hành chuỗi:
 > - **Chu kỳ ngày trong tuần:** Hai ngày cuối tuần đạt tỷ trọng giỏ hàng vượt trội (**16.2% đến 17.5%**), trong khi các ngày giữa tuần phân bổ đều đặn từ 12.1% đến 13.0%.
 > - **Khung giờ vàng trong ngày:** Khung giờ từ **11h trưa đến 18h chiều** chiếm tới **62.9% tổng lượng giao dịch** trong ngày, với đỉnh điểm rơi vào khoảng 13h–16h.
-> - **Ứng dụng vận hành:**
->   - Bố trí tăng cường nhân sự quầy thu ngân và nhân viên hỗ trợ đóng gói vào khung giờ 11h–18h và hai ngày cuối tuần.
->   - Hoàn tất việc sắp xếp và kiểm tra chất lượng quầy rau củ, thịt tươi trước 10h sáng.
->   - Thời điểm vàng để gửi tin nhắn thông báo đẩy (Push Notification / SMS) ưu đãi là trước 11h sáng để đón đầu quyết định đi chợ của khách hàng."*
+> - **Ứng dụng vận hành:** Bố trí tăng cường ca trực thu ngân vào khung giờ 11h–18h và cuối tuần, đồng thời gửi thông báo đẩy ưu đãi trước 11h sáng."*
 
 ---
 
