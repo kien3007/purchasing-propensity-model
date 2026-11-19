@@ -1303,65 +1303,354 @@ Toàn bộ 9 nhóm phát hiện thực nghiệm trên được đúc kết thàn
 > **Bảo Đảm Kỹ Thuật (Point-in-Time Discipline):** 100% đặc trưng tuân thủ ranh giới $DAY \le t_0$, tuyệt đối không sử dụng thông tin tương lai, triệt tiêu hoàn toàn rủi ro rò rỉ dữ liệu (data leakage).
 """))
 
-    # Section 5: Retail Strategy & Operational Appendix
+    # Section 5: Retail Business Strategy & Operations Track
     cells.append(nbf.v4.new_markdown_cell("""---
-## 5. Phụ Lục: Góc Nhìn Chiến Lược Bán Lẻ & Quản Trị Vận Hành (Business Appendix)
+## 5. Góc Nhìn Chiến Lược Kinh Doanh Bán Lẻ & Quản Trị Vận Hành (Business Strategy Track)
 
-Phần này phân tích 4 khía cạnh kinh doanh quan trọng, hỗ trợ ban lãnh đạo chuỗi siêu thị trong việc hoạch định chính sách CRM, ngân sách khuyến mãi và tối ưu ca trực vận hành.
+Phần này phân tích 8 khía cạnh kinh doanh quan trọng, hỗ trợ ban giám đốc chuỗi siêu thị trong việc hoạch định chính sách phân tầng CRM, quản trị danh mục (Category Management), chiến lược thâm nhập nhãn hàng riêng, cấu trúc khuyến mại và tối ưu ca trực vận hành.
 
-### 5.1. Phụ Lục 1: Mức Độ Tập Trung Doanh Thu & Kiểm Định Pareto
-Khảo sát phân hóa doanh số qua tổng chi tiêu \\$8.06 Triệu USD của 2,500 hộ gia đình trong 2 năm.
+### 5.1. Phân Khúc Giá Trị Khách Hàng RFM & Chiến Lược Giữ Chân (RFM Customer Segmentation)
+Phân khúc 2,500 hộ gia đình thành 6 nhóm chiến lược dựa trên Recency (độ trễ ngày), Frequency (tần suất giỏ) và Monetary (tổng chi tiêu).
 """))
 
-    cells.append(nbf.v4.new_code_cell("""# 1. Tính toán tổng chi tiêu của từng hộ gia đình
-hh_spend = baskets.groupby('household_key')['basket_spend'].sum().sort_values(ascending=False).values
-tot_rev = hh_spend.sum()
-cum_rev = np.cumsum(hh_spend) / tot_rev
-cum_hh = np.arange(1, len(hh_spend) + 1) / len(hh_spend)
+    cells.append(nbf.v4.new_code_cell("""# 1. Truy vấn RFM và phân khúc khách hàng
+q_rfm = \"\"\"
+WITH hh_stats AS (
+    SELECT 
+        household_key,
+        MAX(DAY) AS max_day,
+        COUNT(DISTINCT BASKET_ID) AS total_baskets,
+        SUM(basket_spend) AS total_spend,
+        AVG(basket_spend) AS avg_spend_per_basket
+    FROM baskets
+    GROUP BY household_key
+)
+SELECT 
+    household_key,
+    (711 - max_day) AS recency_days,
+    total_baskets AS frequency,
+    total_spend AS monetary,
+    avg_spend_per_basket AS aov
+FROM hh_stats
+\"\"\"
+df_rfm = con.execute(q_rfm).df()
 
-# Hệ số Gini chuẩn hóa (phân vị rời rạc)
-x_sort = np.sort(hh_spend)
-n_h = len(x_sort)
-gini = (2.0 * np.sum(np.arange(1, n_h + 1) * x_sort) - (n_h + 1) * np.sum(x_sort)) / (n_h * np.sum(x_sort))
+def assign_tier(row):
+    r, f, m = row['recency_days'], row['frequency'], row['monetary']
+    if m >= 4500 and r <= 14 and f >= 80:
+        return 'VIP / Champions'
+    elif f >= 40 and r <= 30:
+        return 'Khách thân thiết (Loyal)'
+    elif r <= 14:
+        return 'Khách tiềm năng (Promising)'
+    elif m >= 2500 and r > 30:
+        return 'Nguy cơ rời bỏ (At-Risk)'
+    elif r > 60:
+        return 'Khách ngủ đông (Dormant)'
+    else:
+        return 'Khách vãng lai (Need Attention)'
 
-top10_share = cum_rev[int(len(cum_hh) * 0.10) - 1] * 100.0
-top20_share = cum_rev[int(len(cum_hh) * 0.20) - 1] * 100.0
-hh_for_80 = cum_hh[np.where(cum_rev >= 0.80)[0][0]] * 100.0
+df_rfm['segment'] = df_rfm.apply(assign_tier, axis=1)
+seg = df_rfm.groupby('segment').agg(
+    hh_count=('household_key', 'count'),
+    total_spend=('monetary', 'sum'),
+    avg_spend=('monetary', 'mean'),
+    avg_baskets=('frequency', 'mean'),
+    avg_aov=('aov', 'mean'),
+    avg_rec=('recency_days', 'mean')
+).reset_index()
 
-print(f"📊 PHÂN HÓA DOANH THU & HỆ SỐ GINI:")
-print(f" - Tổng doanh thu 2 năm: ${tot_rev:,.2f} USD")
-print(f" - Hệ số Gini: {gini:.3f}")
-print(f" - Top 10% hộ gia đình đóng góp: {top10_share:.2f}% doanh thu")
-print(f" - Top 20% hộ gia đình đóng góp: {top20_share:.2f}% doanh thu (${tot_rev * top20_share / 100:,.0f} USD)")
-print(f" - Cần {hh_for_80:.1f}% số hộ gia đình để tích lũy 80% doanh thu")
+tot_hh = len(df_rfm)
+tot_rev = df_rfm['monetary'].sum()
+seg['hh_pct'] = seg['hh_count'] * 100.0 / tot_hh
+seg['spend_pct'] = seg['total_spend'] * 100.0 / tot_rev
 
-# Vẽ đường cong tập trung doanh thu
-plt.figure(figsize=(8.5, 4.8))
-plt.plot(cum_hh * 100.0, cum_rev * 100.0, color='#2b5c8f', linewidth=2.5,
-         label=f'Đường cong tập trung thực tế (Gini = {gini:.2f})')
-plt.plot([0, 100], [0, 100], color='#d95f02', linestyle='--', linewidth=1.5,
-         label='Đường phân bổ bình đẳng (45°)')
+order = ['VIP / Champions', 'Khách thân thiết (Loyal)', 'Khách vãng lai (Need Attention)', 
+         'Nguy cơ rời bỏ (At-Risk)', 'Khách tiềm năng (Promising)', 'Khách ngủ đông (Dormant)']
+seg['order'] = seg['segment'].map(lambda x: order.index(x) if x in order else 99)
+seg = seg.sort_values('order').reset_index(drop=True)
 
-plt.scatter([20.0, hh_for_80], [top20_share, 80.0], color='#b2182b', s=50, zorder=5)
-plt.annotate(f"Top 20% hộ tạo {top20_share:.1f}% DT", xy=(20.0, top20_share), xytext=(25, top20_share - 10),
-             arrowprops=dict(arrowstyle="->", color='#b2182b', lw=1.2), fontweight='bold')
-plt.annotate(f"{hh_for_80:.0f}% hộ để đạt 80% DT", xy=(hh_for_80, 80.0), xytext=(hh_for_80 + 3, 72),
-             arrowprops=dict(arrowstyle="->", color='#b2182b', lw=1.2), fontweight='bold')
+print("📊 MA TRẬN PHÂN KHÚC KHÁCH HÀNG RFM:")
+display(seg[['segment', 'hh_count', 'hh_pct', 'spend_pct', 'avg_spend', 'avg_baskets', 'avg_aov', 'avg_rec']])
 
-plt.title("Đường cong tập trung doanh thu theo hộ gia đình (Customer Revenue Concentration)", pad=12)
-plt.xlabel("Tỷ lệ tích lũy hộ gia đình (sắp xếp chi tiêu giảm dần, %)")
-plt.ylabel("Tỷ lệ tích lũy doanh thu (%)")
-plt.legend(frameon=True, facecolor='white', loc='lower right')
+# Vẽ biểu đồ RFM Customer Tiers
+fig, ax = plt.subplots(figsize=(10.5, 4.8))
+x = np.arange(len(seg))
+width = 0.38
+b1 = ax.bar(x - width/2, seg['hh_pct'], width, label='Tỷ lệ số hộ (%)', color='#2b5c8f', alpha=0.9)
+b2 = ax.bar(x + width/2, seg['spend_pct'], width, label='Tỷ lệ đóng góp Doanh thu (%)', color='#d95f02', alpha=0.9)
+
+for bar in b1:
+    h = bar.get_height()
+    ax.text(bar.get_x() + bar.get_width()/2, h + 0.8, f"{h:.1f}%", ha='center', va='bottom', fontsize=9.5, fontweight='bold', color='#2b5c8f')
+for bar in b2:
+    h = bar.get_height()
+    ax.text(bar.get_x() + bar.get_width()/2, h + 0.8, f"{h:.1f}%", ha='center', va='bottom', fontsize=9.5, fontweight='bold', color='#d95f02')
+
+labels = [f"{row['segment']}\\nAOV: ${row['avg_aov']:.0f} | Trễ: {row['avg_rec']:.0f}d" for _, row in seg.iterrows()]
+ax.set_xticks(x)
+ax.set_xticklabels(labels, fontsize=9.0, fontweight='medium')
+ax.set_ylim(0, 65)
+ax.set_ylabel("Tỷ lệ (%)", fontsize=11, fontweight='bold')
+ax.set_title("Phân khúc giá trị khách hàng RFM & Đóng góp doanh thu thực tế (2,500 Hộ)", fontsize=12.5, fontweight='bold', pad=12)
+ax.legend(frameon=True, facecolor='white', loc='upper right', fontsize=10)
+ax.grid(True, linestyle='--', alpha=0.5, axis='y')
 plt.tight_layout()
-plt.savefig(FIG_DIR / '19_clv_pareto_distribution.png', dpi=150)
+plt.savefig(FIG_DIR / '22_rfm_customer_segmentation.png', dpi=150)
 plt.show()
 """))
 
-    cells.append(nbf.v4.new_markdown_cell("""### 5.2. Phụ Lục 2: Cấu Trúc Chiết Khấu Hai Tầng Trong Bán Lẻ
+    cells.append(nbf.v4.new_markdown_cell("""### 5.2. Ma Trận Hiệu Quả Ngành Hàng & Sức Hút Nam Châm Khách Hàng (Department Performance Matrix)
+Phân tích 44 ngành hàng để phân loại các nhóm ngành đóng vai trò **Traffic Driver** (hút khách vào siêu thị) và **Basket Builder** (tăng giá trị giỏ hàng).
+"""))
+
+    cells.append(nbf.v4.new_code_cell("""# 2. Phân tích ma trận ngành hàng
+q_dept = \"\"\"
+WITH dept_trans AS (
+    SELECT 
+        p.DEPARTMENT,
+        t.BASKET_ID,
+        t.SALES_VALUE
+    FROM df_trans t
+    JOIN df_prod p ON t.PRODUCT_ID = p.PRODUCT_ID
+    WHERE t.SALES_VALUE > 0
+),
+tot_b AS (
+    SELECT COUNT(DISTINCT BASKET_ID) AS n_baskets FROM df_trans WHERE SALES_VALUE > 0
+)
+SELECT 
+    d.DEPARTMENT,
+    ROUND(COUNT(DISTINCT d.BASKET_ID) * 100.0 / (SELECT n_baskets FROM tot_b), 2) AS penetration_pct,
+    ROUND(SUM(d.SALES_VALUE) / 1e3, 1) AS revenue_k,
+    ROUND(SUM(d.SALES_VALUE) * 100.0 / (SELECT SUM(SALES_VALUE) FROM df_trans WHERE SALES_VALUE > 0), 2) AS rev_share_pct,
+    ROUND(SUM(d.SALES_VALUE) / COUNT(DISTINCT d.BASKET_ID), 2) AS dept_aov
+FROM dept_trans d
+GROUP BY d.DEPARTMENT
+ORDER BY revenue_k DESC
+LIMIT 8;
+\"\"\"
+df_d = con.execute(q_dept).df()
+print("📊 TOP 8 NGÀNH HÀNG ĐÓNG GÓP DOANH THU & ĐỘ PHỦ GIỎ HÀNG:")
+display(df_d)
+
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(11.5, 4.8))
+y_pos = np.arange(len(df_d))
+ax1.barh(y_pos - 0.2, df_d['rev_share_pct'], height=0.38, color='#2b5c8f', label='Tỷ trọng Doanh thu (%)')
+ax1.barh(y_pos + 0.2, df_d['penetration_pct'], height=0.38, color='#31a354', label='Tỷ lệ thâm nhập Giỏ hàng (%)')
+ax1.set_yticks(y_pos)
+ax1.set_yticklabels(df_d['DEPARTMENT'], fontsize=10, fontweight='bold')
+ax1.invert_yaxis()
+ax1.set_xlabel("Tỷ lệ (%)", fontsize=10.5, fontweight='bold')
+ax1.set_title("A. Doanh thu vs Độ phủ giỏ hàng (Top 8 Ngành)", fontsize=11.5, fontweight='bold', pad=10)
+ax1.legend(loc='lower right', fontsize=9.5, frameon=True, facecolor='white')
+ax1.grid(True, linestyle='--', alpha=0.5, axis='x')
+
+bars = ax2.bar(df_d['DEPARTMENT'], df_d['dept_aov'], color='#d95f02', width=0.55, edgecolor='#8c2d04', lw=1.1)
+ax2.set_xticks(range(len(df_d)))
+ax2.set_xticklabels(df_d['DEPARTMENT'], rotation=35, ha='right', fontsize=9.5, fontweight='bold')
+ax2.set_ylabel("Chi tiêu trung bình mỗi chuyến ($ USD)", fontsize=10.5, fontweight='bold')
+ax2.set_title("B. Giá trị giỏ ngành hàng (Category Basket Size)", fontsize=11.5, fontweight='bold', pad=10)
+ax2.grid(True, linestyle='--', alpha=0.5, axis='y')
+for b in bars:
+    h = b.get_height()
+    ax2.text(b.get_x() + b.get_width()/2, h + 0.5, f"${h:.1f}", ha='center', va='bottom', fontsize=9.5, fontweight='bold', color='#8c2d04')
+ax2.set_ylim(0, 30)
+
+plt.tight_layout()
+plt.savefig(FIG_DIR / '23_department_performance_matrix.png', dpi=150)
+plt.show()
+"""))
+
+    cells.append(nbf.v4.new_markdown_cell("""### 5.3. Sức Mạnh Giỏ Hàng Đa Ngành & Cơ Hội Bán Chéo (Multi-Category Basket Affinity)
+Khảo sát sự tăng trưởng phi tuyến của giá trị giỏ hàng (AOV) khi khách hàng mua sắm liên ngành hàng trong cùng một chuyến đi chợ.
+"""))
+
+    cells.append(nbf.v4.new_code_cell("""# 3. Phân tích giỏ hàng đa ngành
+q_b = \"\"\"
+WITH b_dept AS (
+    SELECT 
+        t.BASKET_ID,
+        SUM(t.SALES_VALUE) AS basket_spend,
+        COUNT(DISTINCT p.DEPARTMENT) AS num_depts
+    FROM df_trans t
+    JOIN df_prod p ON t.PRODUCT_ID = p.PRODUCT_ID
+    WHERE t.SALES_VALUE > 0
+    GROUP BY t.BASKET_ID
+)
+SELECT 
+    CASE 
+        WHEN num_depts = 1 THEN '1 ngành hàng\\n(Đơn lẻ)'
+        WHEN num_depts = 2 THEN '2 ngành hàng'
+        WHEN num_depts <= 4 THEN '3 - 4 ngành hàng'
+        WHEN num_depts <= 7 THEN '5 - 7 ngành hàng'
+        ELSE '≥ 8 ngành\\n(Đại siêu thị)'
+    END AS dept_tier,
+    COUNT(*) AS basket_count,
+    ROUND(COUNT(*) * 100.0 / (SELECT COUNT(*) FROM b_dept), 2) AS basket_share_pct,
+    ROUND(AVG(basket_spend), 2) AS avg_aov,
+    ROUND(SUM(basket_spend), 2) AS total_spend,
+    ROUND(SUM(basket_spend) * 100.0 / (SELECT SUM(basket_spend) FROM b_dept), 2) AS spend_share_pct
+FROM b_dept
+GROUP BY 1
+ORDER BY avg_aov ASC;
+\"\"\"
+df_b = con.execute(q_b).df()
+print("📊 TƯƠNG QUAN SỐ NGÀNH HÀNG TRONG GIỎ VS GIÁ TRỊ AOV:")
+display(df_b)
+
+fig, ax1 = plt.subplots(figsize=(10.5, 4.8))
+x = np.arange(len(df_b))
+color_aov = '#d95f02'
+bars = ax1.bar(x, df_b['avg_aov'], width=0.48, color=color_aov, alpha=0.9, edgecolor='#8c2d04', lw=1.2, label='AOV Giá trị giỏ ($ USD)')
+ax1.set_ylabel("Giá trị giỏ hàng trung bình AOV ($ USD)", fontsize=11, fontweight='bold', color=color_aov)
+ax1.tick_params(axis='y', labelcolor=color_aov)
+ax1.set_ylim(0, 175)
+for b in bars:
+    h = b.get_height()
+    ax1.text(b.get_x() + b.get_width()/2, h + 3.0, f"${h:.1f}", ha='center', va='bottom', fontsize=10.5, fontweight='bold', color=color_aov)
+
+ax2 = ax1.twinx()
+color_share = '#2b5c8f'
+ax2.plot(x, df_b['spend_share_pct'], color=color_share, marker='o', linewidth=2.5, markersize=8, label='Tỷ trọng Doanh thu (%)')
+ax2.set_ylabel("Tỷ trọng Doanh thu tích lũy (%)", fontsize=11, fontweight='bold', color=color_share)
+ax2.tick_params(axis='y', labelcolor=color_share)
+ax2.set_ylim(0, 45)
+ax2.grid(False)
+
+for i, (_, row) in enumerate(df_b.iterrows()):
+    ax2.annotate(f"{row['spend_share_pct']:.1f}% DT\\n({row['basket_share_pct']:.1f}% Giỏ)",
+                 xy=(i, row['spend_share_pct']), xytext=(i, row['spend_share_pct'] + 4.5),
+                 ha='center', fontsize=9.0, fontweight='bold', color=color_share,
+                 bbox=dict(boxstyle='round,pad=0.2', facecolor='#f0f4f8', edgecolor=color_share, lw=0.8))
+
+ax1.set_xticks(x)
+ax1.set_xticklabels(df_b['dept_tier'], fontsize=10, fontweight='bold')
+ax1.set_title("Sức mạnh của Giỏ hàng đa ngành: AOV tăng gấp 12 lần khi mua chéo ngành hàng", fontsize=12.5, fontweight='bold', pad=12)
+ax1.grid(True, linestyle='--', alpha=0.5, axis='y')
+plt.tight_layout()
+plt.savefig(FIG_DIR / '24_basket_category_breadth_aov.png', dpi=150)
+plt.show()
+"""))
+
+    cells.append(nbf.v4.new_markdown_cell("""### 5.4. Thâm Nhập Nhãn Hàng Riêng (Private Label) Theo Từng Ngành Hàng Chủ Lực
+Đánh giá tỷ trọng doanh thu và sản lượng tiêu thụ của nhãn hàng riêng siêu thị so với thương hiệu quốc gia trên từng danh mục.
+"""))
+
+    cells.append(nbf.v4.new_code_cell("""# 4. Thâm nhập nhãn hàng riêng theo ngành hàng
+q_pl = \"\"\"
+SELECT 
+    p.DEPARTMENT,
+    ROUND(SUM(CASE WHEN p.BRAND = 'Private' THEN t.SALES_VALUE ELSE 0 END) * 100.0 / SUM(t.SALES_VALUE), 2) AS pl_spend_pct,
+    ROUND(SUM(CASE WHEN p.BRAND = 'Private' THEN t.QUANTITY ELSE 0 END) * 100.0 / SUM(t.QUANTITY), 2) AS pl_units_pct,
+    ROUND(SUM(t.SALES_VALUE) / 1e3, 1) AS rev_k
+FROM df_trans t
+JOIN df_prod p ON t.PRODUCT_ID = p.PRODUCT_ID
+WHERE t.SALES_VALUE > 0 AND p.DEPARTMENT IN ('PASTRY', 'GROCERY', 'DELI', 'MEAT-PCKGD', 'PRODUCE', 'DRUG GM', 'MEAT')
+GROUP BY p.DEPARTMENT
+ORDER BY pl_spend_pct DESC;
+\"\"\"
+df_pl = con.execute(q_pl).df()
+print("📊 TỶ TRỌNG DOANH THU & SẢN LƯỢNG CỦA PRIVATE LABEL THEO NGÀNH HÀNG:")
+display(df_pl)
+
+fig, ax = plt.subplots(figsize=(10.0, 4.6))
+y = np.arange(len(df_pl))
+height = 0.36
+b1 = ax.barh(y - height/2, df_pl['pl_spend_pct'], height, label='Tỷ trọng Doanh thu Nhãn riêng (%)', color='#d95f02', alpha=0.9)
+b2 = ax.barh(y + height/2, df_pl['pl_units_pct'], height, label='Tỷ trọng Sản lượng Tiêu thụ (%)', color='#2b5c8f', alpha=0.9)
+
+ax.set_yticks(y)
+ax.set_yticklabels(df_pl['DEPARTMENT'], fontsize=10.5, fontweight='bold')
+ax.invert_yaxis()
+ax.set_xlim(0, 65)
+ax.set_xlabel("Tỷ trọng của Nhãn hàng riêng trong ngành (%)", fontsize=10.5, fontweight='bold')
+ax.set_title("Thâm nhập của Nhãn hàng riêng (Private Label) theo từng ngành hàng chủ lực", fontsize=12.5, fontweight='bold', pad=12)
+ax.legend(loc='lower right', fontsize=10, frameon=True, facecolor='white')
+ax.grid(True, linestyle='--', alpha=0.5, axis='x')
+
+for bar in b1:
+    w = bar.get_width()
+    ax.text(w + 1.0, bar.get_y() + bar.get_height()/2, f"{w:.1f}%", va='center', fontsize=9.5, fontweight='bold', color='#d95f02')
+for bar in b2:
+    w = bar.get_width()
+    ax.text(w + 1.0, bar.get_y() + bar.get_height()/2, f"{w:.1f}%", va='center', fontsize=9.5, fontweight='bold', color='#2b5c8f')
+
+plt.tight_layout()
+plt.savefig(FIG_DIR / '25_private_label_by_department.png', dpi=150)
+plt.show()
+"""))
+
+    cells.append(nbf.v4.new_markdown_cell("""### 5.5. Hành Vi Tiêu Dùng Theo Phân Khúc Gia Đình & Trẻ Em (Demographics & Basket Spend)
+Khảo sát sự khác biệt về quy mô chi tiêu và AOV giỏ hàng theo kích thước hộ gia đình và số lượng trẻ em trong nhà.
+"""))
+
+    cells.append(nbf.v4.new_code_cell("""# 5. Phân tích nhân khẩu học theo quy mô hộ và trẻ em
+q_size = \"\"\"
+SELECT 
+    d.classification_4 AS hh_size,
+    COUNT(DISTINCT t.household_key) AS hh_count,
+    ROUND(SUM(t.SALES_VALUE) / COUNT(DISTINCT t.household_key), 2) AS spend_per_hh,
+    ROUND(SUM(t.SALES_VALUE) / COUNT(DISTINCT t.BASKET_ID), 2) AS aov
+FROM df_trans t
+JOIN df_demo d ON t.household_key = d.household_key
+WHERE t.SALES_VALUE > 0
+GROUP BY 1
+ORDER BY CASE hh_size WHEN '1' THEN 1 WHEN '2' THEN 2 WHEN '3' THEN 3 WHEN '4' THEN 4 ELSE 5 END;
+\"\"\"
+df_s = con.execute(q_size).df()
+
+q_kids = \"\"\"
+SELECT 
+    d.KID_CATEGORY_DESC AS kid_cat,
+    COUNT(DISTINCT t.household_key) AS hh_count,
+    ROUND(SUM(t.SALES_VALUE) / COUNT(DISTINCT t.household_key), 2) AS spend_per_hh,
+    ROUND(SUM(t.SALES_VALUE) / COUNT(DISTINCT t.BASKET_ID), 2) AS aov
+FROM df_trans t
+JOIN df_demo d ON t.household_key = d.household_key
+WHERE t.SALES_VALUE > 0
+GROUP BY 1
+ORDER BY CASE kid_cat WHEN 'None/Unknown' THEN 1 WHEN '1' THEN 2 WHEN '2' THEN 3 ELSE 4 END;
+\"\"\"
+df_k = con.execute(q_kids).df()
+
+print("📊 CHI TIÊU THEO QUY MÔ HỘ GIA ĐÌNH VÀ TRẺ EM:")
+display(df_s)
+display(df_k)
+
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(11.5, 4.6))
+
+# Panel A: HH Size
+size_labels = [f"{s} người" if s != '5+' else "≥ 5 người" for s in df_s['hh_size']]
+bars1 = ax1.bar(size_labels, df_s['aov'], color='#3182bd', width=0.52, edgecolor='#08519c', lw=1.1)
+ax1.set_ylabel("Giá trị giỏ hàng AOV ($ USD)", fontsize=10.5, fontweight='bold')
+ax1.set_title("A. AOV theo Quy mô hộ gia đình", fontsize=11.5, fontweight='bold', pad=10)
+ax1.grid(True, linestyle='--', alpha=0.5, axis='y')
+ax1.set_ylim(0, 52)
+for b, s_val in zip(bars1, df_s['spend_per_hh']):
+    h = b.get_height()
+    ax1.text(b.get_x() + b.get_width()/2, h + 1.0, f"${h:.1f}\\n(${s_val:,.0f}/năm)", ha='center', va='bottom', fontsize=9.0, fontweight='bold', color='#08519c')
+
+# Panel B: Kids Category
+kid_labels = ['Không có', '1 trẻ', '2 trẻ', '≥ 3 trẻ']
+bars2 = ax2.bar(kid_labels, df_k['aov'], color='#756bb1', width=0.52, edgecolor='#54278f', lw=1.1)
+ax2.set_ylabel("Giá trị giỏ hàng AOV ($ USD)", fontsize=10.5, fontweight='bold')
+ax2.set_title("B. AOV theo Số lượng trẻ em trong hộ", fontsize=11.5, fontweight='bold', pad=10)
+ax2.grid(True, linestyle='--', alpha=0.5, axis='y')
+ax2.set_ylim(0, 52)
+for b, s_val in zip(bars2, df_k['spend_per_hh']):
+    h = b.get_height()
+    ax2.text(b.get_x() + b.get_width()/2, h + 1.0, f"${h:.1f}\\n(${s_val:,.0f}/năm)", ha='center', va='bottom', fontsize=9.0, fontweight='bold', color='#54278f')
+
+plt.tight_layout()
+plt.savefig(FIG_DIR / '26_demographics_family_basket_spend.png', dpi=150)
+plt.show()
+"""))
+
+    cells.append(nbf.v4.new_markdown_cell("""### 5.6. Cấu Trúc Chiết Khấu Hai Tầng: Giảm Giá Quầy vs Phiếu Coupon
 Đối sánh giữa giảm giá niêm yết tại quầy của siêu thị (`RETAIL_DISC`) và giảm giá qua phiếu coupon (`COUPON_DISC`).
 """))
 
-    cells.append(nbf.v4.new_code_cell("""# Tính toán ngân sách chiết khấu và độ phủ giỏ hàng
+    cells.append(nbf.v4.new_code_cell("""# 6. Đối sánh chiết khấu hai tầng
 q_disc = \"\"\"
 SELECT
     SUM(RETAIL_DISC) AS tot_retail_disc,
@@ -1374,7 +1663,6 @@ tot_ret = abs(res_disc[0])
 tot_coup = abs(res_disc[1])
 tot_gross = res_disc[2] + tot_ret + tot_coup
 
-# Độ phủ giỏ hàng
 q_cov = \"\"\"
 SELECT
     COUNT(*) AS tot_baskets,
@@ -1392,10 +1680,7 @@ print(f" - Giảm giá quầy (RETAIL_DISC): ${tot_ret:,.2f} ({tot_ret * 100.0 /
 print(f" - Giảm giá coupon (COUPON_DISC): ${tot_coup:,.2f} ({tot_coup * 100.0 / tot_gross:.2f}% doanh thu gộp, phủ {cov_coup:.2f}% giỏ hàng)")
 print(f" - Tỷ số chiết khấu quầy / coupon: {ratio:.1f} lần")
 
-# Vẽ biểu đồ đối sánh ngân sách chiết khấu
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(9, 4.2))
-
-# Cột 1: Ngân sách
 bars1 = ax1.bar(['Giảm giá quầy\\n(Retail Markdown)', 'Phiếu giảm giá\\n(Coupon)'],
                 [tot_ret / 1e6, tot_coup / 1e6], color=['#d95f02', '#2ca02c'], width=0.5)
 ax1.set_ylabel("Tổng ngân sách ($ Triệu USD)")
@@ -1405,7 +1690,6 @@ for b in bars1:
     ax1.text(b.get_x() + b.get_width() / 2, h + 0.04, f"${h:.2f}M", ha='center', va='bottom', fontweight='bold')
 ax1.set_ylim(0, 1.8)
 
-# Cột 2: Độ phủ giỏ hàng
 bars2 = ax2.bar(['Giảm giá quầy\\n(Retail Markdown)', 'Phiếu giảm giá\\n(Coupon)'],
                 [cov_ret, cov_coup], color=['#d95f02', '#2ca02c'], width=0.5)
 ax2.set_ylabel("Tỷ lệ giỏ hàng được áp dụng (%)")
@@ -1421,73 +1705,57 @@ plt.savefig(FIG_DIR / '20_markdown_vs_coupon_spend.png', dpi=150)
 plt.show()
 """))
 
-    cells.append(nbf.v4.new_markdown_cell("""### 5.3. Phụ Lục 3: Tỷ Trọng & Hiệu Suất Của Nhãn Hàng Riêng (Private Label)
-Đánh giá hiệu suất của nhãn hàng riêng siêu thị so với thương hiệu quốc gia (National Brand).
+    cells.append(nbf.v4.new_markdown_cell("""### 5.7. Mức Độ Tập Trung Doanh Thu & Kiểm Định Pareto (Lorenz Curve)
+Khảo sát phân hóa doanh số qua tổng chi tiêu \\$8.06 Triệu USD của 2,500 hộ gia đình trong 2 năm.
 """))
 
-    cells.append(nbf.v4.new_code_cell("""# Truy vấn dữ liệu nhãn hàng riêng
-q_brand = \"\"\"
-SELECT
-    p.BRAND,
-    COUNT(DISTINCT p.PRODUCT_ID) AS sku_count,
-    SUM(t.SALES_VALUE) AS tot_spend,
-    SUM(t.QUANTITY) AS tot_units
-FROM df_trans t
-JOIN df_prod p ON t.PRODUCT_ID = p.PRODUCT_ID
-GROUP BY p.BRAND
-\"\"\"
-df_brand = con.execute(q_brand).df()
+    cells.append(nbf.v4.new_code_cell("""# 7. Tính toán mức độ tập trung doanh thu và vẽ đường cong Lorenz
+hh_spend = baskets.groupby('household_key')['basket_spend'].sum().sort_values(ascending=False).values
+tot_rev = hh_spend.sum()
+cum_rev = np.cumsum(hh_spend) / tot_rev
+cum_hh = np.arange(1, len(hh_spend) + 1) / len(hh_spend)
 
-tot_skus = df_brand['sku_count'].sum()
-tot_rev_brand = df_brand['tot_spend'].sum()
-tot_units_brand = df_brand['tot_units'].sum()
+x_sort = np.sort(hh_spend)
+n_h = len(x_sort)
+gini = (2.0 * np.sum(np.arange(1, n_h + 1) * x_sort) - (n_h + 1) * np.sum(x_sort)) / (n_h * np.sum(x_sort))
 
-df_brand['sku_pct'] = df_brand['sku_count'] * 100.0 / tot_skus
-df_brand['spend_pct'] = df_brand['tot_spend'] * 100.0 / tot_rev_brand
-df_brand['units_pct'] = df_brand['tot_units'] * 100.0 / tot_units_brand
-df_brand['spend_sku_idx'] = df_brand['spend_pct'] / df_brand['sku_pct']
+top10_share = cum_rev[int(len(cum_hh) * 0.10) - 1] * 100.0
+top20_share = cum_rev[int(len(cum_hh) * 0.20) - 1] * 100.0
+hh_for_80 = cum_hh[np.where(cum_rev >= 0.80)[0][0]] * 100.0
 
-print("📊 HIỆU SUẤT NHÃN HÀNG RIÊNG (PRIVATE LABEL) VS THƯƠNG HIỆU QUỐC GIA:")
-display(df_brand[['BRAND', 'sku_count', 'sku_pct', 'spend_pct', 'units_pct', 'spend_sku_idx']])
+print(f"📊 PHÂN HÓA DOANH THU & HỆ SỐ GINI:")
+print(f" - Tổng doanh thu: ${tot_rev:,.2f} USD")
+print(f" - Hệ số Gini: {gini:.4f}")
+print(f" - Top 10% hộ đóng góp: {top10_share:.2f}% doanh thu")
+print(f" - Top 20% hộ đóng góp: {top20_share:.2f}% doanh thu (${tot_rev * top20_share / 100:,.0f} USD)")
+print(f" - Cần {hh_for_80:.1f}% số hộ gia đình để tích lũy 80% doanh thu")
 
-# Vẽ biểu đồ đối sánh
-fig, ax = plt.subplots(figsize=(8.5, 4.5))
-metrics = ['Tỷ trọng SKU', 'Tỷ trọng Doanh thu', 'Tỷ trọng Sản lượng']
-private_vals = [df_brand[df_brand['BRAND']=='Private']['sku_pct'].iloc[0],
-                df_brand[df_brand['BRAND']=='Private']['spend_pct'].iloc[0],
-                df_brand[df_brand['BRAND']=='Private']['units_pct'].iloc[0]]
-national_vals = [df_brand[df_brand['BRAND']=='National']['sku_pct'].iloc[0],
-                 df_brand[df_brand['BRAND']=='National']['spend_pct'].iloc[0],
-                 df_brand[df_brand['BRAND']=='National']['units_pct'].iloc[0]]
+plt.figure(figsize=(9.0, 5.0))
+plt.plot(cum_hh * 100.0, cum_rev * 100.0, color='#2b5c8f', linewidth=2.8,
+         label=f'Đường cong Doanh thu Thực tế (Gini = {gini:.3f})')
+plt.plot([0, 100], [0, 100], color='gray', linestyle='--', linewidth=1.5,
+         label='Đường Bình đẳng Tuyệt đối (45° Baseline)')
 
-x_m = np.arange(len(metrics))
-width = 0.35
+plt.scatter([20.0, hh_for_80], [top20_share, 80.0], color='#b2182b', s=60, zorder=5)
+plt.annotate(f"Top 20% hộ tạo {top20_share:.1f}% DT\\n(${tot_rev * top20_share / 100:,.0f})", xy=(20.0, top20_share), xytext=(28, top20_share - 8),
+             arrowprops=dict(arrowstyle="->", color='#b2182b', lw=1.3), fontweight='bold')
+plt.annotate(f"Cần {hh_for_80:.1f}% hộ (1,100 hộ) để đạt 80% DT\\n(Đặc thù FMCG nhu yếu phẩm)", xy=(hh_for_80, 80.0), xytext=(hh_for_80 - 15, 68),
+             arrowprops=dict(arrowstyle="->", color='#b2182b', lw=1.3), fontweight='bold')
 
-b_nat = ax.bar(x_m - width / 2, national_vals, width, label='National Brand (Thương hiệu quốc gia)', color='#1f77b4', alpha=0.85)
-b_priv = ax.bar(x_m + width / 2, private_vals, width, label='Private Label (Nhãn hàng riêng)', color='#d95f02', alpha=0.85)
-
-for b in b_nat:
-    h = b.get_height()
-    ax.text(b.get_x() + b.get_width() / 2, h + 1.5, f"{h:.1f}%", ha='center', va='bottom', fontweight='bold', color='#1f77b4')
-for b in b_priv:
-    h = b.get_height()
-    ax.text(b.get_x() + b.get_width() / 2, h + 1.5, f"{h:.1f}%", ha='center', va='bottom', fontweight='bold', color='#d95f02')
-
-ax.set_xticks(x_m, metrics, fontweight='medium')
-ax.set_ylim(0, 105)
-ax.set_ylabel("Tỷ trọng (%)")
-ax.set_title("Tỷ trọng danh mục SKU vs Doanh thu & Sản lượng tiêu thụ", pad=12)
-ax.legend(frameon=True, facecolor='white', loc='upper right')
+plt.title(f"Mức độ tập trung doanh thu theo hộ gia đình & Đường cong Lorenz\\n(Tổng chi tiêu: ${tot_rev:,.2f} | 2,500 Hộ panel | Gini = {gini:.3f})", pad=12, fontsize=12, fontweight='bold')
+plt.xlabel("Tỷ lệ tích lũy hộ gia đình (sắp xếp chi tiêu giảm dần, %)", fontweight='bold')
+plt.ylabel("Tỷ lệ tích lũy doanh thu thực tế (%)", fontweight='bold')
+plt.legend(frameon=True, facecolor='white', loc='lower right', fontsize=9.5)
 plt.tight_layout()
-plt.savefig(FIG_DIR / '21_private_label_penetration.png', dpi=150)
+plt.savefig(FIG_DIR / '19_clv_pareto_distribution.png', dpi=150)
 plt.show()
 """))
 
-    cells.append(nbf.v4.new_markdown_cell("""### 5.4. Phụ Lục 4: Phân Phối Thời Gian Mua Sắm Theo Chu Kỳ Ngày & Giờ
-Mô tả nhịp điệu vi mô theo chu kỳ ngày (`DAY mod 7`) và khung giờ mua sắm trong ngày.
+    cells.append(nbf.v4.new_markdown_cell("""### 5.8. Phân Phối Thời Gian Mua Sắm Theo Chu Kỳ Ngày & Giờ
+Mô tả nhịp điệu vi mô theo chu kỳ ngày (`DAY mod 7`) và khung giờ mua sắm trong ngày (`TRANS_TIME`).
 """))
 
-    cells.append(nbf.v4.new_code_cell("""# 1. Phân phối chu kỳ ngày (DAY mod 7)
+    cells.append(nbf.v4.new_code_cell("""# 8. Phân phối thời gian mua sắm
 q_day = \"\"\"
 SELECT
     DAY % 7 AS day_mod_7,
@@ -1500,16 +1768,13 @@ df_day = con.execute(q_day).df()
 tot_b = df_day['basket_count'].sum()
 df_day['pct'] = df_day['basket_count'] * 100.0 / tot_b
 
-# 2. Phân phối khung giờ mua sắm trong ngày
 baskets_hour = baskets.copy()
 baskets_hour['hour'] = baskets_hour['trans_time'] // 100
 hourly_dist = baskets_hour.groupby('hour')['BASKET_ID'].count()
 hourly_pct = hourly_dist * 100.0 / len(baskets_hour)
 
-# Vẽ biểu đồ kết hợp
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(9.5, 4.5))
 
-# Biểu đồ chu kỳ ngày
 bars_d = ax1.bar([f"Ngày {d}" for d in df_day['day_mod_7']], df_day['pct'], color='#2b5c8f', width=0.6)
 ax1.axhline(100.0 / 7.0, color='#d95f02', linestyle='--', linewidth=1.5, label='Bình quân lý thuyết (14.3%)')
 for b in bars_d:
@@ -1520,9 +1785,8 @@ ax1.set_title("Phân phối chu kỳ ngày (DAY mod 7)")
 ax1.set_ylabel("Tỷ trọng giỏ hàng (%)")
 ax1.legend(frameon=True, facecolor='white', loc='upper right', fontsize=8.5)
 
-# Biểu đồ khung giờ
 ax2.plot(hourly_pct.index, hourly_pct.values, color='#e7298a', marker='o', linewidth=2.2, markersize=4)
-ax2.axvspan(11, 18, color='#fee8c8', alpha=0.5, label='Giờ cao điểm 11h-18h (64.9%)')
+ax2.axvspan(11, 18, color='#fee8c8', alpha=0.5, label='Giờ cao điểm 11h-18h (62.9%)')
 ax2.set_title("Khung giờ mua sắm trong ngày")
 ax2.set_xlabel("Giờ trong ngày (0h - 23h)")
 ax2.set_ylabel("Tỷ trọng giao dịch (%)")
