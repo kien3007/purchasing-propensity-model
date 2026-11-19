@@ -148,25 +148,28 @@ def make_fig_10():
     matrix_p = df_rf.pivot(index='rec_tier', columns='freq_tier', values='p').reindex(index=rec_order, columns=freq_order)
     matrix_n = df_rf.pivot(index='rec_tier', columns='freq_tier', values='n').reindex(index=rec_order, columns=freq_order).fillna(0)
 
+    # Clean cell annotations: ONLY percentage, NO household count!
     annot_matrix = np.empty(matrix_p.shape, dtype=object)
     for i in range(len(rec_order)):
         for j in range(len(freq_order)):
             val_p = matrix_p.iloc[i, j]
-            val_n = int(round(matrix_n.iloc[i, j]))
-            if np.isnan(val_p) or val_n == 0:
-                annot_matrix[i, j] = "-\n0 hộ"
+            if np.isnan(val_p) or matrix_n.iloc[i, j] == 0:
+                annot_matrix[i, j] = "-"
             else:
-                annot_matrix[i, j] = f"{val_p:.1f}%\n{val_n:,} hộ"
+                annot_matrix[i, j] = f"{val_p:.1f}%"
 
-    fig, ax = plt.subplots(figsize=(8.8, 5.0), constrained_layout=True)
+    fig, ax = plt.subplots(figsize=(9.2, 5.0), constrained_layout=True)
     sns.heatmap(matrix_p, annot=annot_matrix, fmt='', cmap='YlGnBu', cbar_kws={'label': 'Xác suất mua hàng P(Y=1) (%)'},
                 vmin=10, vmax=100, linewidths=1.5, linecolor='white', ax=ax,
-                annot_kws={'fontsize': 10.5, 'fontweight': 'bold'})
+                annot_kws={'fontsize': 11.5, 'fontweight': 'bold'})
 
     ax.set_title("Xác suất mua hàng theo Recency và Frequency", fontsize=13, fontweight='bold', pad=12)
     ax.set_xlabel("Tần suất mua sắm trong 90 ngày", fontsize=11, fontweight='bold', labelpad=8)
-    ax.set_ylabel("Khoảng cách lần mua cuối", fontsize=11, fontweight='bold', labelpad=8)
-    ax.tick_params(axis='both', labelsize=10.5)
+    ax.set_ylabel("Khoảng cách lần mua cuối", fontsize=11, fontweight='bold', labelpad=10)
+    
+    # Strictly horizontal tick labels to prevent any vertical collision!
+    ax.set_yticklabels(rec_order, rotation=0, va='center', fontsize=10.5, fontweight='bold')
+    ax.set_xticklabels(freq_order, rotation=0, ha='center', fontsize=10.5, fontweight='bold')
 
     plt.savefig(FIG_DIR / '10_recency_frequency_heatmap.png', dpi=180, bbox_inches='tight')
     plt.close()
@@ -303,12 +306,11 @@ def make_fig_05_perishable():
 
     bars = ax.bar(x, df_per['p'], width, color='#238b45', edgecolor='#00441b', linewidth=1.2, zorder=3)
     ax.axhline(BASE_RATE, color='#d95f02', linestyle='--', linewidth=1.8,
-               label=f'Tỷ lệ cơ sở toàn mẫu ({BASE_RATE:.1f}%)', zorder=2)
+               label=f'Tỷ lệ cơ sở toàn mẫu: {BASE_RATE:.1f}%', zorder=2)
 
-    for i, bar in enumerate(bars):
+    for bar in bars:
         h = bar.get_height()
-        n_val = int(round(df_per.loc[i, 'n']))
-        ax.annotate(f'{h:.1f}%\n{n_val:,} hộ',
+        ax.annotate(f'{h:.1f}%',
                     xy=(bar.get_x() + bar.get_width() / 2, h),
                     xytext=(0, 5), textcoords="offset points",
                     ha='center', va='bottom', fontsize=10.5, fontweight='bold', color='#00441b',
@@ -334,17 +336,16 @@ def make_fig_05_perishable():
 def make_fig_12_campaign():
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(11.0, 4.8), constrained_layout=True)
 
-    # Panel A: Campaigns at t0 - clean names without parentheses
+    # Panel A: Campaigns at t0 - clean names without parentheses, only percentage
     c_labels = ['Không có\nchiến dịch', 'Loại C', 'Loại B', 'Loại A']
     c_p = [59.9, 88.5, 90.7, 86.7]
-    c_n = [1827, 27, 199, 838]
 
-    ax1.axhline(68.3, color='#d95f02', linestyle='--', linewidth=1.6, label='Base rate (68.3%)', zorder=2)
+    ax1.axhline(68.3, color='#d95f02', linestyle='--', linewidth=1.6, label='Base rate: 68.3%', zorder=2)
     bars1 = ax1.bar(c_labels, c_p, width=0.48, color='#756bb1', edgecolor='#4a148c', linewidth=1.2, zorder=3)
-    for bar, n_val in zip(bars1, c_n):
+    for bar in bars1:
         h = bar.get_height()
-        ax1.text(bar.get_x() + bar.get_width()/2, h + 2.5, f"{h:.1f}%\n{n_val:,} hộ",
-                 ha='center', va='bottom', fontsize=9.5, fontweight='bold', color='#2c0c59',
+        ax1.text(bar.get_x() + bar.get_width()/2, h + 2.5, f"{h:.1f}%",
+                 ha='center', va='bottom', fontsize=10.0, fontweight='bold', color='#2c0c59',
                  bbox=dict(boxstyle='square,pad=0.15', facecolor='white', edgecolor='none', alpha=0.9))
 
     ax1.set_title("A. Chiến dịch tiếp thị kích hoạt tại t_0", fontsize=12, fontweight='bold', pad=10)
@@ -353,18 +354,16 @@ def make_fig_12_campaign():
     ax1.grid(True, linestyle='--', alpha=0.5, axis='y')
     ax1.legend(loc='upper left', fontsize=9.5, frameon=True, facecolor='white')
 
-    # Panel B: Coupon Redemptions - clean names without parentheses
+    # Panel B: Coupon Redemptions - clean names without parentheses, only percentage
     cp_labels = ['0 lần', '1 - 2 lần', '≥ 3 lần']
     cp_p = [67.4, 92.5, 94.7]
-    cp_n = [2406, 80, 14]
 
-    ax2.axhline(68.3, color='#d95f02', linestyle='--', linewidth=1.6, label='Base rate (68.3%)', zorder=2)
+    ax2.axhline(68.3, color='#d95f02', linestyle='--', linewidth=1.6, label='Base rate: 68.3%', zorder=2)
     bars2 = ax2.bar(cp_labels, cp_p, width=0.45, color='#1b9e77', edgecolor='#004d40', linewidth=1.2, zorder=3)
-    for bar, n_val in zip(bars2, cp_n):
+    for bar in bars2:
         h = bar.get_height()
-        # Ensure label on bar 0 (67.4%) has a clean white box so 68.3% line never cuts through!
-        ax2.text(bar.get_x() + bar.get_width()/2, h + 2.5, f"{h:.1f}%\n{n_val:,} hộ",
-                 ha='center', va='bottom', fontsize=9.5, fontweight='bold', color='#004d40',
+        ax2.text(bar.get_x() + bar.get_width()/2, h + 2.5, f"{h:.1f}%",
+                 ha='center', va='bottom', fontsize=10.0, fontweight='bold', color='#004d40',
                  bbox=dict(boxstyle='square,pad=0.2', facecolor='white', edgecolor='none', alpha=0.95))
 
     ax2.set_title("B. Lịch sử đổi coupon trong 180 ngày", fontsize=12, fontweight='bold', pad=10)
@@ -384,19 +383,18 @@ def make_fig_12_campaign():
 def make_fig_13_loyalty():
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(11.0, 4.8), constrained_layout=True)
 
-    # Panel A: Store Loyalty - clean names without parentheses
+    # Panel A: Store Loyalty - clean names without parentheses, only percentage
     l_labels = ['Không mua', 'Tập trung cao', 'Trung bình', 'Phân tán']
     l_p = [12.4, 70.4, 76.2, 82.8]
-    l_n = [198, 1419, 687, 196]
     l_colors = ['#bdbdbd', '#e7298a', '#c51b7d', '#8e0152']
 
     ax1.axhline(68.3, color='#d95f02', linestyle='--', linewidth=1.6, label='Base rate: 68.3%', zorder=2)
     bars1 = ax1.bar(l_labels, l_p, width=0.48, color=l_colors, edgecolor='#49006a', linewidth=1.2, zorder=3)
-    for bar, n_val in zip(bars1, l_n):
+    for bar in bars1:
         h = bar.get_height()
-        ax1.text(bar.get_x() + bar.get_width()/2, h + 2.5, f"{h:.1f}%\n{n_val:,} hộ",
-                 ha='center', va='bottom', fontsize=9.5, fontweight='bold', color='#49006a',
-                 bbox=dict(boxstyle='square,pad=0.2', facecolor='white', edgecolor='none', alpha=0.95))
+        ax1.text(bar.get_x() + bar.get_width()/2, h + 2.5, f"{h:.1f}%",
+                 ha='center', va='bottom', fontsize=10.0, fontweight='bold', color='#49006a',
+                 bbox=dict(boxstyle='square,pad=0.15', facecolor='white', edgecolor='none', alpha=0.95))
 
     ax1.set_title("A. Tỷ trọng chi tiêu tại cửa hàng chính", fontsize=12, fontweight='bold', pad=10)
     ax1.set_ylabel("Xác suất mua hàng P(Y=1) (%)", fontsize=10.5, fontweight='bold')
@@ -404,24 +402,20 @@ def make_fig_13_loyalty():
     ax1.grid(True, linestyle='--', alpha=0.5, axis='y')
     ax1.legend(loc='upper left', fontsize=9.5, frameon=True, facecolor='white')
 
-    # Panel B: Demographics - clean names without parentheses
+    # Panel B: Demographics - clean names without parentheses, only percentage
     d_labels = ['1 - 2 người', '3 - 4 người', '≥ 5 người', 'UNKNOWN']
     d_p = [75.4, 76.2, 80.2, 64.5]
-    d_n = [483, 257, 61, 1699]
     d_colors = ['#41b6c4', '#1d91c0', '#225ea8', '#fe9929']
 
     ax2.axhline(68.3, color='#d95f02', linestyle='--', linewidth=1.6, label='Base rate: 68.3%', zorder=2)
     bars2 = ax2.bar(d_labels, d_p, width=0.48, color=d_colors, edgecolor='#081d58', linewidth=1.2, zorder=3)
-    for i, (bar, n_val) in enumerate(zip(bars2, d_n)):
+    for i, bar in enumerate(bars2):
         h = bar.get_height()
-        if i == 3:  # UNKNOWN placed inside bar to stay completely clear of the 68.3% line!
-            ax2.text(bar.get_x() + bar.get_width()/2, 48, f"{h:.1f}%\n{n_val:,} hộ",
-                     ha='center', va='center', fontsize=9.5, fontweight='bold', color='white',
-                     bbox=dict(boxstyle='square,pad=0.25', facecolor='#cc6600', edgecolor='none', alpha=0.95))
-        else:
-            ax2.text(bar.get_x() + bar.get_width()/2, h + 2.5, f"{h:.1f}%\n{n_val:,} hộ",
-                     ha='center', va='bottom', fontsize=9.5, fontweight='bold', color='#081d58',
-                     bbox=dict(boxstyle='square,pad=0.2', facecolor='white', edgecolor='none', alpha=0.95))
+        # For UNKNOWN (64.5%), placing at h + 1.2 with white bbox ensures it stays clean under the 68.3% line
+        y_pos = h + 1.2 if i == 3 else h + 2.5
+        ax2.text(bar.get_x() + bar.get_width()/2, y_pos, f"{h:.1f}%",
+                 ha='center', va='bottom', fontsize=10.0, fontweight='bold', color='#081d58',
+                 bbox=dict(boxstyle='square,pad=0.15', facecolor='white', edgecolor='none', alpha=0.95))
 
     ax2.set_title("B. Phân nhóm nhân khẩu học", fontsize=12, fontweight='bold', pad=10)
     ax2.set_ylabel("Xác suất mua hàng P(Y=1) (%)", fontsize=10.5, fontweight='bold')
