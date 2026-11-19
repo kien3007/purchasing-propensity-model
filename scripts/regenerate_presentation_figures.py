@@ -504,9 +504,9 @@ def make_fig_22_rfm():
                 fontsize=10, fontweight='bold', color='#d95f02',
                 bbox=dict(boxstyle='square,pad=0.15', facecolor='white', edgecolor='none', alpha=0.9))
 
-    labels = [f"{row['segment']}\nAOV: ${row['avg_aov']:.0f} | Trễ: {row['avg_rec']:.0f}d" for _, row in seg.iterrows()]
+    labels = [f"AOV: ${row['avg_aov']:.0f} | Trễ: {row['avg_rec']:.0f}d" for _, row in seg.iterrows()]
     ax.set_xticks(x)
-    ax.set_xticklabels(labels, fontsize=9.5, fontweight='bold')
+    ax.set_xticklabels(labels, fontsize=10, fontweight='bold', rotation=25, ha='right')
     ax.set_ylim(0, 65)
     ax.set_ylabel("Tỷ lệ (%)", fontsize=11, fontweight='bold')
     ax.set_title("Phân khúc khách hàng RFM và đóng góp doanh thu", fontsize=13, fontweight='bold', pad=12)
@@ -612,10 +612,10 @@ def make_fig_26_demographics():
     ax1.set_title("A. AOV theo Quy mô hộ gia đình", fontsize=12, fontweight='bold', pad=10)
     ax1.grid(True, linestyle='--', alpha=0.5, axis='y')
     ax1.set_ylim(0, 56)
-    for b, s_val in zip(bars1, df_s['spend_per_hh']):
+    for b in bars1:
         h = b.get_height()
-        ax1.text(b.get_x() + b.get_width()/2, h + 1.2, f"${h:.1f}\n${s_val:,.0f}/năm",
-                 ha='center', va='bottom', fontsize=9.2, fontweight='bold', color='#08519c',
+        ax1.text(b.get_x() + b.get_width()/2, h + 1.2, f"${h:.1f}",
+                 ha='center', va='bottom', fontsize=10.5, fontweight='bold', color='#08519c',
                  bbox=dict(boxstyle='square,pad=0.15', facecolor='white', edgecolor='none', alpha=0.9))
 
     # Panel B: Kids Category
@@ -625,10 +625,10 @@ def make_fig_26_demographics():
     ax2.set_title("B. AOV theo Số lượng trẻ em", fontsize=12, fontweight='bold', pad=10)
     ax2.grid(True, linestyle='--', alpha=0.5, axis='y')
     ax2.set_ylim(0, 56)
-    for b, s_val in zip(bars2, df_k['spend_per_hh']):
+    for b in bars2:
         h = b.get_height()
-        ax2.text(b.get_x() + b.get_width()/2, h + 1.2, f"${h:.1f}\n${s_val:,.0f}/năm",
-                 ha='center', va='bottom', fontsize=9.2, fontweight='bold', color='#54278f',
+        ax2.text(b.get_x() + b.get_width()/2, h + 1.2, f"${h:.1f}",
+                 ha='center', va='bottom', fontsize=10.5, fontweight='bold', color='#54278f',
                  bbox=dict(boxstyle='square,pad=0.15', facecolor='white', edgecolor='none', alpha=0.9))
 
     plt.savefig(FIG_DIR / '26_demographics_family_basket_spend.png', dpi=180, bbox_inches='tight')
@@ -867,9 +867,6 @@ def make_fig_20_discount():
              bbox=dict(boxstyle='square,pad=0.15', facecolor='white', edgecolor='none', alpha=0.9))
     ax1.text(1, disc_values[1] + 0.05, f'${disc_values[1]*1000:.1f}K', ha='center', fontweight='bold', fontsize=11,
              bbox=dict(boxstyle='square,pad=0.15', facecolor='white', edgecolor='none', alpha=0.9))
-    ax1.text(0.5, 0.90, f'Giảm giá tại quầy gấp {ratio_markdown_coupon:.1f} lần coupon',
-             transform=ax1.transAxes, ha='center', fontsize=10, fontweight='bold',
-             bbox=dict(boxstyle='round,pad=0.3', facecolor='#fee8c8', edgecolor='#e6550d'))
 
     cov_values = [baskets_with_retail, baskets_with_coupon]
     bars2 = ax2.bar(categories, cov_values, color=colors, edgecolor='black', width=0.45, zorder=3)
@@ -877,9 +874,9 @@ def make_fig_20_discount():
     ax2.set_title('B. Tỷ lệ giỏ hàng áp dụng', fontweight='bold', fontsize=12, pad=10)
     ax2.set_ylim(0, 108)
     ax2.grid(True, linestyle='--', alpha=0.5, axis='y')
-    ax2.text(0, cov_values[0] + 2.5, f'{cov_values[0]:.1f}%\n230.5K giỏ', ha='center', fontweight='bold', fontsize=10.5,
+    ax2.text(0, cov_values[0] + 2.5, f'{cov_values[0]:.1f}%', ha='center', fontweight='bold', fontsize=11,
              bbox=dict(boxstyle='square,pad=0.15', facecolor='white', edgecolor='none', alpha=0.9))
-    ax2.text(1, cov_values[1] + 2.5, f'{cov_values[1]:.1f}%\n16.7K giỏ', ha='center', fontweight='bold', fontsize=10.5,
+    ax2.text(1, cov_values[1] + 2.5, f'{cov_values[1]:.1f}%', ha='center', fontweight='bold', fontsize=11,
              bbox=dict(boxstyle='square,pad=0.15', facecolor='white', edgecolor='none', alpha=0.9))
 
     plt.savefig(FIG_DIR / '20_markdown_vs_coupon_spend.png', dpi=180, bbox_inches='tight')
