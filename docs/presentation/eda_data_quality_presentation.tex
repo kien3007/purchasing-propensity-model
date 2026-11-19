@@ -22,10 +22,6 @@
 \definecolor{bgSlate}{RGB}{248, 250, 252}
 \definecolor{textDark}{RGB}{30, 41, 59}
 
-% Custom Badge Colors for Slide Headers
-\definecolor{tagTeal}{RGB}{0, 206, 170}
-\definecolor{tagOrange}{RGB}{245, 120, 25}
-
 \setbeamercolor{palette primary}{bg=primaryNavy, fg=white}
 \setbeamercolor{palette secondary}{bg=accentTeal, fg=white}
 \setbeamercolor{palette tertiary}{bg=primaryNavy!90, fg=white}
@@ -57,10 +53,6 @@
   \end{beamercolorbox}}%
   \vskip0pt%
 }
-
-% Custom header badges
-\newcommand{\tagML}{\hfill\textcolor{tagTeal}{\textsf{\textbf{\footnotesize [Mô hình ML]}}}}
-\newcommand{\tagBiz}{\hfill\textcolor{tagOrange}{\textsf{\textbf{\footnotesize [Góc nhìn kinh doanh]}}}}
 
 % --- METADATA ---
 \title[EDA \& Data Quality]{\textbf{Khám phá dữ liệu \& kiểm toán chất lượng}}
@@ -107,7 +99,7 @@
 % ==============================================================================
 
 % SLIDE 2: BÀI TOÁN DỰ ĐOÁN 14 NGÀY
-\begin{frame}{1. Thiết kế bài toán: Dự đoán hộ mua hàng 14 ngày tới\tagML}
+\begin{frame}{1. Thiết kế bài toán: Dự đoán hộ mua hàng 14 ngày tới}
   \begin{columns}[c]
     \begin{column}{0.50\textwidth}
       \centering
@@ -133,7 +125,7 @@
 \end{frame}
 
 % SLIDE 3: KIỂM TOÁN 8 BẢNG (KÈM ẢNH ERD THE COMPLETE JOURNEY)
-\begin{frame}{2. Kiểm toán 8 bảng: Xử lý làm sạch, chuẩn hóa khóa nối\tagML}
+\begin{frame}{2. Kiểm toán 8 bảng: Xử lý làm sạch, chuẩn hóa khóa nối}
   \begin{columns}[c]
     \begin{column}{0.46\textwidth}
       \centering
@@ -163,7 +155,7 @@
 \end{frame}
 
 % SLIDE 4: CĂN CỨ CHỌN CỬA SỔ 14 NGÀY
-\begin{frame}{3. Căn cứ chọn cửa sổ 14 ngày: Cân bằng phân hóa \& vận hành\tagML}
+\begin{frame}{3. Căn cứ chọn cửa sổ 14 ngày: Cân bằng phân hóa \& vận hành}
   \begin{columns}[c]
     \begin{column}{0.60\textwidth}
       \centering
@@ -184,7 +176,7 @@
 \end{frame}
 
 % SLIDE 5: RECENCY & FREQUENCY
-\begin{frame}{4. Recency \& Frequency: Phân tách quán tính mua sắm\tagML}
+\begin{frame}{4. Recency \& Frequency: Phân tách quán tính mua sắm}
   \begin{columns}[c]
     \begin{column}{0.60\textwidth}
       \centering
@@ -204,7 +196,7 @@
 \end{frame}
 
 % SLIDE 6: SPEND & BREADTH
-\begin{frame}{5. Spend \& Breadth: Tín hiệu bổ trợ trong phân tầng Tần suất\tagML}
+\begin{frame}{5. Spend \& Breadth: Tín hiệu bổ trợ trong phân tầng Tần suất}
   \begin{columns}[c]
     \begin{column}{0.60\textwidth}
       \centering
@@ -226,7 +218,7 @@
 \end{frame}
 
 % SLIDE 7: HÀNG TƯƠI SỐNG
-\begin{frame}{6. Hàng tươi sống: Chỉ báo chu kỳ tiêu dùng thực phẩm ngắn hạn\tagML}
+\begin{frame}{6. Hàng tươi sống: Chỉ báo chu kỳ tiêu dùng thực phẩm ngắn hạn}
   \begin{columns}[c]
     \begin{column}{0.60\textwidth}
       \centering
@@ -245,7 +237,7 @@
 \end{frame}
 
 % SLIDE 8: CHIẾN DỊCH & COUPON
-\begin{frame}{7. Chiến dịch \& Coupon: Tín hiệu tương quan dự báo tại $t_0$\tagML}
+\begin{frame}{7. Chiến dịch \& Coupon: Tín hiệu tương quan dự báo tại $t_0$}
   \begin{columns}[c]
     \begin{column}{0.60\textwidth}
       \centering
@@ -269,7 +261,7 @@
 \end{frame}
 
 % SLIDE 9: MẠNG LƯỚI CỬA HÀNG & UNKNOWN
-\begin{frame}{8. Mạng lưới cửa hàng \& Phân nhóm UNKNOWN: Cấu trúc\tagML}
+\begin{frame}{8. Mạng lưới cửa hàng \& Phân nhóm UNKNOWN: Cấu trúc}
   \begin{columns}[c]
     \begin{column}{0.60\textwidth}
       \centering
@@ -287,7 +279,7 @@
 \end{frame}
 
 % SLIDE 10: CHUYỂN GIAO 28 ĐẶC TRƯNG POINT-IN-TIME
-\begin{frame}{9. Đề xuất 28 đặc trưng Point-in-Time sang Feature Engineering\tagML}
+\begin{frame}{9. Đề xuất 28 đặc trưng Point-in-Time sang Feature Engineering}
   \scriptsize
   \renewcommand{\arraystretch}{0.88}
   \begin{tabularx}{\linewidth}{l l Y l Y}
@@ -315,7 +307,7 @@
 % ==============================================================================
 
 % SLIDE 11: PHÂN KHÚC KHÁCH HÀNG RFM
-\begin{frame}{10. Phân khúc khách hàng RFM \& Ma trận giữ chân\tagBiz}
+\begin{frame}{10. Phân khúc khách hàng RFM \& Ma trận giữ chân}
   \begin{columns}[c]
     \begin{column}{0.62\textwidth}
       \centering
@@ -335,7 +327,7 @@
 \end{frame}
 
 % SLIDE 12: MA TRẬN HIỆU QUẢ NGÀNH HÀNG
-\begin{frame}{11. Ma trận ngành hàng: Hút khách vs Tăng giỏ\tagBiz}
+\begin{frame}{11. Ma trận ngành hàng: Hút khách vs Tăng giỏ}
   \begin{columns}[c]
     \begin{column}{0.62\textwidth}
       \centering
@@ -355,7 +347,7 @@
 \end{frame}
 
 % SLIDE 13: SỨC MẠNH GIỎ HÀNG ĐA NGÀNH
-\begin{frame}{12. Sức mạnh giỏ hàng đa ngành \& Đòn bẩy bán chéo\tagBiz}
+\begin{frame}{12. Sức mạnh giỏ hàng đa ngành \& Đòn bẩy bán chéo}
   \begin{columns}[c]
     \begin{column}{0.62\textwidth}
       \centering
@@ -376,7 +368,7 @@
 \end{frame}
 
 % SLIDE 14: THÂM NHẬP NHÃN HÀNG RIÊNG (PRIVATE LABEL)
-\begin{frame}{13. Thâm nhập Nhãn riêng (Private Label) theo ngành\tagBiz}
+\begin{frame}{13. Thâm nhập Nhãn riêng (Private Label) theo ngành}
   \begin{columns}[c]
     \begin{column}{0.62\textwidth}
       \centering
@@ -396,7 +388,7 @@
 \end{frame}
 
 % SLIDE 15: HÀNH VI THEO QUY MÔ GIA ĐÌNH & TRẺ EM
-\begin{frame}{14. Tiêu dùng theo Quy mô gia đình \& Trẻ em\tagBiz}
+\begin{frame}{14. Tiêu dùng theo Quy mô gia đình \& Trẻ em}
   \begin{columns}[c]
     \begin{column}{0.62\textwidth}
       \centering
@@ -415,7 +407,7 @@
 \end{frame}
 
 % SLIDE 16: CHIẾT KHẤU HAI TẦNG: MARKDOWN VS COUPON
-\begin{frame}{15. Chiết khấu hai tầng: Markdown tại quầy vs Coupon\tagBiz}
+\begin{frame}{15. Chiết khấu hai tầng: Markdown tại quầy vs Coupon}
   \begin{columns}[c]
     \begin{column}{0.60\textwidth}
       \centering
@@ -436,7 +428,7 @@
 \end{frame}
 
 % SLIDE 17: MỨC ĐỘ TẬP TRUNG DOANH THU: PARETO & GINI
-\begin{frame}{16. Mức độ tập trung doanh thu khách hàng: Pareto \& Gini\tagBiz}
+\begin{frame}{16. Mức độ tập trung doanh thu khách hàng: Pareto \& Gini}
   \begin{columns}[c]
     \begin{column}{0.60\textwidth}
       \centering
@@ -457,7 +449,7 @@
 \end{frame}
 
 % SLIDE 18: NHỊP ĐIỆU THỜI GIAN VI MÔ & VẬN HÀNH
-\begin{frame}{17. Nhịp điệu thời gian vi mô \& Tối ưu hóa vận hành\tagBiz}
+\begin{frame}{17. Nhịp điệu thời gian vi mô \& Tối ưu hóa vận hành}
   \begin{columns}[c]
     \begin{column}{0.60\textwidth}
       \centering
@@ -477,7 +469,7 @@
 \end{frame}
 
 % SLIDE 19: TỔNG KẾT CHIẾN LƯỢC BÁN LẺ: 5 HÀNH ĐỘNG THƯƠNG MẠI
-\begin{frame}{18. Tổng kết: 5 hành động chiến lược bán lẻ\tagBiz}
+\begin{frame}{18. Tổng kết: 5 hành động chiến lược bán lẻ}
   \small
   \begin{columns}[T]
     \begin{column}{0.48\textwidth}
@@ -522,7 +514,7 @@
 \end{frame}
 
 % SLIDE 20: PHỤ LỤC PHÂN PHỐI GIÁ TRỊ GIỎ HÀNG THỰC NGHIỆM (AOV)
-\begin{frame}{Phụ lục: Phân phối giá trị giỏ hàng thực nghiệm (AOV)\tagBiz}
+\begin{frame}{Phụ lục: Phân phối giá trị giỏ hàng thực nghiệm (AOV)}
   \begin{columns}[c]
     \begin{column}{0.60\textwidth}
       \centering
