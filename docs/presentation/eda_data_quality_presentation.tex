@@ -224,35 +224,35 @@
   \end{columns}
 \end{frame}
 
-% SLIDE 9: CHUYỂN GIAO 28 ĐẶC TRƯNG POINT-IN-TIME
-\begin{frame}{8. Đề xuất 28 đặc trưng Point-in-Time sang Feature Engineering}
-  \footnotesize
-  \renewcommand{\arraystretch}{0.95}
-  \begin{tabularx}{\linewidth}{l l Y l}
-    \toprule
-    \textbf{Nhóm đặc trưng} & \textbf{Cửa sổ} & \textbf{Tên đặc trưng kỹ thuật đề xuất} & \textbf{Căn cứ EDA} \\
-    \midrule
-    \textbf{1. Recency} & Lịch sử & \texttt{days\_since\_last\_trip}, \texttt{days\_since\_last\_fresh} & 95.6\% $\to$ 16.7\% \\
-    \textbf{2. Frequency} & 14d, 30d, 90d & \texttt{n\_trips\_14d}, \texttt{n\_trips\_30d}, \texttt{n\_trips\_90d} & 67.2\% vs 31.0\% khi trễ \\
-    \textbf{3. Tương tác R-F} & 90d & \texttt{recency\_x\_frequency\_90d} & Phi tuyến trên heatmap \\
-    \textbf{4. Monetary/Spend} & 30d, 90d & \texttt{total\_spend\_30d}, \texttt{total\_spend\_90d}, \texttt{aov\_90d} & Tầng cao +8.5\% tỷ lệ mua \\
-    \textbf{5. Breadth} & 90d & \texttt{n\_departments\_90d}, \texttt{n\_commodities\_90d} & 64.0\% $\to$ 83.7\% \\
-    \textbf{6. Tươi sống} & 30d & \texttt{fresh\_spend\_share\_30d}, \texttt{n\_fresh\_trips\_30d} & Tươi 0--3d đạt 89.7\% \\
-    \textbf{7. Chiến dịch} & Tại $t_0$, 90d & \texttt{has\_active\_camp}, \texttt{camp\_type\_A}, \texttt{coupons\_90d} & Active 86.8\% vs 59.9\% \\
-    \textbf{8. Cửa hàng} & 90d & \texttt{primary\_store\_share}, \texttt{n\_stores\_visited} & Đa store 79.0\% vs 63.0\% \\
-    \textbf{9. Nhân khẩu học} & Cố định & \texttt{hh\_size}, \texttt{income\_bracket}, \texttt{is\_unknown\_demo} & UNKNOWN chuẩn 68.4\% \\
-    \bottomrule
-  \end{tabularx}
-  \vspace{0.15cm}
-  \centering\footnotesize\textbf{Tổng cộng: 28 đặc trưng Point-in-Time} tuân thủ nghiêm ngặt $DAY \le t_0$, 100\% không rò rỉ tương lai.
-\end{frame}
+% SLIDE 9: CHUYỂN GIAO 28 ĐẶC TRƯNG POINT-IN-TIME (TẠM THỜI ẨN THEO YÊU CẦU)
+% \begin{frame}{8. Đề xuất 28 đặc trưng Point-in-Time sang Feature Engineering}
+%   \footnotesize
+%   \renewcommand{\arraystretch}{0.95}
+%   \begin{tabularx}{\linewidth}{l l Y l}
+%     \toprule
+%     \textbf{Nhóm đặc trưng} & \textbf{Cửa sổ} & \textbf{Tên đặc trưng kỹ thuật đề xuất} & \textbf{Căn cứ EDA} \\
+%     \midrule
+%     \textbf{1. Recency} & Lịch sử & \texttt{days\_since\_last\_trip}, \texttt{days\_since\_last\_fresh} & 95.6\% $\to$ 16.7\% \\
+%     \textbf{2. Frequency} & 14d, 30d, 90d & \texttt{n\_trips\_14d}, \texttt{n\_trips\_30d}, \texttt{n\_trips\_90d} & 67.2\% vs 31.0\% khi trễ \\
+%     \textbf{3. Tương tác R-F} & 90d & \texttt{recency\_x\_frequency\_90d} & Phi tuyến trên heatmap \\
+%     \textbf{4. Monetary/Spend} & 30d, 90d & \texttt{total\_spend\_30d}, \texttt{total\_spend\_90d}, \texttt{aov\_90d} & Tầng cao +8.5\% tỷ lệ mua \\
+%     \textbf{5. Breadth} & 90d & \texttt{n\_departments\_90d}, \texttt{n\_commodities\_90d} & 64.0\% $\to$ 83.7\% \\
+%     \textbf{6. Tươi sống} & 30d & \texttt{fresh\_spend\_share\_30d}, \texttt{n\_fresh\_trips\_30d} & Tươi 0--3d đạt 89.7\% \\
+%     \textbf{7. Chiến dịch} & Tại $t_0$, 90d & \texttt{has\_active\_camp}, \texttt{camp\_type\_A}, \texttt{coupons\_90d} & Active 86.8\% vs 59.9\% \\
+%     \textbf{8. Cửa hàng} & 90d & \texttt{primary\_store\_share}, \texttt{n\_stores\_visited} & Đa store 79.0\% vs 63.0\% \\
+%     \textbf{9. Nhân khẩu học} & Cố định & \texttt{hh\_size}, \texttt{income\_bracket}, \texttt{is\_unknown\_demo} & UNKNOWN chuẩn 68.4\% \\
+%     \bottomrule
+%   \end{tabularx}
+%   \vspace{0.15cm}
+%   \centering\footnotesize\textbf{Tổng cộng: 28 đặc trưng Point-in-Time} tuân thủ nghiêm ngặt $DAY \le t_0$, 100\% không rò rỉ tương lai.
+% \end{frame}
 
 % ==============================================================================
 % PHẦN 2: KHÁM PHÁ DỮ LIỆU CHUYÊN SÂU CHO CHIẾN LƯỢC KINH DOANH BÁN LẺ
 % ==============================================================================
 
 % SLIDE 10: PHÂN KHÚC KHÁCH HÀNG RFM
-\begin{frame}{9. Phân khúc khách hàng RFM \& Ma trận giữ chân}
+\begin{frame}{8. Phân khúc khách hàng RFM \& Ma trận giữ chân}
   \begin{columns}[c]
     \begin{column}{0.68\textwidth}
       \centering
@@ -271,7 +271,7 @@
 \end{frame}
 
 % SLIDE 11: MỨC ĐỘ TẬP TRUNG DOANH THU: PARETO & GINI (CHUYỂN LÊN TỪ CŨ)
-\begin{frame}{10. Mức độ tập trung doanh thu khách hàng: Pareto \& Gini}
+\begin{frame}{9. Mức độ tập trung doanh thu khách hàng: Pareto \& Gini}
   \begin{columns}[c]
     \begin{column}{0.68\textwidth}
       \centering
@@ -291,7 +291,7 @@
 \end{frame}
 
 % SLIDE 12: HÀNH VI THEO QUY MÔ GIA ĐÌNH & TRẺ EM (CHUYỂN LÊN TỪ CŨ)
-\begin{frame}{11. Tiêu dùng theo Quy mô gia đình \& Trẻ em}
+\begin{frame}{10. Tiêu dùng theo Quy mô gia đình \& Trẻ em}
   \begin{columns}[c]
     \begin{column}{0.68\textwidth}
       \centering
@@ -311,7 +311,7 @@
 \end{frame}
 
 % SLIDE 13: MA TRẬN HIỆU QUẢ NGÀNH HÀNG
-\begin{frame}{12. Ma trận ngành hàng: Hút khách vs Tăng giỏ}
+\begin{frame}{11. Ma trận ngành hàng: Hút khách vs Tăng giỏ}
   \begin{columns}[c]
     \begin{column}{0.68\textwidth}
       \centering
@@ -331,7 +331,7 @@
 \end{frame}
 
 % SLIDE 14: SỨC MẠNH GIỎ HÀNG ĐA NGÀNH
-\begin{frame}{13. Sức mạnh giỏ hàng đa ngành \& Đòn bẩy bán chéo}
+\begin{frame}{12. Sức mạnh giỏ hàng đa ngành \& Đòn bẩy bán chéo}
   \begin{columns}[c]
     \begin{column}{0.68\textwidth}
       \centering
@@ -351,7 +351,7 @@
 \end{frame}
 
 % SLIDE 15: THÂM NHẬP NHÃN HÀNG RIÊNG (PRIVATE LABEL)
-\begin{frame}{14. Thâm nhập Nhãn riêng (Private Label) theo ngành}
+\begin{frame}{13. Thâm nhập Nhãn riêng (Private Label) theo ngành}
   \begin{columns}[c]
     \begin{column}{0.68\textwidth}
       \centering
@@ -369,7 +369,7 @@
 \end{frame}
 
 % SLIDE 16: CHIẾT KHẤU HAI TẦNG: MARKDOWN VS COUPON
-\begin{frame}{15. Chiết khấu hai tầng: Markdown tại quầy vs Coupon}
+\begin{frame}{14. Chiết khấu hai tầng: Markdown tại quầy vs Coupon}
   \begin{columns}[c]
     \begin{column}{0.68\textwidth}
       \centering
@@ -387,7 +387,7 @@
 \end{frame}
 
 % SLIDE 17: NHỊP ĐIỆU THỜI GIAN VI MÔ & VẬN HÀNH
-\begin{frame}{16. Nhịp điệu thời gian vi mô \& Tối ưu hóa vận hành}
+\begin{frame}{15. Nhịp điệu thời gian vi mô \& Tối ưu hóa vận hành}
   \begin{columns}[c]
     \begin{column}{0.68\textwidth}
       \centering
@@ -405,50 +405,50 @@
   \end{columns}
 \end{frame}
 
-% SLIDE 18: TỔNG KẾT CHIẾN LƯỢC BÁN LẺ: 5 HÀNH ĐỘNG THƯƠNG MẠI
-\begin{frame}{17. Tổng kết: 5 hành động chiến lược bán lẻ}
-  \small
-  \begin{columns}[T]
-    \begin{column}{0.48\textwidth}
-      \begin{beamercolorbox}[sep=5pt,rounded=true]{block title}
-        \textbf{\footnotesize 1. Khách hàng VIP \& At-Risk}
-      \end{beamercolorbox}
-      \begin{beamercolorbox}[sep=5pt,rounded=true]{block body}
-        \scriptsize Giữ 541 VIP + cứu 52 At-Risk (\$244K).
-      \end{beamercolorbox}
-      \vspace{0.15cm}
-
-      \begin{beamercolorbox}[sep=5pt,rounded=true]{block title}
-        \textbf{\footnotesize 2. Đòn bẩy Bán chéo Đa ngành}
-      \end{beamercolorbox}
-      \begin{beamercolorbox}[sep=5pt,rounded=true]{block body}
-        \scriptsize Kéo giỏ $\ge 5$ ngành (AOV $\times 7$) qua Grocery.
-      \end{beamercolorbox}
-    \end{column}
-    
-    \begin{column}{0.48\textwidth}
-      \begin{beamercolorbox}[sep=5pt,rounded=true]{block title alerted}
-        \textbf{\footnotesize 3. Mở rộng Nhãn hàng riêng}
-      \end{beamercolorbox}
-      \begin{beamercolorbox}[sep=5pt,rounded=true]{block body alerted}
-        \scriptsize Mở Private Label sang Meat/Drug GM (+5--12\% biên).
-      \end{beamercolorbox}
-      \vspace{0.15cm}
-
-      \begin{beamercolorbox}[sep=5pt,rounded=true]{block title alerted}
-        \textbf{\footnotesize 4. Tái cấu trúc Khuyến mãi}
-      \end{beamercolorbox}
-      \begin{beamercolorbox}[sep=5pt,rounded=true]{block body alerted}
-        \scriptsize Chuyển markdown $\to$ coupon Type A (15.96\%).
-      \end{beamercolorbox}
-    \end{column}
-  \end{columns}
-  
-  \vspace{0.2cm}
-  \begin{beamercolorbox}[sep=5pt,center,rounded=true]{block body example}
-    \footnotesize\textbf{5. Vận hành nhân sự \& ca trực:} Dồn ca 11h--18h + cuối tuần.
-  \end{beamercolorbox}
-\end{frame}
+% SLIDE 18: TỔNG KẾT CHIẾN LƯỢC BÁN LẺ: 5 HÀNH ĐỘNG THƯƠNG MẠI (TẠM THỜI ẨN THEO YÊU CẦU)
+% \begin{frame}{17. Tổng kết: 5 hành động chiến lược bán lẻ}
+%   \small
+%   \begin{columns}[T]
+%     \begin{column}{0.48\textwidth}
+%       \begin{beamercolorbox}[sep=5pt,rounded=true]{block title}
+%         \textbf{\footnotesize 1. Khách hàng VIP \& At-Risk}
+%       \end{beamercolorbox}
+%       \begin{beamercolorbox}[sep=5pt,rounded=true]{block body}
+%         \scriptsize Giữ 541 VIP + cứu 52 At-Risk (\$244K).
+%       \end{beamercolorbox}
+%       \vspace{0.15cm}
+% 
+%       \begin{beamercolorbox}[sep=5pt,rounded=true]{block title}
+%         \textbf{\footnotesize 2. Đòn bẩy Bán chéo Đa ngành}
+%       \end{beamercolorbox}
+%       \begin{beamercolorbox}[sep=5pt,rounded=true]{block body}
+%         \scriptsize Kéo giỏ $\ge 5$ ngành (AOV $\times 7$) qua Grocery.
+%       \end{beamercolorbox}
+%     \end{column}
+%     
+%     \begin{column}{0.48\textwidth}
+%       \begin{beamercolorbox}[sep=5pt,rounded=true]{block title alerted}
+%         \textbf{\footnotesize 3. Mở rộng Nhãn hàng riêng}
+%       \end{beamercolorbox}
+%       \begin{beamercolorbox}[sep=5pt,rounded=true]{block body alerted}
+%         \scriptsize Mở Private Label sang Meat/Drug GM (+5--12\% biên).
+%       \end{beamercolorbox}
+%       \vspace{0.15cm}
+% 
+%       \begin{beamercolorbox}[sep=5pt,rounded=true]{block title alerted}
+%         \textbf{\footnotesize 4. Tái cấu trúc Khuyến mãi}
+%       \end{beamercolorbox}
+%       \begin{beamercolorbox}[sep=5pt,rounded=true]{block body alerted}
+%         \scriptsize Chuyển markdown $\to$ coupon Type A (15.96\%).
+%       \end{beamercolorbox}
+%     \end{column}
+%   \end{columns}
+%   
+%   \vspace{0.2cm}
+%   \begin{beamercolorbox}[sep=5pt,center,rounded=true]{block body example}
+%     \footnotesize\textbf{5. Vận hành nhân sự \& ca trực:} Dồn ca 11h--18h + cuối tuần.
+%   \end{beamercolorbox}
+% \end{frame}
 
 % SLIDE 19: PHỤ LỤC PHÂN PHỐI GIÁ TRỊ GIỎ HÀNG THỰC NGHIỆM (AOV)
 \begin{frame}{Phụ lục: Phân phối giá trị giỏ hàng thực nghiệm (AOV)}
