@@ -787,10 +787,6 @@ def make_fig_24_breadth_aov():
     plt.close()
     print("✅ 24_basket_category_breadth_aov.png")
 
-    plt.savefig(FIG_DIR / '24_basket_category_breadth_aov.png', dpi=180, bbox_inches='tight')
-    plt.close()
-    print("✅ 24_basket_category_breadth_aov.png")
-
 
 # ==============================================================================
 # 12. 25_private_label_by_department.png
