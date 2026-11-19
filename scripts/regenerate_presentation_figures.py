@@ -300,30 +300,50 @@ def make_fig_05_perishable():
         '0 - 3 ngày', '4 - 7 ngày', '8 - 14 ngày', '15 - 30 ngày', '> 30 ngày'
     ]).reset_index()
 
-    fig, ax = plt.subplots(figsize=(9.2, 5.0), constrained_layout=True)
+    fig, ax1 = plt.subplots(figsize=(9.2, 5.0), constrained_layout=True)
     x = np.arange(len(df_per))
-    width = 0.50
+    width = 0.45
 
-    bars = ax.bar(x, df_per['p'], width, color='#238b45', edgecolor='#00441b', linewidth=1.2, zorder=3)
-    ax.axhline(BASE_RATE, color='#d95f02', linestyle='--', linewidth=1.8,
-               label=f'Tỷ lệ cơ sở toàn mẫu: {BASE_RATE:.1f}%', zorder=2)
-
+    # Primary axis (left): Household count as BARS
+    bars = ax1.bar(x, df_per['n'], width, color='#cbd5e1', edgecolor='#94a3b8', linewidth=1.2,
+                   label='Số hộ gia đình (trục trái)', zorder=2)
     for bar in bars:
         h = bar.get_height()
-        ax.annotate(f'{h:.1f}%',
-                    xy=(bar.get_x() + bar.get_width() / 2, h),
-                    xytext=(0, 5), textcoords="offset points",
-                    ha='center', va='bottom', fontsize=10.5, fontweight='bold', color='#00441b',
-                    bbox=dict(boxstyle='square,pad=0.15', facecolor='white', edgecolor='none', alpha=0.9))
+        ax1.text(bar.get_x() + bar.get_width()/2, h + 15, f'{int(round(h)):,} hộ',
+                 ha='center', va='bottom', fontsize=9.5, fontweight='bold', color='#475569')
 
-    ax.set_ylabel('Xác suất mua hàng trong 14 ngày: P(Y=1) (%)', fontsize=11, fontweight='bold')
-    ax.set_xlabel('Số ngày kể từ lần gần nhất mua hàng tươi sống', fontsize=11, fontweight='bold', labelpad=8)
-    ax.set_xticks(x)
-    ax.set_xticklabels(df_per['per_tier'], fontsize=10.5, fontweight='bold')
-    ax.set_ylim(0, 112)
-    ax.set_title('Xác suất mua theo độ trễ hàng tươi sống', fontsize=13, fontweight='bold', pad=12)
-    ax.grid(True, linestyle='--', alpha=0.5, axis='y')
-    ax.legend(loc='upper right', frameon=True, facecolor='white', framealpha=0.95, fontsize=10.5)
+    ax1.set_ylabel('Số lượng hộ gia đình (hộ)', fontsize=11, fontweight='bold', color='#475569')
+    ax1.set_xlabel('Số ngày kể từ lần gần nhất mua hàng tươi sống', fontsize=11, fontweight='bold', labelpad=8)
+    ax1.set_xticks(x)
+    ax1.set_xticklabels(df_per['per_tier'], fontsize=10.5, fontweight='bold')
+    ax1.set_ylim(0, max(df_per['n']) * 1.35)
+    ax1.tick_params(axis='y', labelcolor='#475569')
+    ax1.grid(True, linestyle='--', alpha=0.35, axis='y')
+
+    # Secondary axis (right): %Y=1 as LINE
+    ax2 = ax1.twinx()
+    ax2.axhline(BASE_RATE, color='#ea580c', linestyle='--', linewidth=1.6,
+                label=f'Tỷ lệ cơ sở toàn mẫu ({BASE_RATE:.1f}%)', zorder=3)
+    ax2.plot(x, df_per['p'], color='#15803d', linewidth=2.8, marker='o', markersize=8.5,
+             label='Tỷ lệ mua P(Y=1) (trục phải)', zorder=4)
+
+    for xp, yp in zip(x, df_per['p']):
+        y_off = 8 if yp >= BASE_RATE else -16
+        v_align = 'bottom' if yp >= BASE_RATE else 'top'
+        ax2.annotate(f'{yp:.1f}%', (xp, yp), textcoords='offset points', xytext=(0, y_off),
+                     ha='center', va=v_align, fontsize=10.5, fontweight='bold', color='#15803d',
+                     bbox=dict(boxstyle='round,pad=0.2', facecolor='white', edgecolor='#15803d', alpha=0.95))
+
+    ax2.set_ylabel('Xác suất mua hàng P(Y=1) (%)', fontsize=11, fontweight='bold', color='#15803d')
+    ax2.set_ylim(20, 108)
+    ax2.tick_params(axis='y', labelcolor='#15803d')
+
+    # Combined Legend
+    l1, lb1 = ax1.get_legend_handles_labels()
+    l2, lb2 = ax2.get_legend_handles_labels()
+    ax1.legend(l1 + l2, lb1 + lb2, loc='upper right', frameon=True, facecolor='white', framealpha=0.95, fontsize=9.5)
+
+    ax1.set_title('Tỷ lệ mua hàng P(Y=1) và Quy mô hộ theo độ trễ hàng tươi sống', fontsize=13, fontweight='bold', pad=12)
 
     plt.savefig(FIG_DIR / '05_p_y1_perishable_recency.png', dpi=180, bbox_inches='tight')
     plt.close()
@@ -334,43 +354,87 @@ def make_fig_05_perishable():
 # 5. 12_campaign_coupon_combined.png
 # ==============================================================================
 def make_fig_12_campaign():
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(11.0, 4.8), constrained_layout=True)
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(11.5, 4.8), constrained_layout=True)
 
-    # Panel A: Campaigns at t0 - clean names without parentheses, only percentage
+    # Panel A: Campaigns at t0 (Bars = Household count, Line = %Y=1)
     c_labels = ['Không có\nchiến dịch', 'Loại C', 'Loại B', 'Loại A']
-    c_p = [59.9, 88.5, 90.7, 86.7]
+    c_n = [1807, 169, 207, 712]
+    c_p = [59.9, 83.6, 90.7, 86.8]
+    x1 = np.arange(len(c_labels))
 
-    ax1.axhline(68.3, color='#d95f02', linestyle='--', linewidth=1.6, label='Base rate: 68.3%', zorder=2)
-    bars1 = ax1.bar(c_labels, c_p, width=0.48, color='#756bb1', edgecolor='#4a148c', linewidth=1.2, zorder=3)
+    bars1 = ax1.bar(x1, c_n, width=0.45, color='#cbd5e1', edgecolor='#94a3b8', linewidth=1.1,
+                    label='Số hộ (trục trái)', zorder=2)
     for bar in bars1:
         h = bar.get_height()
-        ax1.text(bar.get_x() + bar.get_width()/2, h + 2.5, f"{h:.1f}%",
-                 ha='center', va='bottom', fontsize=10.0, fontweight='bold', color='#2c0c59',
-                 bbox=dict(boxstyle='square,pad=0.15', facecolor='white', edgecolor='none', alpha=0.9))
+        ax1.text(bar.get_x() + bar.get_width()/2, h + 30, f'{int(h):,} hộ',
+                 ha='center', va='bottom', fontsize=8.8, fontweight='bold', color='#475569')
 
-    ax1.set_title("A. Chiến dịch tiếp thị kích hoạt tại t_0", fontsize=12, fontweight='bold', pad=10)
-    ax1.set_ylabel("Xác suất mua hàng P(Y=1) (%)", fontsize=10.5, fontweight='bold')
-    ax1.set_ylim(0, 115)
-    ax1.grid(True, linestyle='--', alpha=0.5, axis='y')
-    ax1.legend(loc='upper left', fontsize=9.5, frameon=True, facecolor='white')
+    ax1.set_ylabel('Số lượng hộ gia đình (hộ)', fontsize=10.0, fontweight='bold', color='#475569')
+    ax1.set_xticks(x1)
+    ax1.set_xticklabels(c_labels, fontsize=10.0, fontweight='bold')
+    ax1.set_ylim(0, 2400)
+    ax1.tick_params(axis='y', labelcolor='#475569')
+    ax1.grid(True, linestyle='--', alpha=0.35, axis='y')
 
-    # Panel B: Coupon Redemptions - clean names without parentheses, only percentage
+    ax1_twin = ax1.twinx()
+    ax1_twin.axhline(68.3, color='#ea580c', linestyle='--', linewidth=1.4, label='Base rate (68.3%)', zorder=3)
+    ax1_twin.plot(x1, c_p, color='#6b21a8', linewidth=2.6, marker='s', markersize=8.0,
+                  label='P(Y=1) (trục phải)', zorder=4)
+    for xp, yp in zip(x1, c_p):
+        y_off = -15 if yp < 68.3 else 8
+        v_align = 'top' if yp < 68.3 else 'bottom'
+        ax1_twin.annotate(f'{yp:.1f}%', (xp, yp), textcoords='offset points', xytext=(0, y_off),
+                          ha='center', va=v_align, fontsize=9.8, fontweight='bold', color='#6b21a8',
+                          bbox=dict(boxstyle='round,pad=0.2', facecolor='white', edgecolor='#6b21a8', alpha=0.95))
+
+    ax1_twin.set_ylabel('Xác suất P(Y=1) (%)', fontsize=10.0, fontweight='bold', color='#6b21a8')
+    ax1_twin.set_ylim(40, 105)
+    ax1_twin.tick_params(axis='y', labelcolor='#6b21a8')
+
+    l1, lb1 = ax1.get_legend_handles_labels()
+    l2, lb2 = ax1_twin.get_legend_handles_labels()
+    ax1.legend(l1 + l2, lb1 + lb2, loc='upper left', fontsize=8.5, frameon=True, facecolor='white', framealpha=0.95)
+    ax1.set_title('A. Chiến dịch tiếp thị kích hoạt tại t_0', fontsize=11.5, fontweight='bold', pad=10)
+
+    # Panel B: Coupon Redemptions in 180 days (Bars = Household count, Line = %Y=1)
     cp_labels = ['0 lần', '1 - 2 lần', '≥ 3 lần']
-    cp_p = [67.4, 92.5, 94.7]
+    cp_n = [2317, 94, 90]
+    cp_p = [66.3, 93.2, 93.6]
+    x2 = np.arange(len(cp_labels))
 
-    ax2.axhline(68.3, color='#d95f02', linestyle='--', linewidth=1.6, label='Base rate: 68.3%', zorder=2)
-    bars2 = ax2.bar(cp_labels, cp_p, width=0.45, color='#1b9e77', edgecolor='#004d40', linewidth=1.2, zorder=3)
+    bars2 = ax2.bar(x2, cp_n, width=0.45, color='#cbd5e1', edgecolor='#94a3b8', linewidth=1.1,
+                    label='Số hộ (trục trái)', zorder=2)
     for bar in bars2:
         h = bar.get_height()
-        ax2.text(bar.get_x() + bar.get_width()/2, h + 2.5, f"{h:.1f}%",
-                 ha='center', va='bottom', fontsize=10.0, fontweight='bold', color='#004d40',
-                 bbox=dict(boxstyle='square,pad=0.2', facecolor='white', edgecolor='none', alpha=0.95))
+        ax2.text(bar.get_x() + bar.get_width()/2, h + 30, f'{int(h):,} hộ',
+                 ha='center', va='bottom', fontsize=8.8, fontweight='bold', color='#475569')
 
-    ax2.set_title("B. Lịch sử đổi coupon trong 180 ngày", fontsize=12, fontweight='bold', pad=10)
-    ax2.set_ylabel("Xác suất mua hàng P(Y=1) (%)", fontsize=10.5, fontweight='bold')
-    ax2.set_ylim(0, 115)
-    ax2.grid(True, linestyle='--', alpha=0.5, axis='y')
-    ax2.legend(loc='upper left', fontsize=9.5, frameon=True, facecolor='white')
+    ax2.set_ylabel('Số lượng hộ gia đình (hộ)', fontsize=10.0, fontweight='bold', color='#475569')
+    ax2.set_xticks(x2)
+    ax2.set_xticklabels(cp_labels, fontsize=10.0, fontweight='bold')
+    ax2.set_ylim(0, 2800)
+    ax2.tick_params(axis='y', labelcolor='#475569')
+    ax2.grid(True, linestyle='--', alpha=0.35, axis='y')
+
+    ax2_twin = ax2.twinx()
+    ax2_twin.axhline(68.3, color='#ea580c', linestyle='--', linewidth=1.4, label='Base rate (68.3%)', zorder=3)
+    ax2_twin.plot(x2, cp_p, color='#0f766e', linewidth=2.6, marker='^', markersize=8.5,
+                  label='P(Y=1) (trục phải)', zorder=4)
+    for xp, yp in zip(x2, cp_p):
+        y_off = -15 if yp < 68.3 else 8
+        v_align = 'top' if yp < 68.3 else 'bottom'
+        ax2_twin.annotate(f'{yp:.1f}%', (xp, yp), textcoords='offset points', xytext=(0, y_off),
+                          ha='center', va=v_align, fontsize=9.8, fontweight='bold', color='#0f766e',
+                          bbox=dict(boxstyle='round,pad=0.2', facecolor='white', edgecolor='#0f766e', alpha=0.95))
+
+    ax2_twin.set_ylabel('Xác suất P(Y=1) (%)', fontsize=10.0, fontweight='bold', color='#0f766e')
+    ax2_twin.set_ylim(45, 108)
+    ax2_twin.tick_params(axis='y', labelcolor='#0f766e')
+
+    l1, lb1 = ax2.get_legend_handles_labels()
+    l2, lb2 = ax2_twin.get_legend_handles_labels()
+    ax2.legend(l1 + l2, lb1 + lb2, loc='upper left', fontsize=8.5, frameon=True, facecolor='white', framealpha=0.95)
+    ax2.set_title('B. Lịch sử đổi coupon trong 180 ngày', fontsize=11.5, fontweight='bold', pad=10)
 
     plt.savefig(FIG_DIR / '12_campaign_coupon_combined.png', dpi=180, bbox_inches='tight')
     plt.close()
@@ -381,47 +445,89 @@ def make_fig_12_campaign():
 # 6. 13_loyalty_demographics_combined.png
 # ==============================================================================
 def make_fig_13_loyalty():
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(11.0, 4.8), constrained_layout=True)
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(11.5, 4.8), constrained_layout=True)
 
-    # Panel A: Store Loyalty - clean names without parentheses, only percentage
+    # Panel A: Store Loyalty (Bars = Household count, Line = %Y=1)
     l_labels = ['Không mua', 'Tập trung cao', 'Trung bình', 'Phân tán']
-    l_p = [12.4, 70.4, 76.2, 82.8]
-    l_colors = ['#bdbdbd', '#e7298a', '#c51b7d', '#8e0152']
+    l_n = [199, 1139, 738, 424]
+    l_p = [12.4, 68.2, 77.9, 78.4]
+    x1 = np.arange(len(l_labels))
 
-    ax1.axhline(68.3, color='#d95f02', linestyle='--', linewidth=1.6, label='Base rate: 68.3%', zorder=2)
-    bars1 = ax1.bar(l_labels, l_p, width=0.48, color=l_colors, edgecolor='#49006a', linewidth=1.2, zorder=3)
+    bars1 = ax1.bar(x1, l_n, width=0.45, color='#cbd5e1', edgecolor='#94a3b8', linewidth=1.1,
+                    label='Số hộ (trục trái)', zorder=2)
     for bar in bars1:
         h = bar.get_height()
-        ax1.text(bar.get_x() + bar.get_width()/2, h + 2.5, f"{h:.1f}%",
-                 ha='center', va='bottom', fontsize=10.0, fontweight='bold', color='#49006a',
-                 bbox=dict(boxstyle='square,pad=0.15', facecolor='white', edgecolor='none', alpha=0.95))
+        ax1.text(bar.get_x() + bar.get_width()/2, h + 20, f'{int(h):,} hộ',
+                 ha='center', va='bottom', fontsize=8.8, fontweight='bold', color='#475569')
 
-    ax1.set_title("A. Tỷ trọng chi tiêu tại cửa hàng chính", fontsize=12, fontweight='bold', pad=10)
-    ax1.set_ylabel("Xác suất mua hàng P(Y=1) (%)", fontsize=10.5, fontweight='bold')
-    ax1.set_ylim(0, 115)
-    ax1.grid(True, linestyle='--', alpha=0.5, axis='y')
-    ax1.legend(loc='upper left', fontsize=9.5, frameon=True, facecolor='white')
+    ax1.set_ylabel('Số lượng hộ gia đình (hộ)', fontsize=10.0, fontweight='bold', color='#475569')
+    ax1.set_xticks(x1)
+    ax1.set_xticklabels(l_labels, fontsize=10.0, fontweight='bold')
+    ax1.set_ylim(0, 1500)
+    ax1.tick_params(axis='y', labelcolor='#475569')
+    ax1.grid(True, linestyle='--', alpha=0.35, axis='y')
 
-    # Panel B: Demographics - clean names without parentheses, only percentage
+    ax1_twin = ax1.twinx()
+    ax1_twin.axhline(68.3, color='#ea580c', linestyle='--', linewidth=1.4, label='Base rate (68.3%)', zorder=3)
+    ax1_twin.plot(x1, l_p, color='#be185d', linewidth=2.6, marker='o', markersize=8.0,
+                  label='P(Y=1) (trục phải)', zorder=4)
+    for xp, yp in zip(x1, l_p):
+        y_off = -15 if yp < 68.3 else 8
+        v_align = 'top' if yp < 68.3 else 'bottom'
+        ax1_twin.annotate(f'{yp:.1f}%', (xp, yp), textcoords='offset points', xytext=(0, y_off),
+                          ha='center', va=v_align, fontsize=9.8, fontweight='bold', color='#be185d',
+                          bbox=dict(boxstyle='round,pad=0.2', facecolor='white', edgecolor='#be185d', alpha=0.95))
+
+    ax1_twin.set_ylabel('Xác suất P(Y=1) (%)', fontsize=10.0, fontweight='bold', color='#be185d')
+    ax1_twin.set_ylim(0, 105)
+    ax1_twin.tick_params(axis='y', labelcolor='#be185d')
+
+    l1, lb1 = ax1.get_legend_handles_labels()
+    l2, lb2 = ax1_twin.get_legend_handles_labels()
+    ax1.legend(l1 + l2, lb1 + lb2, loc='upper left', fontsize=8.5, frameon=True, facecolor='white', framealpha=0.95)
+    ax1.set_title('A. Tỷ trọng chi tiêu tại cửa hàng chính', fontsize=11.5, fontweight='bold', pad=10)
+
+    # Panel B: Demographics (Bars = Household count, Line = %Y=1)
     d_labels = ['1 - 2 người', '3 - 4 người', '≥ 5 người', 'UNKNOWN']
+    d_n = [508, 226, 67, 1699]
     d_p = [75.4, 76.2, 80.2, 64.5]
-    d_colors = ['#41b6c4', '#1d91c0', '#225ea8', '#fe9929']
+    x2 = np.arange(len(d_labels))
 
-    ax2.axhline(68.3, color='#d95f02', linestyle='--', linewidth=1.6, label='Base rate: 68.3%', zorder=2)
-    bars2 = ax2.bar(d_labels, d_p, width=0.48, color=d_colors, edgecolor='#081d58', linewidth=1.2, zorder=3)
-    for i, bar in enumerate(bars2):
+    bar_colors = ['#cbd5e1', '#cbd5e1', '#cbd5e1', '#fed7aa']
+    edge_colors = ['#94a3b8', '#94a3b8', '#94a3b8', '#f97316']
+    bars2 = ax2.bar(x2, d_n, width=0.45, color=bar_colors, edgecolor=edge_colors, linewidth=1.1,
+                    label='Số hộ (trục trái)', zorder=2)
+    for bar in bars2:
         h = bar.get_height()
-        # For UNKNOWN (64.5%), placing at h + 1.2 with white bbox ensures it stays clean under the 68.3% line
-        y_pos = h + 1.2 if i == 3 else h + 2.5
-        ax2.text(bar.get_x() + bar.get_width()/2, y_pos, f"{h:.1f}%",
-                 ha='center', va='bottom', fontsize=10.0, fontweight='bold', color='#081d58',
-                 bbox=dict(boxstyle='square,pad=0.15', facecolor='white', edgecolor='none', alpha=0.95))
+        ax2.text(bar.get_x() + bar.get_width()/2, h + 25, f'{int(h):,} hộ',
+                 ha='center', va='bottom', fontsize=8.8, fontweight='bold', color='#475569')
 
-    ax2.set_title("B. Phân nhóm nhân khẩu học", fontsize=12, fontweight='bold', pad=10)
-    ax2.set_ylabel("Xác suất mua hàng P(Y=1) (%)", fontsize=10.5, fontweight='bold')
-    ax2.set_ylim(0, 115)
-    ax2.grid(True, linestyle='--', alpha=0.5, axis='y')
-    ax2.legend(loc='upper left', fontsize=9.5, frameon=True, facecolor='white')
+    ax2.set_ylabel('Số lượng hộ gia đình (hộ)', fontsize=10.0, fontweight='bold', color='#475569')
+    ax2.set_xticks(x2)
+    ax2.set_xticklabels(d_labels, fontsize=10.0, fontweight='bold')
+    ax2.set_ylim(0, 2200)
+    ax2.tick_params(axis='y', labelcolor='#475569')
+    ax2.grid(True, linestyle='--', alpha=0.35, axis='y')
+
+    ax2_twin = ax2.twinx()
+    ax2_twin.axhline(68.3, color='#ea580c', linestyle='--', linewidth=1.4, label='Base rate (68.3%)', zorder=3)
+    ax2_twin.plot(x2, d_p, color='#1d4ed8', linewidth=2.6, marker='D', markersize=7.5,
+                  label='P(Y=1) (trục phải)', zorder=4)
+    for xp, yp in zip(x2, d_p):
+        y_off = -15 if yp < 68.3 else 8
+        v_align = 'top' if yp < 68.3 else 'bottom'
+        ax2_twin.annotate(f'{yp:.1f}%', (xp, yp), textcoords='offset points', xytext=(0, y_off),
+                          ha='center', va=v_align, fontsize=9.8, fontweight='bold', color='#1d4ed8',
+                          bbox=dict(boxstyle='round,pad=0.2', facecolor='white', edgecolor='#1d4ed8', alpha=0.95))
+
+    ax2_twin.set_ylabel('Xác suất P(Y=1) (%)', fontsize=10.0, fontweight='bold', color='#1d4ed8')
+    ax2_twin.set_ylim(45, 105)
+    ax2_twin.tick_params(axis='y', labelcolor='#1d4ed8')
+
+    l1, lb1 = ax2.get_legend_handles_labels()
+    l2, lb2 = ax2_twin.get_legend_handles_labels()
+    ax2.legend(l1 + l2, lb1 + lb2, loc='upper left', fontsize=8.5, frameon=True, facecolor='white', framealpha=0.95)
+    ax2.set_title('B. Phân nhóm nhân khẩu học', fontsize=11.5, fontweight='bold', pad=10)
 
     plt.savefig(FIG_DIR / '13_loyalty_demographics_combined.png', dpi=180, bbox_inches='tight')
     plt.close()
