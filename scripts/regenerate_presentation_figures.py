@@ -52,6 +52,7 @@ con.register('df_redempt', df_redempt)
 
 cutoffs = [250, 350, 450, 550, 650]
 BASE_RATE = 68.34
+P_COLOR = '#1f77b4'  # Unified blue color for all percentage lines
 
 
 # ==============================================================================
@@ -184,76 +185,75 @@ def make_fig_11():
 
     # Panel A: Spend controlling for Frequency
     x_labels_spend = ['< $100', '$100 - $300', '$300 - $700', '≥ $700']
+    x_indices = np.arange(len(x_labels_spend))
     low_freq_spend = [38.4, 48.0, 76.0, np.nan]
     med_freq_spend = [70.1, 67.8, 79.4, 82.4]
     high_freq_spend = [np.nan, 83.5, 93.9, 96.6]
 
-    ax1.axhline(73.2, color='#d95f02', linestyle='--', linewidth=1.5, label='Base rate active: 73.2%', zorder=2)
+    ax1.axhline(73.2, color='#ea580c', linestyle='--', linewidth=1.5, label='Base rate active: 73.2%', zorder=2)
     ax1.axhline(68.3, color='#888888', linestyle=':', linewidth=1.2, label='Base rate toàn mẫu: 68.3%', zorder=2)
 
-    ax1.plot(x_labels_spend, low_freq_spend, marker='o', linewidth=2.4, color='#e6550d', label='Tần suất thấp: 1-5 giỏ', markersize=7.5, zorder=4)
-    ax1.plot(x_labels_spend, med_freq_spend, marker='s', linewidth=2.4, color='#3182bd', label='Tần suất vừa: 6-15 giỏ', markersize=7.5, zorder=4)
-    ax1.plot(x_labels_spend, high_freq_spend, marker='^', linewidth=2.4, color='#31a354', label='Tần suất cao: ≥16 giỏ', markersize=7.5, zorder=4)
+    # Unified P_COLOR with distinct markers: circle, square, triangle
+    ax1.plot(x_indices, low_freq_spend, marker='o', linewidth=2.2, color=P_COLOR, label='Tần suất thấp: 1-5 giỏ', markersize=7.5, zorder=4)
+    ax1.plot(x_indices, med_freq_spend, marker='s', linewidth=2.2, color=P_COLOR, label='Tần suất vừa: 6-15 giỏ', markersize=7.5, zorder=4)
+    ax1.plot(x_indices, high_freq_spend, marker='^', linewidth=2.2, color=P_COLOR, label='Tần suất cao: ≥16 giỏ', markersize=7.5, zorder=4)
 
-    # Low freq annotations
-    for xp, yp in zip([0, 1, 2], low_freq_spend[:3]):
-        y_off = -15 if xp == 2 else 6
-        v_align = 'top' if xp == 2 else 'bottom'
-        ax1.annotate(f"{yp:.1f}%", (xp, yp), textcoords="offset points", xytext=(0, y_off), ha='center', va=v_align,
-                     fontsize=9.2, fontweight='bold', color='#e6550d',
-                     bbox=dict(boxstyle='square,pad=0.15', facecolor='white', edgecolor='none', alpha=0.95))
+    # Low freq annotations (unboxed)
+    ax1.annotate('38.4%', (0, 38.4), textcoords='offset points', xytext=(0, 8), ha='center', va='bottom', fontsize=9.2, fontweight='bold', color=P_COLOR)
+    ax1.annotate('48.0%', (1, 48.0), textcoords='offset points', xytext=(0, 8), ha='center', va='bottom', fontsize=9.2, fontweight='bold', color=P_COLOR)
+    ax1.annotate('76.0%', (2, 76.0), textcoords='offset points', xytext=(0, -14), ha='center', va='top', fontsize=9.2, fontweight='bold', color=P_COLOR)
 
-    # Med freq annotations
-    for xp, yp in zip([0, 1, 2, 3], med_freq_spend):
-        y_off = -14 if xp == 1 else 7
-        v_align = 'top' if xp == 1 else 'bottom'
-        ax1.annotate(f"{yp:.1f}%", (xp, yp), textcoords="offset points", xytext=(0, y_off), ha='center', va=v_align,
-                     fontsize=9.2, fontweight='bold', color='#3182bd',
-                     bbox=dict(boxstyle='square,pad=0.15', facecolor='white', edgecolor='none', alpha=0.95))
+    # Med freq annotations (unboxed)
+    ax1.annotate('70.1%', (0, 70.1), textcoords='offset points', xytext=(0, 8), ha='center', va='bottom', fontsize=9.2, fontweight='bold', color=P_COLOR)
+    ax1.annotate('67.8%', (1, 67.8), textcoords='offset points', xytext=(0, -14), ha='center', va='top', fontsize=9.2, fontweight='bold', color=P_COLOR)
+    ax1.annotate('79.4%', (2, 79.4), textcoords='offset points', xytext=(18, 4), ha='left', va='bottom', fontsize=9.2, fontweight='bold', color=P_COLOR)
+    ax1.annotate('82.4%', (3, 82.4), textcoords='offset points', xytext=(0, -14), ha='center', va='top', fontsize=9.2, fontweight='bold', color=P_COLOR)
 
-    # High freq annotations
-    for xp, yp in zip([1, 2, 3], high_freq_spend[1:]):
-        ax1.annotate(f"{yp:.1f}%", (xp, yp), textcoords="offset points", xytext=(0, 7), ha='center', va='bottom',
-                     fontsize=9.2, fontweight='bold', color='#31a354',
-                     bbox=dict(boxstyle='square,pad=0.15', facecolor='white', edgecolor='none', alpha=0.95))
+    # High freq annotations (unboxed)
+    ax1.annotate('83.5%', (1, 83.5), textcoords='offset points', xytext=(0, 8), ha='center', va='bottom', fontsize=9.2, fontweight='bold', color=P_COLOR)
+    ax1.annotate('93.9%', (2, 93.9), textcoords='offset points', xytext=(0, 8), ha='center', va='bottom', fontsize=9.2, fontweight='bold', color=P_COLOR)
+    ax1.annotate('96.6%', (3, 96.6), textcoords='offset points', xytext=(0, 8), ha='center', va='bottom', fontsize=9.2, fontweight='bold', color=P_COLOR)
 
     ax1.set_title("A. Chi tiêu theo tầng tần suất", fontsize=12, fontweight='bold', pad=10)
     ax1.set_xlabel("Mức chi tiêu trong 90 ngày", fontsize=10.5, fontweight='bold')
     ax1.set_ylabel("Xác suất mua hàng P(Y=1) (%)", fontsize=10.5, fontweight='bold')
+    ax1.set_xticks(x_indices)
+    ax1.set_xticklabels(x_labels_spend, fontsize=10.0, fontweight='bold')
     ax1.set_ylim(25, 108)
     ax1.grid(True, linestyle='--', alpha=0.5)
     ax1.legend(loc='lower right', fontsize=8.8, frameon=True, facecolor='white', framealpha=0.95)
 
-    # Panel B: Category Breadth controlling for Frequency (clean labels without parentheses)
+    # Panel B: Category Breadth controlling for Frequency
     x_labels_breadth = ['1 - 4 ngành', '5 - 10 ngành', '≥ 11 ngành']
+    x_b_indices = np.arange(len(x_labels_breadth))
     low_freq_breadth = [36.6, 51.4, np.nan]
     med_freq_breadth = [64.0, 73.3, 83.7]
     high_freq_breadth = [np.nan, 91.1, 98.1]
 
-    ax2.axhline(73.2, color='#d95f02', linestyle='--', linewidth=1.5, label='Base rate active: 73.2%', zorder=2)
+    ax2.axhline(73.2, color='#ea580c', linestyle='--', linewidth=1.5, label='Base rate active: 73.2%', zorder=2)
     ax2.axhline(68.3, color='#888888', linestyle=':', linewidth=1.2, label='Base rate toàn mẫu: 68.3%', zorder=2)
 
-    ax2.plot(x_labels_breadth, low_freq_breadth, marker='o', linewidth=2.4, color='#e6550d', label='Tần suất thấp: 1-5 giỏ', markersize=7.5, zorder=4)
-    ax2.plot(x_labels_breadth, med_freq_breadth, marker='s', linewidth=2.4, color='#3182bd', label='Tần suất vừa: 6-15 giỏ', markersize=7.5, zorder=4)
-    ax2.plot(x_labels_breadth, high_freq_breadth, marker='^', linewidth=2.4, color='#31a354', label='Tần suất cao: ≥16 giỏ', markersize=7.5, zorder=4)
+    # Unified P_COLOR with distinct markers
+    ax2.plot(x_b_indices, low_freq_breadth, marker='o', linewidth=2.2, color=P_COLOR, label='Tần suất thấp: 1-5 giỏ', markersize=7.5, zorder=4)
+    ax2.plot(x_b_indices, med_freq_breadth, marker='s', linewidth=2.2, color=P_COLOR, label='Tần suất vừa: 6-15 giỏ', markersize=7.5, zorder=4)
+    ax2.plot(x_b_indices, high_freq_breadth, marker='^', linewidth=2.2, color=P_COLOR, label='Tần suất cao: ≥16 giỏ', markersize=7.5, zorder=4)
 
-    for xp, yp in zip([0, 1], low_freq_breadth[:2]):
-        ax2.annotate(f"{yp:.1f}%", (xp, yp), textcoords="offset points", xytext=(0, 6), ha='center',
-                     fontsize=9.2, fontweight='bold', color='#e6550d',
-                     bbox=dict(boxstyle='square,pad=0.15', facecolor='white', edgecolor='none', alpha=0.95))
-    for xp, yp in zip([0, 1, 2], med_freq_breadth):
-        offset = -14 if xp == 1 else 6
-        ax2.annotate(f"{yp:.1f}%", (xp, yp), textcoords="offset points", xytext=(0, offset), ha='center',
-                     fontsize=9.2, fontweight='bold', color='#3182bd',
-                     bbox=dict(boxstyle='square,pad=0.15', facecolor='white', edgecolor='none', alpha=0.95))
-    for xp, yp in zip([1, 2], high_freq_breadth[1:]):
-        ax2.annotate(f"{yp:.1f}%", (xp, yp), textcoords="offset points", xytext=(0, 6), ha='center',
-                     fontsize=9.2, fontweight='bold', color='#31a354',
-                     bbox=dict(boxstyle='square,pad=0.15', facecolor='white', edgecolor='none', alpha=0.95))
+    # Annotations (unboxed)
+    ax2.annotate('36.6%', (0, 36.6), textcoords='offset points', xytext=(0, 8), ha='center', va='bottom', fontsize=9.2, fontweight='bold', color=P_COLOR)
+    ax2.annotate('51.4%', (1, 51.4), textcoords='offset points', xytext=(0, 8), ha='center', va='bottom', fontsize=9.2, fontweight='bold', color=P_COLOR)
+
+    ax2.annotate('64.0%', (0, 64.0), textcoords='offset points', xytext=(0, 8), ha='center', va='bottom', fontsize=9.2, fontweight='bold', color=P_COLOR)
+    ax2.annotate('73.3%', (1, 73.3), textcoords='offset points', xytext=(0, -14), ha='center', va='top', fontsize=9.2, fontweight='bold', color=P_COLOR)
+    ax2.annotate('83.7%', (2, 83.7), textcoords='offset points', xytext=(0, -14), ha='center', va='top', fontsize=9.2, fontweight='bold', color=P_COLOR)
+
+    ax2.annotate('91.1%', (1, 91.1), textcoords='offset points', xytext=(0, 8), ha='center', va='bottom', fontsize=9.2, fontweight='bold', color=P_COLOR)
+    ax2.annotate('98.1%', (2, 98.1), textcoords='offset points', xytext=(0, 8), ha='center', va='bottom', fontsize=9.2, fontweight='bold', color=P_COLOR)
 
     ax2.set_title("B. Độ rộng ngành theo tầng tần suất", fontsize=12, fontweight='bold', pad=10)
     ax2.set_xlabel("Số lượng ngành hàng đã mua", fontsize=10.5, fontweight='bold')
     ax2.set_ylabel("Xác suất mua hàng P(Y=1) (%)", fontsize=10.5, fontweight='bold')
+    ax2.set_xticks(x_b_indices)
+    ax2.set_xticklabels(x_labels_breadth, fontsize=10.0, fontweight='bold')
     ax2.set_ylim(25, 108)
     ax2.grid(True, linestyle='--', alpha=0.5)
     ax2.legend(loc='lower right', fontsize=8.8, frameon=True, facecolor='white', framealpha=0.95)
@@ -320,23 +320,22 @@ def make_fig_05_perishable():
     ax1.tick_params(axis='y', labelcolor='#475569')
     ax1.grid(True, linestyle='--', alpha=0.35, axis='y')
 
-    # Secondary axis (right): %Y=1 as LINE
+    # Secondary axis (right): %Y=1 as LINE with unified P_COLOR & circle marker
     ax2 = ax1.twinx()
     ax2.axhline(BASE_RATE, color='#ea580c', linestyle='--', linewidth=1.6,
                 label=f'Tỷ lệ cơ sở toàn mẫu ({BASE_RATE:.1f}%)', zorder=3)
-    ax2.plot(x, df_per['p'], color='#15803d', linewidth=2.8, marker='o', markersize=8.5,
+    ax2.plot(x, df_per['p'], color=P_COLOR, linewidth=2.6, marker='o', markersize=8.0,
              label='Tỷ lệ mua P(Y=1) (trục phải)', zorder=4)
 
     for xp, yp in zip(x, df_per['p']):
         y_off = 8 if yp >= BASE_RATE else -16
         v_align = 'bottom' if yp >= BASE_RATE else 'top'
         ax2.annotate(f'{yp:.1f}%', (xp, yp), textcoords='offset points', xytext=(0, y_off),
-                     ha='center', va=v_align, fontsize=10.5, fontweight='bold', color='#15803d',
-                     bbox=dict(boxstyle='round,pad=0.2', facecolor='white', edgecolor='#15803d', alpha=0.95))
+                     ha='center', va=v_align, fontsize=10.0, fontweight='bold', color=P_COLOR)
 
-    ax2.set_ylabel('Xác suất mua hàng P(Y=1) (%)', fontsize=11, fontweight='bold', color='#15803d')
+    ax2.set_ylabel('Xác suất mua hàng P(Y=1) (%)', fontsize=11, fontweight='bold', color=P_COLOR)
     ax2.set_ylim(20, 108)
-    ax2.tick_params(axis='y', labelcolor='#15803d')
+    ax2.tick_params(axis='y', labelcolor=P_COLOR)
 
     # Combined Legend
     l1, lb1 = ax1.get_legend_handles_labels()
@@ -356,7 +355,7 @@ def make_fig_05_perishable():
 def make_fig_12_campaign():
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(11.5, 4.8), constrained_layout=True)
 
-    # Panel A: Campaigns at t0 (Bars = Household count, Line = %Y=1)
+    # Panel A: Campaigns at t0 (Bars = Household count, Line = %Y=1 with circle marker)
     c_labels = ['Không có\nchiến dịch', 'Loại C', 'Loại B', 'Loại A']
     c_n = [1807, 169, 207, 712]
     c_p = [59.9, 83.6, 90.7, 86.8]
@@ -378,25 +377,24 @@ def make_fig_12_campaign():
 
     ax1_twin = ax1.twinx()
     ax1_twin.axhline(68.3, color='#ea580c', linestyle='--', linewidth=1.4, label='Base rate (68.3%)', zorder=3)
-    ax1_twin.plot(x1, c_p, color='#6b21a8', linewidth=2.6, marker='s', markersize=8.0,
+    ax1_twin.plot(x1, c_p, color=P_COLOR, linewidth=2.6, marker='o', markersize=8.0,
                   label='P(Y=1) (trục phải)', zorder=4)
     for xp, yp in zip(x1, c_p):
-        y_off = -15 if yp < 68.3 else 8
+        y_off = -14 if yp < 68.3 else 8
         v_align = 'top' if yp < 68.3 else 'bottom'
         ax1_twin.annotate(f'{yp:.1f}%', (xp, yp), textcoords='offset points', xytext=(0, y_off),
-                          ha='center', va=v_align, fontsize=9.8, fontweight='bold', color='#6b21a8',
-                          bbox=dict(boxstyle='round,pad=0.2', facecolor='white', edgecolor='#6b21a8', alpha=0.95))
+                          ha='center', va=v_align, fontsize=9.8, fontweight='bold', color=P_COLOR)
 
-    ax1_twin.set_ylabel('Xác suất P(Y=1) (%)', fontsize=10.0, fontweight='bold', color='#6b21a8')
+    ax1_twin.set_ylabel('Xác suất P(Y=1) (%)', fontsize=10.0, fontweight='bold', color=P_COLOR)
     ax1_twin.set_ylim(40, 105)
-    ax1_twin.tick_params(axis='y', labelcolor='#6b21a8')
+    ax1_twin.tick_params(axis='y', labelcolor=P_COLOR)
 
     l1, lb1 = ax1.get_legend_handles_labels()
     l2, lb2 = ax1_twin.get_legend_handles_labels()
     ax1.legend(l1 + l2, lb1 + lb2, loc='upper left', fontsize=8.5, frameon=True, facecolor='white', framealpha=0.95)
     ax1.set_title('A. Chiến dịch tiếp thị kích hoạt tại t_0', fontsize=11.5, fontweight='bold', pad=10)
 
-    # Panel B: Coupon Redemptions in 180 days (Bars = Household count, Line = %Y=1)
+    # Panel B: Coupon Redemptions in 180 days (Bars = Household count, Line = %Y=1 with square marker)
     cp_labels = ['0 lần', '1 - 2 lần', '≥ 3 lần']
     cp_n = [2317, 94, 90]
     cp_p = [66.3, 93.2, 93.6]
@@ -418,22 +416,21 @@ def make_fig_12_campaign():
 
     ax2_twin = ax2.twinx()
     ax2_twin.axhline(68.3, color='#ea580c', linestyle='--', linewidth=1.4, label='Base rate (68.3%)', zorder=3)
-    ax2_twin.plot(x2, cp_p, color='#0f766e', linewidth=2.6, marker='^', markersize=8.5,
+    ax2_twin.plot(x2, cp_p, color=P_COLOR, linewidth=2.6, marker='s', markersize=8.0,
                   label='P(Y=1) (trục phải)', zorder=4)
     for xp, yp in zip(x2, cp_p):
-        y_off = -15 if yp < 68.3 else 8
+        y_off = -14 if yp < 68.3 else 8
         v_align = 'top' if yp < 68.3 else 'bottom'
         ax2_twin.annotate(f'{yp:.1f}%', (xp, yp), textcoords='offset points', xytext=(0, y_off),
-                          ha='center', va=v_align, fontsize=9.8, fontweight='bold', color='#0f766e',
-                          bbox=dict(boxstyle='round,pad=0.2', facecolor='white', edgecolor='#0f766e', alpha=0.95))
+                          ha='center', va=v_align, fontsize=9.8, fontweight='bold', color=P_COLOR)
 
-    ax2_twin.set_ylabel('Xác suất P(Y=1) (%)', fontsize=10.0, fontweight='bold', color='#0f766e')
+    ax2_twin.set_ylabel('Xác suất P(Y=1) (%)', fontsize=10.0, fontweight='bold', color=P_COLOR)
     ax2_twin.set_ylim(45, 108)
-    ax2_twin.tick_params(axis='y', labelcolor='#0f766e')
+    ax2_twin.tick_params(axis='y', labelcolor=P_COLOR)
 
     l1, lb1 = ax2.get_legend_handles_labels()
     l2, lb2 = ax2_twin.get_legend_handles_labels()
-    ax2.legend(l1 + l2, lb1 + lb2, loc='upper left', fontsize=8.5, frameon=True, facecolor='white', framealpha=0.95)
+    ax2.legend(l1 + l2, lb1 + lb2, loc='upper right', fontsize=8.5, frameon=True, facecolor='white', framealpha=0.95)
     ax2.set_title('B. Lịch sử đổi coupon trong 180 ngày', fontsize=11.5, fontweight='bold', pad=10)
 
     plt.savefig(FIG_DIR / '12_campaign_coupon_combined.png', dpi=180, bbox_inches='tight')
@@ -447,7 +444,7 @@ def make_fig_12_campaign():
 def make_fig_13_loyalty():
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(11.5, 4.8), constrained_layout=True)
 
-    # Panel A: Store Loyalty (Bars = Household count, Line = %Y=1)
+    # Panel A: Store Loyalty (Bars = Household count, Line = %Y=1 with circle marker)
     l_labels = ['Không mua', 'Tập trung cao', 'Trung bình', 'Phân tán']
     l_n = [199, 1139, 738, 424]
     l_p = [12.4, 68.2, 77.9, 78.4]
@@ -469,25 +466,28 @@ def make_fig_13_loyalty():
 
     ax1_twin = ax1.twinx()
     ax1_twin.axhline(68.3, color='#ea580c', linestyle='--', linewidth=1.4, label='Base rate (68.3%)', zorder=3)
-    ax1_twin.plot(x1, l_p, color='#be185d', linewidth=2.6, marker='o', markersize=8.0,
+    ax1_twin.plot(x1, l_p, color=P_COLOR, linewidth=2.6, marker='o', markersize=8.0,
                   label='P(Y=1) (trục phải)', zorder=4)
-    for xp, yp in zip(x1, l_p):
-        y_off = -15 if yp < 68.3 else 8
-        v_align = 'top' if yp < 68.3 else 'bottom'
+    for i, (xp, yp) in enumerate(zip(x1, l_p)):
+        if i == 1:
+            y_off = 9
+            v_align = 'bottom'
+        else:
+            y_off = -14 if yp < 68.3 else 8
+            v_align = 'top' if yp < 68.3 else 'bottom'
         ax1_twin.annotate(f'{yp:.1f}%', (xp, yp), textcoords='offset points', xytext=(0, y_off),
-                          ha='center', va=v_align, fontsize=9.8, fontweight='bold', color='#be185d',
-                          bbox=dict(boxstyle='round,pad=0.2', facecolor='white', edgecolor='#be185d', alpha=0.95))
+                          ha='center', va=v_align, fontsize=9.8, fontweight='bold', color=P_COLOR)
 
-    ax1_twin.set_ylabel('Xác suất P(Y=1) (%)', fontsize=10.0, fontweight='bold', color='#be185d')
+    ax1_twin.set_ylabel('Xác suất P(Y=1) (%)', fontsize=10.0, fontweight='bold', color=P_COLOR)
     ax1_twin.set_ylim(0, 105)
-    ax1_twin.tick_params(axis='y', labelcolor='#be185d')
+    ax1_twin.tick_params(axis='y', labelcolor=P_COLOR)
 
     l1, lb1 = ax1.get_legend_handles_labels()
     l2, lb2 = ax1_twin.get_legend_handles_labels()
     ax1.legend(l1 + l2, lb1 + lb2, loc='upper left', fontsize=8.5, frameon=True, facecolor='white', framealpha=0.95)
     ax1.set_title('A. Tỷ trọng chi tiêu tại cửa hàng chính', fontsize=11.5, fontweight='bold', pad=10)
 
-    # Panel B: Demographics (Bars = Household count, Line = %Y=1)
+    # Panel B: Demographics (Bars = Household count, Line = %Y=1 with square marker)
     d_labels = ['1 - 2 người', '3 - 4 người', '≥ 5 người', 'UNKNOWN']
     d_n = [508, 226, 67, 1699]
     d_p = [75.4, 76.2, 80.2, 64.5]
@@ -511,14 +511,13 @@ def make_fig_13_loyalty():
 
     ax2_twin = ax2.twinx()
     ax2_twin.axhline(68.3, color='#ea580c', linestyle='--', linewidth=1.4, label='Base rate (68.3%)', zorder=3)
-    ax2_twin.plot(x2, d_p, color='#1d4ed8', linewidth=2.6, marker='D', markersize=7.5,
+    ax2_twin.plot(x2, d_p, color=P_COLOR, linewidth=2.6, marker='s', markersize=8.0,
                   label='P(Y=1) (trục phải)', zorder=4)
     for xp, yp in zip(x2, d_p):
-        y_off = -15 if yp < 68.3 else 8
+        y_off = -14 if yp < 68.3 else 8
         v_align = 'top' if yp < 68.3 else 'bottom'
         ax2_twin.annotate(f'{yp:.1f}%', (xp, yp), textcoords='offset points', xytext=(0, y_off),
-                          ha='center', va=v_align, fontsize=9.8, fontweight='bold', color='#1d4ed8',
-                          bbox=dict(boxstyle='round,pad=0.2', facecolor='white', edgecolor='#1d4ed8', alpha=0.95))
+                          ha='center', va=v_align, fontsize=9.8, fontweight='bold', color=P_COLOR)
 
     ax2_twin.set_ylabel('Xác suất P(Y=1) (%)', fontsize=10.0, fontweight='bold', color='#1d4ed8')
     ax2_twin.set_ylim(45, 105)
