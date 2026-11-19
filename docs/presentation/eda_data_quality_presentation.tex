@@ -98,34 +98,8 @@
 % PHẦN 1: KHÁM PHÁ DỮ LIỆU CHO BÀI TOÁN HỌC MÁY (ML TRACK)
 % ==============================================================================
 
-% SLIDE 2: BÀI TOÁN DỰ ĐOÁN 14 NGÀY
-\begin{frame}{1. Thiết kế bài toán: Dự đoán hộ mua hàng 14 ngày tới}
-  \begin{columns}[c]
-    \begin{column}{0.50\textwidth}
-      \centering
-      \includegraphics[width=\linewidth,height=0.74\textheight,keepaspectratio]{../reports/figures/00_propensity_problem_timeline.png}
-    \end{column}
-    \begin{column}{0.48\textwidth}
-      \footnotesize
-      \textbf{Quy cách bài toán \& kỷ luật ranh giới thời gian:}
-      \begin{itemize}\setlength{\itemsep}{3.5pt}
-        \item \textbf{Mục tiêu:} Dự đoán hộ có phát sinh $\ge 1$ giỏ hàng hợp lệ ($\text{Spend} > \$0$) trong cửa sổ 14 ngày sau mốc chốt sổ ($t_0$).
-        \item \textbf{Kỷ luật Point-in-Time ($DAY \le t_0$):} Toàn bộ đặc trưng chỉ dùng dữ liệu lịch sử trước hoặc tại $t_0$, tuyệt đối không rò rỉ tương lai.
-        \item \textbf{Cửa sổ nhãn $(t_0, t_0 + 14]$:} Đánh giá trên 5 mốc chốt sổ ($t_0 \in \{250, 350, 450, 550, 650\}$) đều bảo đảm đủ 14 ngày tương lai quan sát.
-        \item \textbf{Tỷ lệ mẫu dương (Base Rate):}
-        \begin{itemize}\setlength{\itemsep}{2pt}
-          \item Toàn mẫu 2,500 hộ: \textbf{68.34\%} ($\pm 1.04\%$).
-          \item Nhóm 2,301 hộ active trong 90 ngày: \textbf{73.20\%}.
-        \end{itemize}
-      \end{itemize}
-      \vspace{0.15cm}
-      \textbf{Giá trị kinh doanh:} Tối ưu chi phí gửi thư tiếp thị direct mail (\$1.50/thư) nhắm đúng thời điểm hộ sắp phát sinh nhu cầu.
-    \end{column}
-  \end{columns}
-\end{frame}
-
-% SLIDE 3: KIỂM TOÁN 8 BẢNG (KÈM ẢNH ERD THE COMPLETE JOURNEY)
-\begin{frame}{2. Kiểm toán 8 bảng: Xử lý làm sạch, chuẩn hóa khóa nối}
+% SLIDE 2: KIỂM TOÁN 8 BẢNG (KÈM ẢNH ERD THE COMPLETE JOURNEY)
+\begin{frame}{1. Kiểm toán 8 bảng: Xử lý làm sạch, chuẩn hóa khóa nối}
   \begin{columns}[c]
     \begin{column}{0.46\textwidth}
       \centering
@@ -154,8 +128,8 @@
   \end{columns}
 \end{frame}
 
-% SLIDE 4: CĂN CỨ CHỌN CỬA SỔ 14 NGÀY
-\begin{frame}{3. Căn cứ chọn cửa sổ 14 ngày: Cân bằng phân hóa \& vận hành}
+% SLIDE 3: CĂN CỨ CHỌN CỬA SỔ 14 NGÀY
+\begin{frame}{2. Căn cứ chọn cửa sổ 14 ngày: Cân bằng phân hóa \& vận hành}
   \begin{columns}[c]
     \begin{column}{0.60\textwidth}
       \centering
@@ -175,8 +149,8 @@
   \end{columns}
 \end{frame}
 
-% SLIDE 5: RECENCY & FREQUENCY
-\begin{frame}{4. Recency \& Frequency: Phân tách quán tính mua sắm}
+% SLIDE 4: RECENCY & FREQUENCY
+\begin{frame}{3. Recency \& Frequency: Phân tách quán tính mua sắm}
   \begin{columns}[c]
     \begin{column}{0.60\textwidth}
       \centering
@@ -195,8 +169,8 @@
   \end{columns}
 \end{frame}
 
-% SLIDE 6: SPEND & BREADTH
-\begin{frame}{5. Spend \& Breadth: Tín hiệu bổ trợ trong phân tầng Tần suất}
+% SLIDE 5: SPEND & BREADTH
+\begin{frame}{4. Spend \& Breadth: Tín hiệu bổ trợ trong phân tầng Tần suất}
   \begin{columns}[c]
     \begin{column}{0.60\textwidth}
       \centering
@@ -217,8 +191,8 @@
   \end{columns}
 \end{frame}
 
-% SLIDE 7: HÀNG TƯƠI SỐNG
-\begin{frame}{6. Hàng tươi sống: Chỉ báo chu kỳ tiêu dùng thực phẩm ngắn hạn}
+% SLIDE 6: HÀNG TƯƠI SỐNG
+\begin{frame}{5. Hàng tươi sống: Chỉ báo chu kỳ tiêu dùng thực phẩm ngắn hạn}
   \begin{columns}[c]
     \begin{column}{0.60\textwidth}
       \centering
@@ -236,8 +210,8 @@
   \end{columns}
 \end{frame}
 
-% SLIDE 8: CHIẾN DỊCH & COUPON
-\begin{frame}{7. Chiến dịch \& Coupon: Tín hiệu tương quan dự báo tại $t_0$}
+% SLIDE 7: CHIẾN DỊCH & COUPON
+\begin{frame}{6. Chiến dịch \& Coupon: Tín hiệu tương quan dự báo tại $t_0$}
   \begin{columns}[c]
     \begin{column}{0.60\textwidth}
       \centering
@@ -260,8 +234,8 @@
   \end{columns}
 \end{frame}
 
-% SLIDE 9: MẠNG LƯỚI CỬA HÀNG & UNKNOWN
-\begin{frame}{8. Mạng lưới cửa hàng \& Phân nhóm UNKNOWN: Cấu trúc}
+% SLIDE 8: MẠNG LƯỚI CỬA HÀNG & UNKNOWN
+\begin{frame}{7. Mạng lưới cửa hàng \& Phân nhóm UNKNOWN: Cấu trúc}
   \begin{columns}[c]
     \begin{column}{0.60\textwidth}
       \centering
@@ -278,8 +252,8 @@
   \end{columns}
 \end{frame}
 
-% SLIDE 10: CHUYỂN GIAO 28 ĐẶC TRƯNG POINT-IN-TIME
-\begin{frame}{9. Đề xuất 28 đặc trưng Point-in-Time sang Feature Engineering}
+% SLIDE 9: CHUYỂN GIAO 28 ĐẶC TRƯNG POINT-IN-TIME
+\begin{frame}{8. Đề xuất 28 đặc trưng Point-in-Time sang Feature Engineering}
   \scriptsize
   \renewcommand{\arraystretch}{0.88}
   \begin{tabularx}{\linewidth}{l l Y l Y}
@@ -306,8 +280,8 @@
 % PHẦN 2: KHÁM PHÁ DỮ LIỆU CHUYÊN SÂU CHO CHIẾN LƯỢC KINH DOANH BÁN LẺ
 % ==============================================================================
 
-% SLIDE 11: PHÂN KHÚC KHÁCH HÀNG RFM
-\begin{frame}{10. Phân khúc khách hàng RFM \& Ma trận giữ chân}
+% SLIDE 10: PHÂN KHÚC KHÁCH HÀNG RFM
+\begin{frame}{9. Phân khúc khách hàng RFM \& Ma trận giữ chân}
   \begin{columns}[c]
     \begin{column}{0.62\textwidth}
       \centering
@@ -326,8 +300,8 @@
   \end{columns}
 \end{frame}
 
-% SLIDE 12: MA TRẬN HIỆU QUẢ NGÀNH HÀNG
-\begin{frame}{11. Ma trận ngành hàng: Hút khách vs Tăng giỏ}
+% SLIDE 11: MA TRẬN HIỆU QUẢ NGÀNH HÀNG
+\begin{frame}{10. Ma trận ngành hàng: Hút khách vs Tăng giỏ}
   \begin{columns}[c]
     \begin{column}{0.62\textwidth}
       \centering
@@ -346,8 +320,8 @@
   \end{columns}
 \end{frame}
 
-% SLIDE 13: SỨC MẠNH GIỎ HÀNG ĐA NGÀNH
-\begin{frame}{12. Sức mạnh giỏ hàng đa ngành \& Đòn bẩy bán chéo}
+% SLIDE 12: SỨC MẠNH GIỎ HÀNG ĐA NGÀNH
+\begin{frame}{11. Sức mạnh giỏ hàng đa ngành \& Đòn bẩy bán chéo}
   \begin{columns}[c]
     \begin{column}{0.62\textwidth}
       \centering
@@ -367,8 +341,8 @@
   \end{columns}
 \end{frame}
 
-% SLIDE 14: THÂM NHẬP NHÃN HÀNG RIÊNG (PRIVATE LABEL)
-\begin{frame}{13. Thâm nhập Nhãn riêng (Private Label) theo ngành}
+% SLIDE 13: THÂM NHẬP NHÃN HÀNG RIÊNG (PRIVATE LABEL)
+\begin{frame}{12. Thâm nhập Nhãn riêng (Private Label) theo ngành}
   \begin{columns}[c]
     \begin{column}{0.62\textwidth}
       \centering
@@ -387,8 +361,8 @@
   \end{columns}
 \end{frame}
 
-% SLIDE 15: HÀNH VI THEO QUY MÔ GIA ĐÌNH & TRẺ EM
-\begin{frame}{14. Tiêu dùng theo Quy mô gia đình \& Trẻ em}
+% SLIDE 14: HÀNH VI THEO QUY MÔ GIA ĐÌNH & TRẺ EM
+\begin{frame}{13. Tiêu dùng theo Quy mô gia đình \& Trẻ em}
   \begin{columns}[c]
     \begin{column}{0.62\textwidth}
       \centering
@@ -406,8 +380,8 @@
   \end{columns}
 \end{frame}
 
-% SLIDE 16: CHIẾT KHẤU HAI TẦNG: MARKDOWN VS COUPON
-\begin{frame}{15. Chiết khấu hai tầng: Markdown tại quầy vs Coupon}
+% SLIDE 15: CHIẾT KHẤU HAI TẦNG: MARKDOWN VS COUPON
+\begin{frame}{14. Chiết khấu hai tầng: Markdown tại quầy vs Coupon}
   \begin{columns}[c]
     \begin{column}{0.60\textwidth}
       \centering
@@ -427,8 +401,8 @@
   \end{columns}
 \end{frame}
 
-% SLIDE 17: MỨC ĐỘ TẬP TRUNG DOANH THU: PARETO & GINI
-\begin{frame}{16. Mức độ tập trung doanh thu khách hàng: Pareto \& Gini}
+% SLIDE 16: MỨC ĐỘ TẬP TRUNG DOANH THU: PARETO & GINI
+\begin{frame}{15. Mức độ tập trung doanh thu khách hàng: Pareto \& Gini}
   \begin{columns}[c]
     \begin{column}{0.60\textwidth}
       \centering
@@ -448,8 +422,8 @@
   \end{columns}
 \end{frame}
 
-% SLIDE 18: NHỊP ĐIỆU THỜI GIAN VI MÔ & VẬN HÀNH
-\begin{frame}{17. Nhịp điệu thời gian vi mô \& Tối ưu hóa vận hành}
+% SLIDE 17: NHỊP ĐIỆU THỜI GIAN VI MÔ & VẬN HÀNH
+\begin{frame}{16. Nhịp điệu thời gian vi mô \& Tối ưu hóa vận hành}
   \begin{columns}[c]
     \begin{column}{0.60\textwidth}
       \centering
@@ -468,8 +442,8 @@
   \end{columns}
 \end{frame}
 
-% SLIDE 19: TỔNG KẾT CHIẾN LƯỢC BÁN LẺ: 5 HÀNH ĐỘNG THƯƠNG MẠI
-\begin{frame}{18. Tổng kết: 5 hành động chiến lược bán lẻ}
+% SLIDE 18: TỔNG KẾT CHIẾN LƯỢC BÁN LẺ: 5 HÀNH ĐỘNG THƯƠNG MẠI
+\begin{frame}{17. Tổng kết: 5 hành động chiến lược bán lẻ}
   \small
   \begin{columns}[T]
     \begin{column}{0.48\textwidth}

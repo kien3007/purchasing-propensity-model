@@ -6,33 +6,32 @@
 
 ## Cấu trúc tổng thể bài trình bày (Deck Structure & Narrative Arc)
 
-Bài thuyết trình kéo dài **15 phút** (gồm 12 phút trình bày mạch chính và 3 phút Q&A), được chuẩn hóa thành **2 Phần rõ rệt** tương ứng với 20 slides chuyên nghiệp:
+Bài thuyết trình kéo dài **15 phút** (gồm 12 phút trình bày mạch chính và 3 phút Q&A), được chuẩn hóa thành **2 Phần rõ rệt** tương ứng với 19 slides chuyên nghiệp:
 
-1. **Phần 1: Khám phá dữ liệu cho Bài toán Học máy (Slides 1 – 10 | 6.5 phút):**
+1. **Phần 1: Khám phá dữ liệu cho Bài toán Học máy (Slides 1 – 9 | 6.0 phút):**
    - **Slide 1:** Tiêu đề báo cáo & Định hướng tiếp cận 2 phân hệ (ML Track & Business Track).
-   - **Slide 2:** Thiết kế bài toán học máy: Đơn vị hộ panel 2,500 hộ, chân trời $\Delta t = 14$ ngày, kỷ luật ranh giới thời gian $DAY \le t_0$.
-   - **Slide 3:** Kiểm toán 8 bảng dữ liệu: Sơ đồ ERD The Complete Journey, bóc tách dòng/giỏ/hộ, kiểm định tác động nhãn của 942 giỏ hàng phi thương mại (0.016%).
-   - **Slide 4:** Căn cứ thực nghiệm chọn cửa sổ 14 ngày (Base rate 68.34%, std $\pm 1.04\%$, cân bằng phân hóa & vận hành).
-   - **Slide 5:** Heatmap tương tác 2D Recency $\times$ Frequency phân tách quán tính mua sắm.
-   - **Slide 6:** Phân tầng kiểm soát Spend & Breadth bổ trợ tín hiệu trong từng tầng tần suất.
-   - **Slide 7:** Hàng tươi sống: Chỉ báo chu kỳ tiêu dùng thực phẩm ngắn hạn.
-   - **Slide 8:** Tác động kích hoạt của chiến dịch tiếp thị và tỷ lệ đổi coupon Type A/B/C tại $t_0$.
-   - **Slide 9:** Cấu trúc mạng lưới cửa hàng (Store Loyalty) và kiểm định tính đại diện của nhóm `UNKNOWN`.
-   - **Slide 10:** Đề xuất 28 đặc trưng Point-in-Time chuyển giao sang Feature Engineering.
+   - **Slide 2:** 1. Kiểm toán 8 bảng dữ liệu: Sơ đồ ERD The Complete Journey, bóc tách dòng/giỏ/hộ, kiểm định tác động nhãn của 942 giỏ hàng phi thương mại (0.016%).
+   - **Slide 3:** 2. Căn cứ thực nghiệm chọn cửa sổ 14 ngày (Base rate 68.34%, std $\pm 1.04\%$, cân bằng phân hóa & vận hành).
+   - **Slide 4:** 3. Heatmap tương tác 2D Recency $\times$ Frequency phân tách quán tính mua sắm.
+   - **Slide 5:** 4. Phân tầng kiểm soát Spend & Breadth bổ trợ tín hiệu trong từng tầng tần suất.
+   - **Slide 6:** 5. Hàng tươi sống: Chỉ báo chu kỳ tiêu dùng thực phẩm ngắn hạn.
+   - **Slide 7:** 6. Tác động kích hoạt của chiến dịch tiếp thị và tỷ lệ đổi coupon Type A/B/C tại $t_0$.
+   - **Slide 8:** 7. Cấu trúc mạng lưới cửa hàng (Store Loyalty) và kiểm định tính đại diện của nhóm `UNKNOWN`.
+   - **Slide 9:** 8. Đề xuất 28 đặc trưng Point-in-Time chuyển giao sang Feature Engineering.
 
-2. **Phần 2: Khám phá dữ liệu chuyên sâu cho Chiến lược Bán lẻ (Slides 11 – 19 | 5.5 phút):**
-   - **Slide 11:** Phân khúc giá trị khách hàng RFM & Ma trận giữ chân (VIP 21.6% tạo 54.3% DT, At-Risk 2.1% tạo 3% DT trễ 83 ngày).
-   - **Slide 12:** Ma trận hiệu quả ngành hàng: Nam châm kéo khách (Grocery 78.1% độ phủ, 50.8% DT) vs Tăng giá trị giỏ hàng (Fresh & Drug GM).
-   - **Slide 13:** Sức mạnh giỏ hàng đa ngành & Cơ hội bán chéo liên ngành (AOV tăng từ $12 lên $84+; 12.7% giỏ đa ngành tạo 38.0% DT).
-   - **Slide 14:** Thâm nhập Nhãn hàng riêng (Private Label) theo ngành hàng (Pastry 51.6% DT, Grocery 27.0% DT; dư địa tăng biên lợi nhuận tại Meat & Drug GM).
-   - **Slide 15:** Hành vi tiêu dùng theo Quy mô gia đình & Trẻ em (Hộ $\ge 5$ người đạt AOV $42.06, chi $6,699/năm).
-   - **Slide 16:** Cấu trúc chiết khấu hai tầng: Markdown tại quầy ($1.40M) vs Coupon ($42.6K) — đòn bẩy gấp 32.8 lần.
-   - **Slide 17:** Mức độ tập trung doanh thu khách hàng: Kiểm định Pareto (Top 20% = 53.0% DT) và Hệ số Gini (0.5028).
-   - **Slide 18:** Nhịp điệu thời gian vi mô & Tối ưu hóa vận hành (Khung giờ cao điểm 11h–18h chiếm 62.9% giao dịch).
-   - **Slide 19:** Tổng kết chiến lược bán lẻ: 5 hành động thương mại trọng tâm cho ban giám đốc chuỗi.
+2. **Phần 2: Khám phá dữ liệu chuyên sâu cho Chiến lược Bán lẻ (Slides 10 – 18 | 6.0 phút):**
+   - **Slide 10:** 9. Phân khúc giá trị khách hàng RFM & Ma trận giữ chân (VIP 21.6% tạo 54.3% DT, At-Risk 2.1% tạo 3% DT trễ 83 ngày).
+   - **Slide 11:** 10. Ma trận hiệu quả ngành hàng: Nam châm kéo khách (Grocery 78.1% độ phủ, 50.8% DT) vs Tăng giá trị giỏ hàng (Fresh & Drug GM).
+   - **Slide 12:** 11. Sức mạnh giỏ hàng đa ngành & Cơ hội bán chéo liên ngành (AOV tăng từ $12 lên $84+; 12.7% giỏ đa ngành tạo 38.0% DT).
+   - **Slide 13:** 12. Thâm nhập Nhãn hàng riêng (Private Label) theo ngành hàng (Pastry 51.6% DT, Grocery 27.0% DT; dư địa tăng biên lợi nhuận tại Meat & Drug GM).
+   - **Slide 14:** 13. Hành vi tiêu dùng theo Quy mô gia đình & Trẻ em (Hộ $\ge 5$ người đạt AOV $42.06, chi $6,699/năm).
+   - **Slide 15:** 14. Cấu trúc chiết khấu hai tầng: Markdown tại quầy ($1.40M) vs Coupon ($42.6K) — đòn bẩy gấp 32.8 lần.
+   - **Slide 16:** 15. Mức độ tập trung doanh thu khách hàng: Kiểm định Pareto (Top 20% = 53.0% DT) và Hệ số Gini (0.5028).
+   - **Slide 17:** 16. Nhịp điệu thời gian vi mô & Tối ưu hóa vận hành (Khung giờ cao điểm 11h–18h chiếm 62.9% giao dịch).
+   - **Slide 18:** 17. Tổng kết chiến lược bán lẻ: 5 hành động thương mại trọng tâm cho ban giám đốc chuỗi.
 
-3. **Phụ lục & Q&A Defense (Slide 20 + 5 Câu hỏi phản biện):**
-   - **Slide 20:** Phân phối giá trị giỏ hàng thực nghiệm (AOV: Trung vị $17.18 USD, Trung bình $29.24 USD).
+3. **Phụ lục & Q&A Defense (Slide 19 + 5 Câu hỏi phản biện):**
+   - **Slide 19:** Phụ lục: Phân phối giá trị giỏ hàng thực nghiệm (AOV: Trung vị $17.18 USD, Trung bình $29.24 USD).
    - **Phần Q&A:** 5 câu hỏi tình huống hóc búa về rò rỉ dữ liệu, xử lý `UNKNOWN`, phân tầng Spend/Breadth, chiến lược giải cứu At-Risk, và quy luật Pareto FMCG.
 
 ---
@@ -47,32 +46,16 @@ Bài thuyết trình kéo dài **15 phút** (gồm 12 phút trình bày mạch c
 **Lời thoại trình bày:**
 > *"Kính chào quý thầy cô và hội đồng. Hôm nay, nhóm chúng em xin báo cáo kết quả: **Khám phá dữ liệu (EDA) và Kiểm toán chất lượng dữ liệu**, đóng vai trò là nền tảng thực nghiệm khoa học kép: vừa phục vụ trực tiếp cho việc xây dựng **Mô hình học máy dự đoán xác suất mua hàng 14 ngày**, vừa mở rộng thành **Khung phân tích chiến lược bán lẻ chuyên sâu** cho ban điều hành chuỗi siêu thị.
 >
-> Toàn bộ nghiên cứu được thực hiện trên bộ dữ liệu thực tế Dunnhumby — The Complete Journey gồm 2,500 hộ panel, 2.59 triệu dòng giao dịch trải dài trên 711 ngày quan sát liên tục. Để bài báo cáo đạt độ mạch lạc cao nhất, nhóm đã chia cấu trúc thành 2 phần rõ rệt với huy hiệu nhận diện riêng: **Phần 1: Bài toán học máy** và **Phần 2: Chiến lược bán lẻ**."*
+> Toàn bộ nghiên cứu được thực hiện trên bộ dữ liệu thực tế Dunnhumby — The Complete Journey gồm 2,500 hộ panel, 2.59 triệu dòng giao dịch trải dài trên 711 ngày quan sát liên tục. Để bài báo cáo đạt độ mạch lạc cao nhất, nhóm đã chia cấu trúc thành 2 phần rõ rệt: **Phần 1: Bài toán học máy** và **Phần 2: Chiến lược bán lẻ**."*
 
 ---
 
-### Slide 2: 1. Thiết kế bài toán: Dự đoán hộ mua hàng 14 ngày tới
-* **Thời lượng:** 45 giây
-* **Trực quan:** Sơ đồ timeline phân định cửa sổ lịch sử 90 ngày ($DAY \le t_0$), mốc chốt sổ $t_0$, và cửa sổ nhãn 14 ngày ($(t_0, t_0 + 14]$).
-
-**Lời thoại trình bày:**
-> *"Mở đầu Phần 1, chúng em xác lập quy cách bài toán học máy với kỷ luật ranh giới thời gian nghiêm ngặt:
-> - **Đơn vị dự báo:** Cấp hộ gia đình (`household_key`). Toàn bộ 2,500 hộ gia đình là một panel khách hàng cố định được chuỗi siêu thị theo dõi liên tục.
-> - **Kỷ luật Point-in-Time ($DAY \le t_0$):** 100% đặc trưng chỉ được tính toán từ dữ liệu lịch sử phát sinh trước hoặc tại mốc chốt sổ $t_0$, tuyệt đối không sử dụng thông tin tương lai để ngăn ngừa rò rỉ dữ liệu (data leakage).
-> - **Chân trời dự báo ($\Delta t$):** 14 ngày kế tiếp ($(t_0, t_0 + 14]$).
-> - **Nhãn mục tiêu ($Y$):** $Y = 1$ nếu hộ có phát sinh ít nhất một giỏ hàng thương mại hợp lệ có chi tiêu dương ($\text{Spend} > \$0$); ngược lại $Y = 0$.
-> - **Tỷ lệ mẫu dương (Base Rate):** Đạt trung bình **68.34%** ($\pm 1.04\%$) trên toàn bộ 2,500 hộ qua 5 mốc chốt sổ thực nghiệm ($t_0 \in \{250, 350, 450, 550, 650\}$). Riêng trên nhóm 2,301 hộ có hoạt động trong 90 ngày gần nhất, tỷ lệ mua đạt **73.20%**.
->
-> Về mặt kinh doanh, bài toán giúp tối ưu chi phí gửi thư tiếp thị trực tiếp direct mail (\$1.50/thư) nhắm đúng điểm rơi nhu cầu của khách hàng."*
-
----
-
-### Slide 3: 2. Kiểm toán 8 bảng: Xử lý dữ liệu & chuẩn hóa khóa nối
-* **Thời lượng:** 50 giây
+### Slide 2: 1. Kiểm toán 8 bảng: Xử lý dữ liệu & chuẩn hóa khóa nối
+* **Thời lượng:** 55 giây
 * **Trực quan:** Sơ đồ kiến trúc ERD thực tế bên trái (The complete journey: dataset details) và bảng phân tích bóc tách làm sạch 8 bảng bên phải.
 
 **Lời thoại trình bày:**
-> *"Nhìn vào sơ đồ kiến trúc 8 bảng dữ liệu Dunnhumby bên trái, nhóm đã tiến hành kiểm toán dữ liệu đa cấp độ với các kết quả cụ thể:
+> *"Mở đầu Phần 1, nhìn vào sơ đồ kiến trúc 8 bảng dữ liệu Dunnhumby bên trái, nhóm đã tiến hành kiểm toán dữ liệu đa cấp độ với các kết quả cụ thể:
 > 1. **Bảng giao dịch (`transaction_data`):** Từ 2,595,732 dòng thô, nhóm phát hiện và loại bỏ 1,054 dòng thuộc **942 giỏ hàng lỗi có tổng chi tiêu $\le \$0$** (gồm các giao dịch hoàn trả, quẹt thẻ lỗi hoặc dùng toàn bộ điểm thưởng). Bảo toàn nguyên vẹn **275,542 giỏ hàng thương mại sạch**.
 > 2. **Kiểm định tác động nhãn:** Nhóm đã kiểm tra chéo xem việc loại 942 giỏ hàng này có làm sai lệch nhãn học máy hay không. Kết quả trên toàn bộ 12,500 lượt đánh giá qua 5 mốc cutoff chỉ làm đổi đúng **2 nhãn từ 1 sang 0** tại $t_0=550$ (tỷ lệ chỉ **0.016%**), chứng minh việc làm sạch không hề gây biến dạng nhãn mục tiêu.
 > 3. **Bảng coupon:** Khử trùng 5,164 bản ghi trùng lặp 100%, chuẩn hóa về đúng **119,384 dòng ánh xạ** duy nhất; bảng đổi quà ghi nhận chính xác **2,318 lượt đổi thực tế** của 434 hộ.
@@ -81,19 +64,19 @@ Bài thuyết trình kéo dài **15 phút** (gồm 12 phút trình bày mạch c
 
 ---
 
-### Slide 4: 3. Căn cứ chọn cửa sổ 14 ngày: Phân hóa & vận hành
-* **Thời lượng:** 40 giây
+### Slide 3: 2. Căn cứ chọn cửa sổ 14 ngày: Phân hóa & vận hành
+* **Thời lượng:** 45 giây
 * **Trực quan:** Đồ thị tỷ lệ mẫu dương và độ lệch chuẩn của 3 cửa sổ: 7 ngày, 14 ngày và 30 ngày.
 
 **Lời thoại trình bày:**
 > *"Để xác định chân trời dự báo tối ưu, nhóm đã kiểm nghiệm thực nghiệm 3 cửa sổ:
 > - **Cửa sổ 7 ngày:** Base rate trung bình chỉ đạt **51.2%**. Tuy cân bằng về tỷ lệ nhãn nhưng lại quá nhạy cảm với nhiễu ngẫu nhiên thời tiết, chu kỳ ngày cuối tuần, và tạo áp lực vận hành tiếp thị quá dồn dập cho đội ngũ in ấn gửi thư.
 > - **Cửa sổ 30 ngày:** Base rate tăng vọt lên **84.1%**, khiến nhãn bị bão hòa, làm mất tính phân tách giữa khách hàng năng động và khách hàng vãng lai.
-> - **Cửa sổ 14 ngày:** Base rate đạt **68.34%** với độ lệch chuẩn cực kỳ ổn định giữa các mốc cutoff ($\pm 1.04\%$). Khoảng thời gian 2 tuần này vừa bao trọn chu kỳ nhận lương của người tiêu dùng, vừa khớp hoàn hảo với chu kỳ 14 ngày lên kế hoạch và phát hành chiến dịch CRM của siêu thị."*
+> - **Cửa sổ 14 ngày:** Base rate đạt **68.34%** với độ lệch chuẩn cực kỳ ổn định giữa các mốc cutoff ($\pm 1.04\%$). Khoảng thời gian 2 tuần này vừa bao trọn chu kỳ nhận lương của người tiêu dùng, vừa khớp hoàn hảo với chu kỳ 14 ngày lên kế hoạch và phát hành chiến dịch CRM của siêu thị. Riêng trên nhóm 2,301 hộ active trong 90 ngày gần nhất, tỷ lệ mua đạt 73.20%."*
 
 ---
 
-### Slide 5: 4. Recency & Frequency: Phân tách quán tính mua sắm
+### Slide 4: 3. Recency & Frequency: Phân tách quán tính mua sắm
 * **Thời lượng:** 45 giây
 * **Trực quan:** Heatmap 2D màu sắc phân tách xác suất mua theo tương tác giữa Recency và Frequency.
 
@@ -106,7 +89,7 @@ Bài thuyết trình kéo dài **15 phút** (gồm 12 phút trình bày mạch c
 
 ---
 
-### Slide 6: 5. Spend & Breadth: Tín hiệu bổ trợ phân tầng Tần suất
+### Slide 5: 4. Spend & Breadth: Tín hiệu bổ trợ trong phân tầng Tần suất
 * **Thời lượng:** 45 giây
 * **Trực quan:** Biểu đồ phân tầng kiểm soát tần suất, so sánh hiệu ứng của Spend và Breadth trên tầng tần suất trung bình (3–6 chuyến).
 
@@ -121,7 +104,7 @@ Bài thuyết trình kéo dài **15 phút** (gồm 12 phút trình bày mạch c
 
 ---
 
-### Slide 7: 6. Hàng tươi sống: Chỉ báo chu kỳ tiêu dùng thực phẩm ngắn hạn
+### Slide 6: 5. Hàng tươi sống: Chỉ báo chu kỳ tiêu dùng thực phẩm ngắn hạn
 * **Thời lượng:** 40 giây
 * **Trực quan:** Biểu đồ phân rã xác suất mua theo số ngày kể từ lần cuối mua rau củ (`PRODUCE`) hoặc thịt tươi (`MEAT`).
 
@@ -133,7 +116,7 @@ Bài thuyết trình kéo dài **15 phút** (gồm 12 phút trình bày mạch c
 
 ---
 
-### Slide 8: 7. Chiến dịch & Coupon: Tín hiệu tương quan dự báo tại $t_0$
+### Slide 7: 6. Chiến dịch & Coupon: Tín hiệu tương quan dự báo tại $t_0$
 * **Thời lượng:** 45 giây
 * **Trực quan:** Biểu đồ xác suất mua theo trạng thái chiến dịch active và tỷ lệ chuyển đổi đổi coupon theo 3 loại chiến dịch Type A, B, C.
 
@@ -148,7 +131,7 @@ Bài thuyết trình kéo dài **15 phút** (gồm 12 phút trình bày mạch c
 
 ---
 
-### Slide 9: 8. Mạng lưới cửa hàng & Phân nhóm UNKNOWN: Cấu trúc
+### Slide 8: 7. Mạng lưới cửa hàng & Phân nhóm UNKNOWN: Cấu trúc
 * **Thời lượng:** 45 giây
 * **Trực quan:** Biểu đồ tương quan tỷ trọng cửa hàng chính và tính ổn định của nhóm `UNKNOWN`.
 
@@ -159,7 +142,7 @@ Bài thuyết trình kéo dài **15 phút** (gồm 12 phút trình bày mạch c
 
 ---
 
-### Slide 10: 9. Đề xuất 28 đặc trưng Point-in-Time sang Feature Engineering
+### Slide 9: 8. Đề xuất 28 đặc trưng Point-in-Time sang Feature Engineering
 * **Thời lượng:** 45 giây
 * **Trực quan:** Bảng ma trận 9 nhóm đặc trưng (28 biến) với cửa sổ tính toán, kiểu dữ liệu và căn cứ thực nghiệm từ EDA.
 
@@ -170,7 +153,7 @@ Bài thuyết trình kéo dài **15 phút** (gồm 12 phút trình bày mạch c
 
 ---
 
-### Slide 11: 10. Phân khúc khách hàng RFM & Ma trận giữ chân
+### Slide 10: 9. Phân khúc khách hàng RFM & Ma trận giữ chân
 * **Thời lượng:** 50 giây
 * **Trực quan:** Biểu đồ cột kép so sánh tỷ lệ số hộ trong Panel (%) và tỷ lệ đóng góp Doanh thu thực tế (%) trên 6 phân khúc RFM.
 
@@ -183,7 +166,7 @@ Bài thuyết trình kéo dài **15 phút** (gồm 12 phút trình bày mạch c
 
 ---
 
-### Slide 12: 11. Ma trận ngành hàng: Hút khách vs Tăng giỏ
+### Slide 11: 10. Ma trận ngành hàng: Hút khách vs Tăng giỏ
 * **Thời lượng:** 45 giây
 * **Trực quan:** Biểu đồ ngang Panel A (Doanh thu vs Độ phủ giỏ của Top 8 ngành) và Panel B (Chi tiêu bình quân mỗi chuyến AOV ngành).
 
@@ -197,7 +180,7 @@ Bài thuyết trình kéo dài **15 phút** (gồm 12 phút trình bày mạch c
 
 ---
 
-### Slide 13: 12. Sức mạnh giỏ hàng đa ngành & Đòn bẩy bán chéo
+### Slide 12: 11. Sức mạnh giỏ hàng đa ngành & Đòn bẩy bán chéo
 * **Thời lượng:** 45 giây
 * **Trực quan:** Đồ thị cột AOV giỏ hàng theo số lượng ngành hàng trong giỏ, kèm đường tỷ trọng doanh thu tích lũy.
 
@@ -212,7 +195,7 @@ Bài thuyết trình kéo dài **15 phút** (gồm 12 phút trình bày mạch c
 
 ---
 
-### Slide 14: 13. Thâm nhập Nhãn riêng (Private Label) theo ngành
+### Slide 13: 12. Thâm nhập Nhãn riêng (Private Label) theo ngành
 * **Thời lượng:** 45 giây
 * **Trực quan:** Biểu đồ tỷ trọng Doanh thu và Sản lượng tiêu thụ của Nhãn hàng riêng (Private Label) trên 7 ngành hàng chủ lực.
 
@@ -225,7 +208,7 @@ Bài thuyết trình kéo dài **15 phút** (gồm 12 phút trình bày mạch c
 
 ---
 
-### Slide 15: 14. Tiêu dùng theo Quy mô gia đình & Trẻ em
+### Slide 14: 13. Tiêu dùng theo Quy mô gia đình & Trẻ em
 * **Thời lượng:** 45 giây
 * **Trực quan:** Biểu đồ so sánh AOV và mức chi tiêu bình quân hàng năm theo Quy mô hộ gia đình (Panel A) và Số lượng trẻ em (Panel B).
 
@@ -237,7 +220,7 @@ Bài thuyết trình kéo dài **15 phút** (gồm 12 phút trình bày mạch c
 
 ---
 
-### Slide 16: 15. Chiết khấu hai tầng: Markdown tại quầy vs Coupon
+### Slide 15: 14. Chiết khấu hai tầng: Markdown tại quầy vs Coupon
 * **Thời lượng:** 40 giây
 * **Trực quan:** Biểu đồ so sánh Quy mô dòng tiền chiết khấu ($ Triệu USD) và Tỷ lệ giỏ hàng được áp dụng (%) giữa Markdown tại quầy và Phiếu Coupon.
 
@@ -251,7 +234,7 @@ Bài thuyết trình kéo dài **15 phút** (gồm 12 phút trình bày mạch c
 
 ---
 
-### Slide 17: 16. Mức độ tập trung doanh thu khách hàng: Pareto & Gini
+### Slide 16: 15. Mức độ tập trung doanh thu khách hàng: Pareto & Gini
 * **Thời lượng:** 45 giây
 * **Trực quan:** Đường cong Lorenz thực tế (Gini = 0.5028) so sánh với đường bình đẳng tuyệt đối 45°, định vị điểm tích lũy Top 20% và mốc 80% doanh thu.
 
@@ -263,7 +246,7 @@ Bài thuyết trình kéo dài **15 phút** (gồm 12 phút trình bày mạch c
 
 ---
 
-### Slide 18: 17. Nhịp điệu thời gian vi mô & Tối ưu hóa vận hành
+### Slide 17: 16. Nhịp điệu thời gian vi mô & Tối ưu hóa vận hành
 * **Thời lượng:** 40 giây
 * **Trực quan:** Biểu đồ phân phối ngày trong tuần (`DAY mod 7`) và biểu đồ đường phân bố khung giờ mua sắm trong ngày (`TRANS_TIME`).
 
@@ -278,7 +261,7 @@ Bài thuyết trình kéo dài **15 phút** (gồm 12 phút trình bày mạch c
 
 ---
 
-### Slide 19: 18. Tổng kết: 5 hành động chiến lược bán lẻ
+### Slide 18: 17. Tổng kết: 5 hành động chiến lược bán lẻ
 * **Thời lượng:** 50 giây
 * **Trực quan:** 5 khối màu tổng kết 5 trụ cột hành động thương mại trọng tâm cho Ban Giám đốc.
 
@@ -292,7 +275,7 @@ Bài thuyết trình kéo dài **15 phút** (gồm 12 phút trình bày mạch c
 
 ---
 
-### Slide 20: Phụ lục: Phân phối giá trị giỏ hàng thực nghiệm (AOV)
+### Slide 19: Phụ lục: Phân phối giá trị giỏ hàng thực nghiệm (AOV)
 * **Thời lượng:** 30 giây (Dùng khi tra cứu hoặc phản biện)
 * **Trực quan:** Biểu đồ phân phối chi tiêu giỏ hàng với đường Median, Mean và vùng IQR.
 
@@ -321,7 +304,7 @@ Bài thuyết trình kéo dài **15 phút** (gồm 12 phút trình bày mạch c
 > - Cửa sổ tính toán nhãn mục tiêu là khoảng thời gian tương lai độc lập hoàn toàn: $DAY \in (t_0, t_0 + 14]$.
 > - Nhóm đã viết unit test kiểm tra tự động (`test_data_quality.py`) để khẳng định không có bất kỳ bản ghi nào sau $t_0$ được sử dụng trong ma trận đặc trưng."*
 
-### Câu hỏi 3: Tại sao tại Slide 6 nhóm lại khẳng định Spend và Breadth cung cấp tín hiệu bổ trợ độc lập cho Frequency? Nhóm đã chứng minh như thế nào?
+### Câu hỏi 3: Tại sao nhóm lại khẳng định Spend và Breadth cung cấp tín hiệu bổ trợ độc lập cho Frequency? Nhóm đã chứng minh như thế nào?
 **Câu trả lời:**
 > *"Dạ thưa quý thầy cô, trong toàn bộ tập dữ liệu, Frequency, Spend và Breadth đều có tương quan dương với nhau. Tuy nhiên, nếu chỉ nhìn tương quan đơn biến thì không thể biết liệu Spend và Breadth có giá trị gia tăng (incremental value) hay chỉ là bản sao của Frequency.
 > Để bóc tách, nhóm đã sử dụng phương pháp **phân tầng kiểm soát (Stratified Control)**:
