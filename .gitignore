@@ -44,6 +44,9 @@ htmlcov/
 .agents/
 scratch/
 
+# Local scripts & generation tools
+scripts/
+
 # OS generated files
 .DS_Store
 Thumbs.db

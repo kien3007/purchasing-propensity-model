@@ -12,17 +12,20 @@
 
 ## 📌 1. Đặt Vấn Đề Kinh Doanh & Định Nghĩa Bài Toán
 
-Trong ngành bán lẻ hiện đại (Grocery & Supermarket Retail), việc thấu hiểu và dự đoán trước khi nào khách hàng sẽ quay lại mua sắm là chìa khóa sống còn để tối ưu hóa ngân sách tiếp thị (Marketing ROI), quản lý chuỗi cung ứng hàng tươi sống (Fresh Inventory Management), và xây dựng các chương trình cá nhân hóa (Personalized CRM/Promotion).
+Trong ngành bán lẻ hiện đại (Supermarket & FMCG Retail), thấu hiểu và dự đoán chính xác khi nào khách hàng sẽ quay lại mua sắm là chìa khóa sống còn để:
+- **Tối ưu hóa ngân sách tiếp thị (Marketing ROI)**: Tránh phát voucher cào bằng cho nhóm khách chắc chắn quay lại tự nhiên.
+- **Kích hoạt đúng nhóm chuyển đổi (Persuadable Segment)**: Tập trung nguồn lực vào nhóm khách hàng đang lưỡng lự hoặc có dấu hiệu giãn cách chu kỳ mua.
+- **Quản lý chuỗi cung ứng hàng tươi sống (Fresh Inventory Management)**: Dự báo sức mua ngắn hạn để giảm tỷ lệ hao hụt hàng cận hạn.
 
 ### 🎯 Phát biểu bài toán (Mathematical Formulation):
 Dự đoán xác suất hộ gia đình $h \in \{1, 2, \dots, 2500\}$ sẽ phát sinh **ít nhất một lượt đi chợ/mua sắm hợp lệ ($> \$0$)** trong khoảng thời gian tương lai $\Delta t = 14$ ngày kể từ một mốc thời gian chốt sổ quan sát bất kỳ ($t_0$):
 
 $$Y_{h, t_0} = \begin{cases} 1 & \text{nếu } \exists \text{ trip của hộ } h \text{ trong khoảng } (t_0, t_0 + 14] \\ 0 & \text{ngược lại} \end{cases}$$
 
-### 🛡️ Nguyên Tắc Thiết Kế Cốt Lõi:
-1. **Cam kết 100% Số Liệu Thực Tế (Zero Hallucination)**: Toàn bộ số liệu, phần trăm và thông số trong dự án này đều được trích xuất và tính toán trực tiếp từ 2,595,732 dòng giao dịch thực tế của Dunnhumby.
-2. **Kỷ Luật Point-in-Time Tuyệt Đối (Zero Future Leakage)**: Mọi biến số và tính năng (features) tại thời điểm $t_0$ chỉ được phép sử dụng dữ liệu phát sinh tính đến hết ngày $t_0$ ($DAY \le t_0$). Nghiêm cấm dùng Cross-Validation ngẫu nhiên trên toàn bộ tập dữ liệu (dễ gây rò rỉ tương lai).
-3. **Diễn Giải Đơn Giản Cho Mọi Người**: Mọi phân tích, đồ thị đều được thiết kế thân thiện, dễ hiểu cho cả người không chuyên kỹ thuật, giải thích rõ: *Tại sao làm thế? Ý nghĩa kinh doanh là gì?*
+### 🛡️ Ba Nguyên Tắc Thiết Kế Cốt Lõi:
+1. **Cam kết 100% Số Liệu Thực Tế (Zero Hallucination)**: Toàn bộ số liệu, tỷ lệ phần trăm và thông số trong dự án đều được trích xuất và tính toán trực tiếp từ 2,595,732 dòng giao dịch thực tế của Dunnhumby.
+2. **Kỷ Luật Point-in-Time Tuyệt Đối (Zero Future Leakage)**: Mọi biến số và tính năng (features) tại thời điểm $t_0$ chỉ được phép sử dụng dữ liệu phát sinh tính đến hết ngày $t_0$ ($DAY \le t_0$). Nghiêm cấm dùng Cross-Validation ngẫu nhiên trên toàn bộ tập dữ liệu (dễ gây rò rỉ thông tin tương lai).
+3. **Diễn Giải Trực Quan Cho Cả Người Trong Ngành Lẫn Ngoài Ngành**: Mọi kết luận phân tích đều tuân thủ công thức 3 mảnh: **Hiện tượng đời thường + Con số neo thực tế + Hành động cụ thể**.
 
 ---
 
@@ -30,30 +33,27 @@ $$Y_{h, t_0} = \begin{cases} 1 & \text{nếu } \exists \text{ trip của hộ } 
 
 ```text
 purchasing-propensity-model/
-├── .agents/skills/              # 13 Skills tiêu chuẩn (EDA, Modeling, LaTeX Beamer, Clean Code...)
-├── .venv/                       # Môi trường ảo Python độc lập
-├── data/                        # Thư mục dữ liệu trung gian (git-ignored)
+├── .agents/skills/              # Các skills tiêu chuẩn (EDA, Modeling, LaTeX Beamer, Clean Code...)
+├── .venv/                       # Môi trường ảo Python độc lập (git-ignored)
+├── data/                        # Dữ liệu trung gian & cache (git-ignored)
 ├── docs/                        # Tài liệu nghiệp vụ, slide thuyết trình & báo cáo chuyên sâu
-│   ├── purchase_propensity_checklist.md  # Master Blueprint & Checklist
-│   ├── presentation/                     # Slide thuyết trình LaTeX Beamer chuẩn học thuật (19 trang)
-│   │   ├── presentation.tex              # Mã nguồn LaTeX Beamer widescreen 16:9
-│   │   └── presentation.pdf              # File Slide PDF đã biên dịch hoàn chỉnh
+│   ├── purchase_propensity_checklist.md  # Master Blueprint & Checklist kiểm toán
+│   ├── presentation/                     # Slide thuyết trình LaTeX Beamer widescreen 16:9 (23 slide)
+│   │   ├── eda_data_quality_presentation.tex    # Mã nguồn Beamer chuẩn mực
+│   │   ├── eda_data_quality_presentation.pdf    # Bản PDF trình chiếu xuất bản hoàn chỉnh
+│   │   └── eda_presentation_script.md          # Kịch bản thuyết minh MC/Diễn giả chi tiết
 │   └── reports/
-│       ├── model_performance_summary.md  # Báo cáo kết quả kiểm thử OOT
+│       ├── model_performance_summary.md  # Báo cáo tổng hợp hiệu năng mô hình
 │       ├── model_performance_summary.json
-│       └── figures/                      # 10 biểu đồ trực quan hóa dữ liệu
+│       └── figures/                      # 21 biểu đồ trực quan hóa dữ liệu chuẩn hóa 4 màu
 ├── models/                      # Mô hình LightGBM đã hiệu chuẩn xác suất (.joblib)
-├── notebooks/
-│   ├── 01_eda_and_data_quality.ipynb             # Khám phá 8 bảng dữ liệu & 10 câu chuyện trực quan
-│   ├── 02_point_in_time_feature_engineering.ipynb  # Kỷ luật Point-in-Time, chống rò rỉ & trích xuất 28 tính năng
-│   ├── 03_model_training_and_benchmarking.ipynb  # Huấn luyện Heuristic vs Logistic vs LightGBM & Hiệu chuẩn Isotonic
-│   ├── 04_business_impact_and_decile_lift.ipynb  # Phân tầng 10 phân vị Decile Lift, Cumulative Gains & ROI Marketing
-│   └── 05_model_explainability_and_shap.ipynb    # Giải thích toàn cục/cục bộ qua SHAP & CRM Action Playbook
+├── notebooks/                   # Chuỗi 5 Jupyter Notebooks tương tác hoàn chỉnh
+│   ├── 01_eda_and_data_quality.ipynb             # Kiểm toán 8 bảng dữ liệu & phân tích chuyên sâu
+│   ├── 02_point_in_time_feature_engineering.ipynb  # Kỷ luật Point-in-Time & trích xuất 28 đặc trưng
+│   ├── 03_model_training_and_benchmarking.ipynb  # Benchmark Heuristic vs Logistic vs LightGBM
+│   ├── 04_business_impact_and_decile_lift.ipynb  # Phân tầng 10 phân vị Decile Lift & ROI Marketing
+│   └── 05_model_explainability_and_shap.ipynb    # Giải thích toàn cục/cục bộ qua SHAP & Playbook
 ├── sample_data/                 # Thư mục chứa 8 file CSV gốc từ Dunnhumby
-├── scripts/
-│   ├── compute_actual_stats.py          # Script kiểm toán số liệu thực tế
-│   ├── compute_campaign_stats.py        # Script phân tích tác động chiến dịch
-│   └── generate_eda_notebook.py         # Script xây dựng Notebook chuẩn
 ├── src/                         # Gói mã nguồn Python chuẩn mực (Clean Architecture)
 │   ├── config/settings.py       # Cấu hình cửa sổ thời gian, đường dẫn, siêu tham số
 │   ├── data/loader.py           # Ingestion tối ưu RAM (downcasting) & tổng hợp giỏ hàng
@@ -67,33 +67,43 @@ purchasing-propensity-model/
 │   └── pipelines/
 │       └── train_pipeline.py    # Luồng huấn luyện, kiểm thử và xuất báo cáo tự động
 ├── tests/
-│   └── test_data_quality.py     # 4 Unit tests kiểm toán chống rò rỉ & chất lượng logic
+│   └── test_data_quality.py     # Unit tests kiểm toán chống rò rỉ & chất lượng logic
 ├── pyproject.toml               # Khai báo dependency và cấu hình pytest
-├── .gitignore                   # Loại trừ file lớn (>100MB) và môi trường ảo
+├── .gitignore                   # Loại trừ file lớn, scripts nội bộ và môi trường ảo
 └── README.md                    # Tài liệu hướng dẫn tổng quan dự án
 ```
 
 ---
 
-## 📊 3. Khám Phá Dữ Liệu & 10 Phát Hiện Nghiệp Vụ Cốt Lõi (EDA)
+## 📊 3. Khám Phá Dữ Liệu & Các Phát Hiện Nghiệp Vụ Cốt Lõi (EDA)
 
-Toàn bộ 8 bảng trong dataset Dunnhumby đã được liên kết và kiểm toán toàn diện:
+Bộ dữ liệu Dunnhumby gồm 8 bảng quan hệ đã được kiểm toán toàn diện:
 - **Giao dịch**: 2,595,732 dòng -> 276,484 giỏ hàng thô.
 - **Làm sạch**: Loại bỏ 942 giao dịch số tiền âm/trả hàng -> **275,542 giỏ hàng hợp lệ ($> \$0$)**.
-- **Độ phủ khách hàng**: 2,500 hộ gia đình trải dài qua 711 ngày quan sát (~102 tuần).
+- **Độ phủ khách hàng**: Đủ 2,500 hộ gia đình trải dài qua 711 ngày quan sát (~102 tuần), không ai bị bỏ sót.
 
-| Biểu đồ | Loại biểu đồ & Lý do chọn | Phát hiện từ số liệu thực tế | Ý nghĩa kinh doanh & Quyết định kỹ thuật |
-| :---: | :--- | :--- | :--- |
-| **01. Nhịp Đi Chợ** | **Histogram + Đường tích lũy CDF**<br>*Thấy rõ các mốc ngày quay lại phổ biến nhất.* | - Trung vị: **2.0 ngày**; Trung bình: **5.67 ngày**.<br>- **82.0%** mua lại trong 7 ngày.<br>- **92.4%** mua lại trong 14 ngày. | Căn cứ khoa học chuẩn xác để chốt **$\Delta t = 14$ ngày** làm cửa sổ dự đoán mục tiêu. |
-| **02. Giá Trị Giỏ** | **Histogram có dán nhãn Percentiles**<br>*Tránh bị lệch bởi các đơn hàng tiệc tùng lớn.* | - P25: **\$7.85**, P50: **\$17.18**.<br>- P75: **\$37.28**, P90: **\$68.04**.<br>- Trung bình: **\$29.24**. | Tách biệt tính năng tần suất mua và quy mô chi tiêu AOV. |
-| **03. Nhịp Trong Tuần** | **Bar Chart (Cột chuẩn mực)**<br>*Dễ so sánh giữa các ngày trong tuần.* | - Khối lượng mua sắm đều đặn cả tuần.<br>- Đỉnh cao điểm rơi vào các ngày cuối tuần (Thứ 7 - CN). | Trích xuất tính năng khoảng cách tới chu kỳ cuối tuần tiếp theo. |
-| **04. Khung Giờ Mua** | **Line Chart (Dòng thời gian 24h)**<br>*Mô tả nhịp sinh học mua sắm trong ngày.* | - Khung giờ vàng từ **11:00 đến 18:00** chiếm trên 65% số đơn. Thấp nhất từ 0h - 6h. | Khai thác tính năng giờ mua ưa thích của từng hộ gia đình. |
-| **05. Đồ Tươi Sống** | **Comparative Bar Chart (Cột đôi so sánh)**<br>*So sánh trực quan hai trạng thái giỏ hàng.* | - **51.71%** giỏ hàng chứa đồ tươi sống (Thịt, Rau củ, Sữa, Bánh mì).<br>- Chu kỳ mua lặp lại đồ tươi ngắn hơn rõ rệt. | Tính năng `days_since_last_perishable` là động lực hàng đầu kéo khách quay lại. |
-| **06. Mồi Câu Coupon** | **Grouped Bar Chart (So sánh chi tiêu)**<br>*Chứng minh tác động tài chính của voucher.* | - Đơn dùng Coupon đạt AOV = **\$67.60** vs không dùng = **\$26.76** (**Tăng gấp 2.53 lần / +152.6%**). | Coupon không làm mất biên lợi nhuận mà kích thích giỏ hàng lớn. Feature `coupon_redemption_count_180d`. |
-| **07. Tăng Tốc Tiếp Thị** | **Boxplot / Interval Comparison**<br>*Đo lường trực tiếp độ co giãn thời gian mua.* | - Khi có chiến dịch: chu kỳ trung bình = **3.55 ngày**.<br>- Không có chiến dịch: chu kỳ = **6.49 ngày** (**Rút ngắn 45.3%**). | Feature `is_targeted_by_active_campaign` tạo cú hích gia tăng propensity rõ rệt. |
-| **08. Nhảy Cóc Shop** | **Categorical Bar Chart (Tỷ lệ nhóm)**<br>*Nhận diện lòng trung thành theo địa bàn.* | - Chỉ **6.68%** chỉ đi 1 shop duy nhất.<br>- **66.4%** đi $\ge 4$ shop khác nhau.<br>- Nhưng Primary Store chiếm tới **73.35% chi tiêu**. | Khách hay mua tiện đường nhưng có 1 shop ruột. Feature `store_loyalty_index` & `primary_store_id`. |
-| **09. Nhân Khẩu Học** | **Horizontal Bar Chart (Thanh ngang dễ đọc)**<br>*Tránh mỏi cổ khi đọc tên nhóm phân loại.* | - Hộ độc thân: AOV = **\$31.49**.<br>- Hộ 4-5+ người: AOV = **\$43.91** (+39.4% chi tiêu). | Nạp các trường nhân khẩu học (`classification_1` đến `classification_5`, `KID_CATEGORY_DESC`) vào mô hình. |
-| **10. Ổn Định Nhãn** | **Time-Series Stability Line**<br>*Chứng minh không có trôi dạt dữ liệu.* | - Tỷ lệ $P(Y=1)$ dao động ổn định trong biên độ hẹp **66% - 70%** xuyên suốt 16 mốc $t_0$ (Day 200 - 680). | Cho phép áp dụng Multi-Cutoff Sliding Window mà không làm méo mó nhãn mục tiêu. |
+### 🌟 10 Căn Cứ Thực Nghiệm Nền Tảng:
+1. **Căn cứ chọn cửa sổ 14 ngày**: Chu kỳ đi chợ có trung vị 2.0 ngày, trung bình 5.67 ngày; 82.0% khách quay lại trong 7 ngày và 92.4% trong 14 ngày. Cửa sổ 14 ngày cân bằng hoàn hảo giữa khả năng phân hóa hành vi và độ trễ vận hành chiến dịch.
+2. **Phân phối giá trị giỏ hàng (Log-Normal)**: Đa số đi chợ hết \$17.18 (trung vị), nhưng các giỏ lớn kéo trung bình lên \$29.24. Cần áp dụng biến đổi $\ln(1 + \text{Spend})$ để nén ngoại lai khi đưa vào mô hình.
+3. **Tương tác Độ trễ (Recency) & Tần suất (Frequency)**: Khách vừa đi chợ 2–3 hôm trước có xác suất quay lại 96%, nhưng bỏ đi >30 ngày chỉ còn 17%. Khách quen (tần suất cao) duy trì xác suất quay lại gấp đôi khách lạ ngay cả khi cùng một khoảng thời gian vắng mặt.
+4. **Sức mạnh của độ rộng ngành hàng (Category Breadth)**: Khách mua đa dạng nhiều ngành hàng (rau củ, thịt cá, đồ gia dụng) có xác suất quay lại tăng từ 64.0% lên 83.7% (+19.7%), tạo sự gắn bó bền vững hơn là chỉ tập trung tăng số tiền chi tiêu.
+5. **Hàng tươi sống - Chuông báo động chu kỳ tiêu dùng**: Do có hạn sử dụng ngắn, khách vừa mua đồ tươi 3 ngày trước đạt 90.0% quay lại, nhưng quá 14 ngày không mua đồ tươi tỷ lệ này giảm sâu xuống 37.7%.
+6. **Chiến dịch tiếp thị & Phiếu giảm giá**: Có chiến dịch kích hoạt tại thời điểm quan sát nâng xác suất quay lại lên 86.8% (so với 59.9% khi không có). Phiếu giảm giá toàn giỏ (Type A/B) hiệu quả gấp đôi phiếu giảm giá 1 món (Type C).
+7. **Tính đại diện của nhóm thông tin khuyết thiếu (UNKNOWN)**: 1,699 hộ gia đình giấu thông tin nhân khẩu học vẫn đi chợ với tỷ lệ quay lại 68.4% (tương đồng 68.2% ở nhóm khai báo đầy đủ), chứng minh dữ liệu khuyết thiếu ngẫu nhiên và an toàn giữ lại 100% mẫu.
+8. **Phân khúc khách hàng RFM**: 541 hộ VIP gánh 54.3% doanh thu siêu thị. Nhóm 52 hộ "Nguy cơ rời bỏ" (từng chi tiêu rất lớn nhưng đã vắng mặt gần 3 tháng) cần được kích hoạt chiến dịch win-back khẩn cấp để cứu vãn \$244K doanh thu.
+9. **Mức độ tập trung doanh thu (Lorenz & Gini)**: Hệ số Gini = 0.5028. Cần tới 44% số hộ gia đình để tạo ra 80% doanh thu, chứng minh ngành hàng tiêu dùng thiết yếu không tuân theo quy luật Pareto 80/20 cực đoan.
+10. **Tỷ trọng thâm nhập nhãn hàng riêng (Private Label)**: Nhãn hàng riêng chiếm 51.6% doanh số ngành bánh (PASTRY), nhưng mới đạt 5.0% ở quầy thịt tươi và 9.4% ở quầy mỹ phẩm/gia dụng -> Dư địa lớn để mở rộng nhãn riêng nhằm gia tăng biên lợi nhuận thêm 5–12%.
+
+### 🔬 6 Phát Hiện Chuyên Sâu Mới (Deep-Dive Insights):
+1. **Kiểm toán chuỗi thời gian mở rộng mẫu (Panel Onboarding)**: 20 tuần đầu là giai đoạn tuyển mẫu (số hộ hoạt động tăng từ 390 lên 1,336 hộ/tuần, doanh thu tăng từ \$22.5K lên \$84K/tuần); từ tuần 21–102 số lượng hộ mới ổn định hoàn toàn. Cần phân tích theo nhóm gia nhập (cohort) để tránh nhầm lẫn sự mở rộng mẫu với tăng trưởng thực tế của siêu thị.
+2. **Nhịp mua đều đặn (Inter-purchase Regularity)**: Hộ gia đình có thói quen đi chợ đúng ngày cố định ($CV \le 0.65$) đạt xác suất quay lại 14 ngày lên tới **86.1%**, cao hơn **+5.6%** so với nhóm đi chợ thất thường ($CV > 0.85$, đạt 80.5%).
+3. **Tách biệt giỏ xăng (KIOSK-GAS)**: Trong 22,056 giỏ hàng có xăng, có tới **95.7% (21,108 giỏ) chỉ mua xăng đơn thuần** với AOV \$24.83. Trong khi đó, giỏ thực phẩm 1 ngành hàng chỉ có AOV \$8.83. Việc tách riêng trạm xăng giúp định giá đúng giá trị thực của chuyến đi chợ.
+4. **Cơ hội bán chéo sản phẩm vi mô (Cross-sell Affinities)**:
+   - *Mì khô/Pasta $\to$ Sốt mì*: Xuất hiện trong 6,423 giỏ, tỷ lệ đính kèm đạt **45.8%** (gấp **10.7 lần** tỷ lệ nền 4.3%).
+   - *Phô mai $\to$ Thịt nguội*: Xuất hiện trong 7,132 giỏ, tỷ lệ đính kèm đạt **63.0%** (gấp **4.4 lần** tỷ lệ nền 14.3%).
+   - *Giấy vệ sinh $\to$ Khăn giấy cuộn*: Xuất hiện trong 3,743 giỏ, tỷ lệ đính kèm đạt **27.5%** (gấp **3.2 lần** tỷ lệ nền 8.5%).
+5. **Cấu trúc chiết khấu niêm yết (Markdowns)**: Dù quầy tạp hóa chiếm số tiền giảm giá lớn nhất (\$817.5K / 58.4%), nhưng riêng hai ngành thịt và hải sản đóng gói chịu mức giảm giá sâu nhất (**22.5% – 25.3%**, tiêu tốn \$296K) $\to$ Cần ưu tiên rà soát lại chính sách định giá và bảo quản hàng tươi sống.
+6. **Hiệu ứng phiếu giảm giá trong cùng hộ gia đình (Within-Household Lift)**: So sánh trên 1,856 hộ có cả hai loại giao dịch, giá trị giỏ hàng trung bình khi dùng coupon đạt **\$68.17**, cao hơn **+140.8%** so với khi không dùng coupon (**\$28.31**). Kết quả khẳng định coupon kích thích khách mua nhiều hàng hơn trong cùng một chuyến đi, chứ không chỉ chọn lọc nhóm khách VIP vốn dĩ giàu có.
 
 ---
 
@@ -111,9 +121,8 @@ Mô hình được kiểm thử trên tập dữ liệu độc lập ngoài th�
 | 📏 Heuristic Recency Rule | 0.6311 | 0.3941 | 0.3392 | 0.3158 | 0.69x | 16.4% |
 
 > [!NOTE]
-> **Nhận xét chuyên môn**:
-> - **Hiệu chuẩn xác suất (Isotonic Calibration)** giúp hạ thấp sai số hiệu chuẩn kỳ vọng (**ECE giảm xuống chỉ còn 1.71%**), giúp xác suất mô hình trả về phản ánh đúng 100% tỷ lệ chuyển đổi thực tế trong kinh doanh.
-> - **Quy luật Heuristic đơn giản thất bại** vì khách hàng bán lẻ không mua sắm theo một chu kỳ cơ học cố định mà chịu tác động đa chiều từ đồ tươi sống, khuyến mãi và đà mua sắm gần nhất.
+> - **Hiệu chuẩn xác suất (Isotonic Calibration)** giúp hạ thấp sai số hiệu chuẩn kỳ vọng (**ECE giảm xuống chỉ còn 1.71%**), giúp xác suất mô hình trả về phản ánh chính xác tỷ lệ chuyển đổi thực tế trong kinh doanh.
+> - **Quy luật Heuristic đơn giản thất bại** vì khách hàng bán lẻ không mua sắm theo một chu kỳ cơ học cố định mà chịu tác động đa chiều từ hàng tươi sống, khuyến mãi và đà mua sắm gần nhất.
 
 ---
 
@@ -136,8 +145,8 @@ Khi triển khai thực tế vào các chiến dịch Marketing / CRM, khách h�
 
 > [!TIP]
 > **Ứng dụng thực tiễn**:
-> - Nhóm **Decile 1-3**: Tỷ lệ mua tự nhiên lên tới **95% - 99%**. Không cần tốn voucher giảm giá cao (Organic Buyers).
-> - Nhóm **Decile 6-8**: Tỷ lệ mua dao động từ 50% - 70%. Đây là **"nhóm vàng cần thuyết phục" (Persuadable Segment)**, nơi ngân sách Marketing mang lại chỉ số ROI chuyển đổi cao nhất!
+> - Nhóm **Decile 1–3**: Tỷ lệ mua tự nhiên lên tới **95% – 99%**. Không cần tốn voucher giảm giá cao (Organic Buyers).
+> - Nhóm **Decile 6–8**: Tỷ lệ mua dao động từ 50% – 70%. Đây là **"nhóm vàng cần thuyết phục" (Persuadable Segment)**, nơi ngân sách Marketing mang lại chỉ số ROI chuyển đổi cao nhất!
 
 ---
 
@@ -149,7 +158,7 @@ Khi triển khai thực tế vào các chiến dịch Marketing / CRM, khách h�
 | **2** | `baskets_count_90d` | 45,173.9 | 0.2852 | Độ ổn định mua sắm dài hạn trong quý |
 | **3** | `days_since_last_basket` | 14,227.1 | 0.1794 | Số ngày kể từ giỏ hàng gần nhất (Recency kinh điển) |
 | **4** | `baskets_count_30d` | 11,228.2 | 0.2073 | Tần suất mua sắm trong tháng vừa qua |
-| **5** | `std_inter_trip` | 6,343.8 | 0.1260 | Độ biến động chu kỳ đi chợ (Khách đi theo giờ giấc cố định vs thất thường) |
+| **5** | `std_inter_trip` | 6,343.8 | 0.1260 | Độ biến động chu kỳ đi chợ (Khách đi đều đặn vs thất thường) |
 | **6** | `spend_30d` | 4,423.2 | 0.1132 | Tổng ngân sách chi tiêu gần nhất |
 | **7** | `urgency_ratio` | 2,755.2 | 0.0520 | Tỷ lệ quá hạn chu kỳ cá nhân hóa (Recency / Chu kỳ trung vị) |
 | **8** | `days_since_last_perishable` | 2,421.2 | 0.0596 | Số ngày hết đồ ăn tươi sống trong tủ lạnh |
@@ -209,4 +218,3 @@ jupyter nbconvert --to notebook --execute notebooks/05_model_explainability_and_
 
 ## ⚖️ Giấy Phép & Tác Quyền
 Dự án được phát triển và công bố theo giấy phép MIT License. Toàn bộ mã nguồn mở phục vụ mục đích nghiên cứu, học tập và ứng dụng thực tiễn trong ngành khoa học dữ liệu bán lẻ.
-
